@@ -291,7 +291,7 @@
             percent: 0.10
           },
           {
-            name: '积分兑换',
+            name: '氢春豆兑换',
             amount: 0.30,
             percent: 0.40
           },

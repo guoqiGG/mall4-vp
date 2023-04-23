@@ -402,7 +402,7 @@ export default {
           this.dataForm.levelName=newVal
         })
         this.userRightsIds = this.dataForm.userRightsIds
-        // 设置所需积分最大最小值
+        // 设置所需氢春豆最大最小值
         this.serMinOrMaxNeedGrowth(userLevels, index)
         this.getCategoryDataList()
         this.getRightsDataList()
@@ -527,7 +527,7 @@ export default {
       })
     },
     /**
-     * 设置所需积分最大最小值
+     * 设置所需氢春豆最大最小值
      */
     serMinOrMaxNeedGrowth (userLevels, index) {
       if (userLevels[index].level > 1) {
@@ -582,11 +582,11 @@ export default {
       if (!this.isCoupon) {
         this.dataForm.couponList = []
       }
-      // 积分倍率
+      // 氢春豆倍率
       if (!this.isRateScore) {
         this.dataForm.rateScore = 1
       }
-      // 赠送积分
+      // 赠送氢春豆
       if (!this.isPresScore) {
         this.dataForm.presScore = 0
       }
@@ -615,7 +615,7 @@ export default {
         this.isCheckSccuss = false
         return false
       }
-      // 积分倍率
+      // 氢春豆倍率
       if (this.isRateScore && this.dataForm.rateScore === 1) {
         this.msg = this.$i18n.t('user.feedback1')
         this.isCheckSccuss = false
@@ -627,7 +627,7 @@ export default {
         this.isCheckSccuss = false
         return false
       }
-      // 赠送积分
+      // 赠送氢春豆
       if (this.isPresScore && this.dataForm.presScore === 0) {
         this.msg = this.$i18n.t('user.bonus0')
         this.isCheckSccuss = false

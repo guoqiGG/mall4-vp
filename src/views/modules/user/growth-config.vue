@@ -22,7 +22,7 @@
         <el-input v-model="dataForm.buyPrice" @change="setShopGetScore">
           <template slot="append">{{$t('coupon.yuan')}}{{$t('user.getOneGrowth')}}</template>
         </el-input>
-        <!-- <span class="tips">元可获取1积分</span> -->
+        <!-- <span class="tips">元可获取1氢春豆</span> -->
       </el-form-item>
       <el-form-item
         :label="$t('user.completedOrderGet')"
@@ -33,7 +33,7 @@
         <el-input v-model="dataForm.buyOrder" @change="setShopComplete">
           <template slot="append">{{$t('user.growth')}}</template>
         </el-input>
-        <!-- <span class="tips">元可获取1积分</span> -->
+        <!-- <span class="tips">元可获取1氢春豆</span> -->
       </el-form-item>
     </el-form>
     <div class="default-btn" @click="dataFormSubmit()">{{$t('sysManagement.save')}}</div>

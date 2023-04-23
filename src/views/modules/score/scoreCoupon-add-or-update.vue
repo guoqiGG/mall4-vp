@@ -13,10 +13,10 @@
         <el-button plain
                    @click="selectCoupon()">请选择优惠券</el-button>
       </el-form-item>
-      <el-form-item label="积分价格"
+      <el-form-item label="氢春豆价格"
                     prop="scorePrice">
         <el-input v-model="dataForm.scorePrice"
-                  placeholder="积分价格"
+                  placeholder="氢春豆价格"
                   type="number"></el-input>
       </el-form-item>
     </el-form>
@@ -67,7 +67,7 @@ export default {
           { required: true, message: '请选择优惠券', trigger: 'blur' }
         ],
         scorePrice: [
-          { required: true, message: '积分价格不能为空', trigger: 'blur' },
+          { required: true, message: '氢春豆价格不能为空', trigger: 'blur' },
           { validator: validate, trigger: 'blur' }
         ]
       }

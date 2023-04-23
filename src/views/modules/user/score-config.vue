@@ -1,5 +1,5 @@
 <template >
-  <div class="distribution-积分设置-set gray-box top-redius border-bottom-gray">
+  <div class="distribution-氢春豆设置-set gray-box top-redius border-bottom-gray">
     <div class="title">{{ $t("user.pointSettings") }} <span class="tip">{{ $t("user.pointSettingsTip") }} </span></div>
     <el-form @submit.native.prevent
       label-width="180px"
@@ -17,7 +17,7 @@
       <!-- <el-checkbox v-model="dataForm.levelSetConditionsSwitch.boundCustomers">绑定客户数</el-checkbox>
       <el-checkbox v-model="dataForm.levelSetConditionsSwitch.invitedVeeker">邀请分销员数</el-checkbox>-->
       <br />
-      <!-- <el-button @click="addRow"                    :rules="[{required: true, message: '注册积分获取不能为空', trigger: 'blur'}]"
+      <!-- <el-button @click="addRow"                    :rules="[{required: true, message: '注册氢春豆获取不能为空', trigger: 'blur'}]"
       style="margin-top:15px">添加等级</el-button>-->
       <el-form-item
         :label="$t('user.pointsEarnOne')"
@@ -152,7 +152,7 @@
           type="number"
         ></el-input-number>
       </el-form-item>
-      <!-- <div class="title">积分使用设置</div> -->
+      <!-- <div class="title">氢春豆使用设置</div> -->
       <!-- <br> -->
       <el-form-item
         :label="$t('user.pointsSwitch')"
@@ -371,25 +371,25 @@ export default {
           { required: true, message: this.$i18n.t('user.pointsOfRegistrationCannotEmpty'), trigger: 'blur' }
         ],
         // signInScoreSeven: [
-        //   { required: true, message: '签到积分获取不能为空', trigger: 'blur' }
+        //   { required: true, message: '签到氢春豆获取不能为空', trigger: 'blur' }
         // ],
         // signInScoreOne: [
-        //   { required: true, message: '签到积分获取不能为空', trigger: 'blur' }
+        //   { required: true, message: '签到氢春豆获取不能为空', trigger: 'blur' }
         // ],
         // signInScoreTwo: [
-        //   { required: true, message: '签到积分获取不能为空', trigger: 'blur' }
+        //   { required: true, message: '签到氢春豆获取不能为空', trigger: 'blur' }
         // ],
         // signInScoreThree: [
-        //   { required: true, message: '签到积分获取不能为空', trigger: 'blur' }
+        //   { required: true, message: '签到氢春豆获取不能为空', trigger: 'blur' }
         // ],
         // signInScoreFour: [
-        //   { required: true, message: '签到积分获取不能为空', trigger: 'blur' }
+        //   { required: true, message: '签到氢春豆获取不能为空', trigger: 'blur' }
         // ],
         // signInScoreFive: [
-        //   { required: true, message: '签到积分获取不能为空', trigger: 'blur' }
+        //   { required: true, message: '签到氢春豆获取不能为空', trigger: 'blur' }
         // ],
         // signInScoreSix: [
-        //   { required: true, message: '签到积分获取不能为空', trigger: 'blur' }
+        //   { required: true, message: '签到氢春豆获取不能为空', trigger: 'blur' }
         // ],
         shopGetScore: [
           { required: true, message: this.$i18n.t('user.pointsOfShoppingCannotEmpty'), trigger: 'blur' }

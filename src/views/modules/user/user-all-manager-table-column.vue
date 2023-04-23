@@ -37,8 +37,8 @@
       <el-form-item label="账户资产">
         <el-checkbox-group v-model="columnData">
           <!-- 账户资产 -->
-          <el-checkbox label="当前积分" name="columnName"></el-checkbox>
-          <el-checkbox label="累计积分" name="columnName"></el-checkbox>
+          <el-checkbox label="当前氢春豆" name="columnName"></el-checkbox>
+          <el-checkbox label="累计氢春豆" name="columnName"></el-checkbox>
           <el-checkbox label="当前余额" name="columnName"></el-checkbox>
           <el-checkbox label="累计余额" name="columnName"></el-checkbox>
         </el-checkbox-group>

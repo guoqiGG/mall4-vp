@@ -163,7 +163,7 @@
             :label="$t('product.prodType')"
             width="120">
             <template slot-scope="scope">
-              <!-- 商品类型(0普通商品 1拼团 2秒杀 3积分 5活动商品) -->
+              <!-- 商品类型(0普通商品 1拼团 2秒杀 3氢春豆 5活动商品) -->
               <div class="tag-text">{{[$t('product.ordProd'),$t('product.groupProd'),$t('product.limitedTimeProd'),$t('goods.points'),'', $t('product.activeProd')][scope.row.prodType]}}</div>
             </template>
           </el-table-column>
@@ -172,7 +172,7 @@
             :label="$t('product.prodMold')"
             width="120">
             <template slot-scope="scope">
-              <!-- 商品类型(0普通商品 1拼团 2秒杀 3积分 5活动商品) -->
+              <!-- 商品类型(0普通商品 1拼团 2秒杀 3氢春豆 5活动商品) -->
               <div class="tag-text">{{ scope.row.mold === 0 ? $t('product.physicalGoods') : $t('product.virtualGoods')}}</div>
             </template>
           </el-table-column>

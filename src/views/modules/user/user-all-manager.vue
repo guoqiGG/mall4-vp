@@ -86,7 +86,7 @@
           <el-form-item label="批量操作">
             <el-button class="operation-btn" size="mini" @click="clear()">修改成长值</el-button>
             <el-button class="operation-btn" size="mini" @click="clear()">打标签</el-button>
-            <el-button class="operation-btn" size="mini" @click="clear()">修改积分</el-button>
+            <el-button class="operation-btn" size="mini" @click="clear()">修改氢春豆</el-button>
             <!-- <el-button class="operation-btn" size="mini" @click="clear()">修改分销员等级</el-button> -->
             <!-- <el-button class="operation-btn" size="mini" @click="clear()">送优惠券</el-button> -->
             <!-- <el-button class="operation-btn" size="mini" @click="clear()">修改关系链</el-button> -->
@@ -162,8 +162,8 @@
           <!-- <el-table-column prop="aa" label="会员卡"></el-table-column> -->
 
           <!-- 账户资产 -->
-          <el-table-column prop="currentScore" label="当前积分" v-if="isVisible15"></el-table-column>
-          <el-table-column prop="sumScore" label="累计积分" v-if="isVisible16"></el-table-column>
+          <el-table-column prop="currentScore" label="当前氢春豆" v-if="isVisible15"></el-table-column>
+          <el-table-column prop="sumScore" label="累计氢春豆" v-if="isVisible16"></el-table-column>
           <el-table-column prop="currentBalance" label="当前余额" v-if="isVisible17"></el-table-column>
           <el-table-column prop="sumBalance" label="累计余额" v-if="isVisible18"></el-table-column>
           <!-- 分销信息 -->
@@ -391,8 +391,8 @@ export default {
       this.isVisible12 = columnData.includes('充值次数')
       this.isVisible13 = columnData.includes('退款金额')
       this.isVisible14 = columnData.includes('退款次数')
-      this.isVisible15 = columnData.includes('当前积分')
-      this.isVisible16 = columnData.includes('累计积分')
+      this.isVisible15 = columnData.includes('当前氢春豆')
+      this.isVisible16 = columnData.includes('累计氢春豆')
       this.isVisible17 = columnData.includes('当前余额')
       this.isVisible18 = columnData.includes('累计余额')
     },
@@ -405,4 +405,3 @@ export default {
 </script>
 <style lang="scss">
 </style>
-    
