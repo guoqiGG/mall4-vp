@@ -492,7 +492,7 @@ export default {
     initTradeDetail (id) {
       this.$refs.tradeDetail.init(id)
     },
-    // 调用积分详情组件方法
+    // 调用氢春豆详情组件方法
     initScoreDetail (id) {
       this.$refs.scoreDetail.init(id)
     },

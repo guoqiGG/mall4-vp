@@ -6,7 +6,7 @@ export default {
     defalutSku: {
       price: 0.00, // 销售价
       oriPrice: 0.01, // 市场价
-      skuScore: 1, // 积分价
+      skuScore: 1, // 氢春豆价
       stocks: 0, // 库存
       properties: '', // 销售属性组合字符串
       skuName: '', // sku名称

@@ -18,7 +18,7 @@
      {{this.$i18n.t('shopProcess.basicInfo')}}
   </div>
 
-    <!-- <div class="title">新增积分商品</div> -->
+    <!-- <div class="title">新增氢春豆商品</div> -->
     <el-form ref="dataForm" :model="dataForm" label-width="150px" size="small">
       <!-- 选择语言 -->
       <el-form-item
@@ -621,7 +621,7 @@ export default {
       param.price = param.skuList[0].price
       // 商品原价
       param.oriPrice = ''
-      // 商品积分价格
+      // 商品氢春豆价格
       param.scorePrice = param.skuList[0].skuScore
       // 商品实际库存
       for (let i = 0; i < param.skuList.length; i++) {
@@ -644,7 +644,7 @@ export default {
         if (param.oriPrice === element.oriPrice) {
           param.oriPrice = element.oriPrice
         }
-        // 设置最低积分价格
+        // 设置最低氢春豆价格
         param.scorePrice = Math.min(param.scorePrice, element.skuScore)
         if (param.scorePrice === element.skuScore) {
           param.scorePrice = element.skuScore

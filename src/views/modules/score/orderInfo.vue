@@ -237,7 +237,7 @@
                 <!-- <el-form-item label="店铺优惠:">
               <span class="text">￥15.00</span>
                 </el-form-item>-->
-                <!-- <el-form-item label="积分抵扣:">
+                <!-- <el-form-item label="氢春豆抵扣:">
               <span class="text">￥15.00</span>
                 </el-form-item>-->
                 <!-- <el-form-item label="发票费用:">

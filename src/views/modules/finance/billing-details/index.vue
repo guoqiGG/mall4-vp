@@ -23,7 +23,7 @@
               <p>- {{$t('settlementDetail.tip16')}}</p>
               <p>- {{$t('settlementDetail.tip17')}}</p>
               <p>- {{$t('settlementDetail.tip18')}}</p> -->
-              <!-- <p>- 店铺应收金额：每笔订单店铺应收金额=商品实付金额+退单改价差额+运费+平台优惠券优惠金额+使用积分-平台佣金-分销佣金；</p> -->
+              <!-- <p>- 店铺应收金额：每笔订单店铺应收金额=商品实付金额+退单改价差额+运费+平台优惠券优惠金额+使用氢春豆-平台佣金-分销佣金；</p> -->
               <!-- <p>- {{$t('settlementDetail.tip19')}}</p>
               <p>- {{$t('settlementDetail.tip20')}}</p>
               <p>- {{$t('settlementDetail.tip21')}}</p>

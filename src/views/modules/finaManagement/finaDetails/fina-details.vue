@@ -382,7 +382,7 @@
         // this.dateRange = [this.startTime, this.endTime]
         this.dateRangeParam = [this.startTime, this.endTime]
       },
-      // 0：积分支付  1：微信小程序支付  2：支付宝 3：微信扫码支付  4：微信H5支付  5：微信公众号支付 6：支付宝H5支付  7：支付宝APP支付  8：微信App支付  9：用户余额支付  10：PayPal支付
+      // 0：氢春豆支付  1：微信小程序支付  2：支付宝 3：微信扫码支付  4：微信H5支付  5：微信公众号支付 6：支付宝H5支付  7：支付宝APP支付  8：微信App支付  9：用户余额支付  10：PayPal支付
       setPaymentMethodRange (val) {
         this.payType = val
         // this.getFinaDetailsData()

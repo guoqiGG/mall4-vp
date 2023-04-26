@@ -86,7 +86,7 @@
                 />
               </template>
             </el-table-column>
-            <!-- 积分价 -->
+            <!-- 氢春豆价 -->
             <el-table-column
               prop="skuScore"
               :label="this.$i18n.t('product.scorePrice')"
@@ -493,7 +493,7 @@ export default {
       deep: true,
       immediate: true,
       handler (val) {
-        
+
       }
     },
     skuTags: {
