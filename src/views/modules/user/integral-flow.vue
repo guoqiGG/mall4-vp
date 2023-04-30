@@ -1,21 +1,29 @@
 <template>
   <div>
     <el-form :inline="true" :model="form" size="small" ref="form" class="search-form">
-      <el-form-item label="团长" prop="parentName">
-        <el-input v-model="dataForm.parentName" placeholder="请输入团长"></el-input>
+      <el-form-item label="团长" prop="parentId">
+        <!-- <el-input v-model="dataForm.parentId" placeholder="请输入团长" /> -->
+        <el-select v-model="dataForm.parentId" filterable remote reserve-keyword placeholder="请输入团长手机号查询"
+          :remote-method="remoteMethod" :loading="loading">
+          <el-option v-for="item in parentOptions" :key="item.value" :label="item.label" :value="item.value">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="时间" prop="time">
-        <el-date-picker v-model="dataForm.time" type="datetimerange" placeholder="选择日期"
-          value-format="yyyy-MM-dd HH:mm:ss" :start-placeholder="$t('text.startTime')"
-                :end-placeholder="$t('date.end')" :range-separator="$t('date.tip')"></el-date-picker>
+        <el-date-picker v-model="dataForm.time" type="datetimerange" placeholder="选择日期" value-format="yyyy-MM-dd HH:mm:ss"
+          :start-placeholder="$t('text.startTime')" :end-placeholder="$t('date.end')"
+          :range-separator="$t('date.tip')"></el-date-picker>
       </el-form-item>
-      <el-form-item label="主播" prop="anchorName">
-        <el-input v-model="dataForm.anchorName" placeholder="请输入主播"></el-input>
+      <el-form-item label="主播" prop="anchorId">
+        <el-select v-model="dataForm.anchorId" filterable placeholder="请选择主播">
+            <el-option v-for="item in anchorOptions" :key="item.value" :label="item.label" :value="item.value">
+            </el-option>
+          </el-select>
       </el-form-item>
       <el-form-item>
-        <div class="default-btn primary-btn" @click="search()">{{ $t("order.query") }}</div>
-        <div class="default-btn" @click="reset()">{{ $t("order.clear") }}</div>
-        <div class="default-btn" @click="getSoldExcel()">{{ $t("order.export") }}</div>
+        <div class="default-btn primary-btn" @click="search()">搜索</div>
+        <div class="default-btn" @click="reset()">重置</div>
+        <div class="default-btn" @click="getSoldExcel()">导出</div>
       </el-form-item>
     </el-form>
     <el-table :data="dataList" style="width: 100%">
@@ -31,14 +39,15 @@
 </template>
 
 <script>
+import { debounce } from 'lodash'
 export default {
   data () {
     return {
       theData: null, // 保存上次点击查询的请求条件
       dataForm: {
-        parentName: undefined,
+        parentId: undefined,
         time: [],
-        anchorName: undefined
+        anchorId: undefined
       },
       page: {
         total: 0, // 总页数
@@ -47,13 +56,17 @@ export default {
       },
       dataList: [],
       dataListLoading: false,
-      totalScore: 0
+      totalScore: 0,
+      loading: false,
+      parentOptions: [],
+      anchorOptions: []
     }
   },
   created () {
     // 携带参数查询
     this.getDataList(this.page)
     this.getDataTotal()
+    this.getAnchorList()
   },
   methods: {
     /**
@@ -68,8 +81,8 @@ export default {
         params: this.$http.adornParams(
           Object.assign(
             {
-              parentName: this.dataForm.parentName,
-              anchorName: this.dataForm.anchorName,
+              parentId: this.dataForm.parentId,
+              anchorId: this.dataForm.anchorId,
               startTime: this.dataForm.time[0],
               endTime: this.dataForm.time[1]
             },
@@ -95,8 +108,8 @@ export default {
         params: this.$http.adornParams(
           Object.assign(
             {
-              parentName: this.dataForm.parentName,
-              anchorName: this.dataForm.anchorName,
+              parentId: this.dataForm.parentId,
+              anchorId: this.dataForm.anchorId,
               startTime: this.dataForm.time[0],
               endTime: this.dataForm.time[1]
             }
@@ -126,12 +139,10 @@ export default {
           url: this.$http.adornUrl('/user/integral-flow/excelScoreflowInfo'),
           method: 'post',
           params: this.$http.adornParams({
-            scoreFlowDto: {
-              parentName: this.dataForm.parentName,
-              anchorName: this.dataForm.anchorName,
-              startTime: this.dataForm.time[0],
-              endTime: this.dataForm.time[1]
-            }
+            parentId: this.dataForm.parentId,
+            anchorId: this.dataForm.anchorId,
+            startTime: this.dataForm.time[0],
+            endTime: this.dataForm.time[1]
           }),
           responseType: 'blob' // 解决文件下载乱码问题
         }).then(({ data }) => {
@@ -174,9 +185,9 @@ export default {
     reset () {
       this.$refs.form.resetFields()
       this.dataForm = {
-        parentName: undefined,
+        parentId: undefined,
         time: [],
-        anchorName: undefined
+        anchorId: undefined
       }
     },
     formatScore (row, column, cellValue) {
@@ -184,6 +195,50 @@ export default {
         return `-${cellValue}`
       }
       return cellValue
+    },
+    // 团长模糊查询
+    remoteMethod: debounce(function (value) {
+      this.loading = true
+
+      this.$http({
+        url: this.$http.adornUrl('/distribution/distributionUser/page/achievement'),
+        method: 'get',
+        params: this.$http.adornParams(Object.assign({
+          size: 50,
+          current: 1,
+          sortParam: 1,
+          sortType: 2,
+          userMobile: value
+        }, this.theParams))
+      }).then(({ data }) => {
+        this.parentOptions = data.records.map(item => ({
+          ...item,
+          label: `${item.nickName}(${item.userMobile})`,
+          value: item.distributionUserId
+        }))
+        this.loading = false
+      })
+    }, 300),
+    // 主播
+    getAnchorList () {
+      this.dataListLoading = true
+      this.$http({
+        url: this.$http.adornUrl('/platform/live/liveUser/page'),
+        method: 'get',
+        params: this.$http.adornParams(
+          Object.assign({
+            current: 1,
+            size: 1000
+          })
+        )
+      }).then(({ data }) => {
+        this.anchorOptions = data.records.map(item => ({
+          ...item,
+          label: `${item.nickName}(${item.anchorWechat})`,
+          value: item.distributionUserId
+        }))
+        this.dataListLoading = false
+      })
     }
   }
 }
