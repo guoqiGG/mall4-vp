@@ -2,7 +2,6 @@
   <div>
     <el-form :inline="true" :model="form" size="small" ref="form" class="search-form">
       <el-form-item label="团长" prop="parentId">
-        <!-- <el-input v-model="dataForm.parentId" placeholder="请输入团长" /> -->
         <el-select v-model="dataForm.parentId" filterable remote reserve-keyword placeholder="请输入团长手机号查询"
           :remote-method="remoteMethod" :loading="loading">
           <el-option v-for="item in parentOptions" :key="item.value" :label="item.label" :value="item.value">
@@ -29,7 +28,7 @@
     <el-table :data="dataList" style="width: 100%">
       <el-table-column prop="score" label="豆数" :formatter="formatScore"></el-table-column>
       <el-table-column prop="createTime" label="时间"></el-table-column>
-      <el-table-column prop="source" label="消息来源"></el-table-column>
+      <el-table-column prop="sourceName" label="消息来源"></el-table-column>
     </el-table>
     <div class="total-row">合计: <span>{{ totalScore }}</span></div>
     <el-pagination v-if="dataList.length" @size-change="sizeChangeHandle" @current-change="currentChangeHandle"
@@ -77,7 +76,7 @@ export default {
       this.dataListLoading = true
       this.$http({
         url: this.$http.adornUrl('/user/integral-flow/scoreflowInfo'),
-        method: 'get',
+        method: 'post',
         params: this.$http.adornParams(
           Object.assign(
             {
