@@ -2207,6 +2207,9 @@ const zhCn = {
     agreeToRefundA: '同意退款',
     refusalToRefund: '拒绝退款'
   },
+  live: {
+    addNewLiveRoom: '新增直播间'
+  },
   liveRoom: {
     roomName: '直播间名称',
     selectRole: '角色选择',

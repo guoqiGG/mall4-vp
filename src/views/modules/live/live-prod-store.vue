@@ -2,41 +2,36 @@
   <div class="mod-live-liveProdStore">
     <!-- 搜索栏 -->
     <div class="search-bar">
-      <el-form @submit.native.prevent :inline="true" class="search-form" ref="searchForm" :model="searchForm" size="small">
-          <div class="input-row">
-            <el-form-item prop="name" :label="$t('product.prodName')+':'">
-              <el-input v-model="searchForm.name" type="text" clearable  :placeholder="$t('product.prodName')"></el-input>
-            </el-form-item>
-            <el-form-item >
-              <div class="default-btn primary-btn" @click="searchChange(true)">{{ $t('crud.searchBtn') }}</div>
-              <div class="default-btn" @click="resetForm('searchForm')">{{ $t('product.reset') }}</div>
-            </el-form-item>
-          </div>
-        </el-form>
+      <el-form @submit.native.prevent :inline="true" class="search-form" ref="searchForm" :model="searchForm"
+        size="small">
+        <div class="input-row">
+          <el-form-item prop="name" :label="$t('product.prodName') + ':'">
+            <el-input v-model="searchForm.name" type="text" clearable :placeholder="$t('product.prodName')"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <div class="default-btn primary-btn" @click="searchChange(true)">{{ $t('crud.searchBtn') }}</div>
+            <div class="default-btn" @click="resetForm('searchForm')">{{ $t('product.reset') }}</div>
+          </el-form-item>
+        </div>
+      </el-form>
     </div>
-   <div class="main-container">
-      <!-- 搜索栏end -->
+    <div class="main-container">
+        <!-- 搜索栏end -->
+        <div class="operation-bar">
+        <div class="default-btn primary-btn" @click="addOrUpdateHandle(0, 1)">
+          新增
+        </div>
+        <span class="live-tips">
+          （今日剩余提交审核直播商品次数：<span class="stress">{{shopNum}}</span>次，平台今日剩余限额<span class="stress">{{ totalNum }}</span>次）</span>
+      </div>
       <div class="table-con">
         <div class="tips">
-          <span class="text">{{$t('liveRoom.newLiveProdNum')}}{{$t('liveRoom.platformRemainingQuota')}}{{totalNum}}{{$t('user.bout')}}</span>
+          <span
+            class="text">{{ $t('liveRoom.newLiveProdNum') }}{{ $t('liveRoom.platformRemainingQuota') }}{{ totalNum }}{{ $t('user.bout') }}</span>
         </div>
-        <el-table
-          :data="dataList"
-          header-cell-class-name="table-header"
-          row-class-name="table-row"
-          style="width: 100%"
-        >
-          <el-table-column
-            :label="$t('brand.serialNumber')"
-            type="index"
-            width="80"
-          />
-          <el-table-column
-            align="left"
-            prop="coverPic"
-            :label="$t('group.prodInfo')"
-            width="400"
-          >
+        <el-table :data="dataList" header-cell-class-name="table-header" row-class-name="table-row" style="width: 100%">
+          <el-table-column :label="$t('brand.serialNumber')" type="index" width="80" />
+          <el-table-column align="left" prop="coverPic" :label="$t('group.prodInfo')" width="400">
             <template slot-scope="scope">
               <div class="table-cell-con">
                 <div class="table-cell-image">
@@ -46,83 +41,58 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column
-            prop="price"
-            :label="$t('product.price')"
-          />
-          <el-table-column
-            prop="status"
-            :label="$t('product.status')"
-          >
+          <el-table-column prop="price" :label="$t('product.price')" />
+          <el-table-column prop="status" :label="$t('product.status')">
             <template slot-scope="scope">
-              <span v-if="scope.row.status === -1">{{$t('liveRoom.goodsDeleted')}}</span>
-              <span v-if="scope.row.status === 0">{{$t('liveRoom.notReviewed')}}</span>
-              <span v-if="scope.row.status === 1">{{$t('liveRoom.underReview')}}</span>
-              <span v-if="scope.row.status === 2">{{$t('liveRoom.approved')}}</span>
-              <span v-if="scope.row.status === 3">{{$t('liveRoom.auditFailed')}}</span>
-              <span v-if="scope.row.status === 4">{{$t('product.violation')}}</span>
-              <span v-if="scope.row.status === 5">{{$t('scoreProdList.platformOffShelf')}}</span>
+              <span v-if="scope.row.status === -1">{{ $t('liveRoom.goodsDeleted') }}</span>
+              <span v-if="scope.row.status === 0">{{ $t('liveRoom.notReviewed') }}</span>
+              <span v-if="scope.row.status === 1">{{ $t('liveRoom.underReview') }}</span>
+              <span v-if="scope.row.status === 2">{{ $t('liveRoom.approved') }}</span>
+              <span v-if="scope.row.status === 3">{{ $t('liveRoom.auditFailed') }}</span>
+              <span v-if="scope.row.status === 4">{{ $t('product.violation') }}</span>
+              <span v-if="scope.row.status === 5">{{ $t('scoreProdList.platformOffShelf') }}</span>
             </template>
           </el-table-column>
-          <el-table-column
-            width="150"
-            prop="createTime"
-            :label="$t('liveRoom.addGoodsTime')"
-          >
+          <el-table-column width="150" prop="createTime" :label="$t('liveRoom.addGoodsTime')">
             <template slot-scope="scope">
               <span class="table-cell-text">{{ scope.row.createTime || '-' }}</span>
             </template>
           </el-table-column>
-          <el-table-column
-            width="150"
-            prop="verifyTime"
-            :label="$t('liveRoom.submissionTime')"
-          >
+          <el-table-column width="150" prop="verifyTime" :label="$t('liveRoom.submissionTime')">
             <template slot-scope="scope">
               <span class="table-cell-text">{{ scope.row.verifyTime || '-' }}</span>
             </template>
           </el-table-column>
-          <el-table-column
-            width="150"
-            prop="successTime"
-            :label="$t('liveRoom.passTime')"
-          >
+          <el-table-column width="150" prop="successTime" :label="$t('liveRoom.passTime')">
             <template slot-scope="scope">
               <span class="table-cell-text">{{ scope.row.successTime || '-' }}</span>
             </template>
           </el-table-column>
-          <el-table-column
-            align="center"
-            :label="$t('crud.menu')"
-            width="100"
-            fixed="right"
-            >
+          <el-table-column align="center" :label="$t('crud.menu')" width="100" fixed="right">
             <template slot-scope="scope">
               <div class="text-btn-con">
-                <div
-                  :class="[scope.row.status === 1? 'disabled-btn':'','default-btn text-btn']"
-                  @click="deleteHandle(scope.row.liveProdStoreId,scope.row.status)"
-                >{{$t('remindPop.delete')}}</div>
+                <div :class="[scope.row.status === 1 ? 'disabled-btn' : '', 'default-btn text-btn']"
+                  @click="deleteHandle(scope.row.liveProdStoreId, scope.row.status)">{{ $t('remindPop.delete') }}</div>
               </div>
             </template>
           </el-table-column>
         </el-table>
       </div>
-      <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="page.currentPage"
-          :page-sizes="[10, 20, 50, 100]"
-          :page-size="page.pageSize"
-          :total="page.total"
-          layout="total, sizes, prev, pager, next, jumper"
-      ></el-pagination>
-   </div>
-    <!-- <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="refreshChange"></add-or-update> -->
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+        :current-page="page.currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="page.pageSize" :total="page.total"
+        layout="total, sizes, prev, pager, next, jumper"></el-pagination>
+    </div>
+    <add-or-update
+      v-if="addOrUpdateVisible"
+      ref="addOrUpdate"
+      @refreshDataList="refreshChange"
+    />
   </div>
 </template>
 
 <script>
+import AddOrUpdate from './liveProdStore-add-or-update.vue'
+
 export default {
   data () {
     return {
@@ -147,7 +117,7 @@ export default {
     }
   },
   components: {
-    // AddOrUpdate
+    AddOrUpdate
   },
   created () {
   },
@@ -197,11 +167,12 @@ export default {
       })
     },
     // 新增 / 修改
-    addOrUpdateHandle (id) {
-      // this.addOrUpdateVisible = true
-      // this.$nextTick(() => {
-      //   this.$refs.addOrUpdate.init(id)
-      // })
+    addOrUpdateHandle (id, type) {
+      // type = 1 新增 type = 2 修改  type = 3 查看
+      this.addOrUpdateVisible = true
+      this.$nextTick(() => {
+        this.$refs.addOrUpdate.init(id, type)
+      })
     },
     /**
      * 提交审核
@@ -287,6 +258,7 @@ export default {
 .mod-live-liveProdStore {
   .tips {
     margin-bottom: 20px;
+
     .text {
       color: #FF0000;
     }

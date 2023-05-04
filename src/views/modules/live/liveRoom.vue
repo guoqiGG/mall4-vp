@@ -2,44 +2,32 @@
   <div class="mod-live-liveUser">
     <!-- 搜索栏 -->
     <div class="search-bar">
-      <el-form @submit.native.prevent :inline="true" class="search-form" ref="searchForm" :model="searchForm" size="small">
+      <el-form @submit.native.prevent :inline="true" class="search-form" ref="searchForm" :model="searchForm"
+        size="small">
         <div class="input-row">
-          <el-form-item prop="name" :label="$t('liveRoom.roomName')+':'">
-            <el-input v-model="searchForm.name" type="text" clearable  :placeholder="$t('liveRoom.roomName')"></el-input>
+          <el-form-item prop="name" :label="$t('liveRoom.roomName') + ':'">
+            <el-input v-model="searchForm.name" type="text" clearable :placeholder="$t('liveRoom.roomName')"></el-input>
           </el-form-item>
-          <el-form-item prop="anchorName" :label="$t('liveRoom.anchorNickname')+':'">
-            <el-input v-model="searchForm.anchorName" type="text" clearable  :placeholder="$t('liveRoom.anchorNickname')"></el-input>
+          <el-form-item prop="anchorName" :label="$t('liveRoom.anchorNickname') + ':'">
+            <el-input v-model="searchForm.anchorName" type="text" clearable
+              :placeholder="$t('liveRoom.anchorNickname')"></el-input>
           </el-form-item>
-          <el-form-item prop="liveStatus" :label="$t('liveRoom.liveRoomStatus')+':'">
-            <el-select v-model="searchForm.liveStatus" clearable  :placeholder="$t('liveRoom.liveRoomStatus')">
-              <el-option
-                v-for="item in liveStatus"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+          <el-form-item prop="liveStatus" :label="$t('liveRoom.liveRoomStatus') + ':'">
+            <el-select v-model="searchForm.liveStatus" clearable :placeholder="$t('liveRoom.liveRoomStatus')">
+              <el-option v-for="item in liveStatus" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item prop="roomTop" :label="$t('liveRoom.whetherToTop')+':'">
-            <el-select v-model="searchForm.roomTop" clearable  :placeholder="$t('liveRoom.whetherToTop')">
-              <el-option
-                v-for="item in roomTops"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+          <el-form-item prop="roomTop" :label="$t('liveRoom.whetherToTop') + ':'">
+            <el-select v-model="searchForm.roomTop" clearable :placeholder="$t('liveRoom.whetherToTop')">
+              <el-option v-for="item in roomTops" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label="this.$i18n.t('liveRoom.liveBroadcastTime')+':'">
-            <el-date-picker
-              size="small"
-              v-model="dateRange"
-              type="datetimerange"
-              range-separator="—"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              :start-placeholder="this.$i18n.t('date.start')"
-              :end-placeholder="this.$i18n.t('date.end')"
-            ></el-date-picker>
+          <el-form-item :label="this.$i18n.t('liveRoom.liveBroadcastTime') + ':'">
+            <el-date-picker size="small" v-model="dateRange" type="datetimerange" range-separator="—"
+              value-format="yyyy-MM-dd HH:mm:ss" :start-placeholder="this.$i18n.t('date.start')"
+              :end-placeholder="this.$i18n.t('date.end')"></el-date-picker>
           </el-form-item>
           <el-form-item>
             <div class="default-btn primary-btn" @click="searchChange(true)">{{ $t('crud.searchBtn') }}</div>
@@ -51,134 +39,77 @@
     <!-- 搜索栏end -->
     <div class="main-container">
       <div class="tips">
-        <span class="text"
-        >{{
+        <span class="text">{{
           $t("liveRoom.platformDeleteQuota")
         }}
-        {{ totalNum }} {{ $t("distribution.bcTip4") }}</span>
+          {{ totalNum }} {{ $t("distribution.bcTip4") }}</span>
+      </div>
+      <div class="operation-bar">
+        <div class="default-btn primary-btn"  @click="addOrUpdateHandle()">
+          新增
+        </div>
+        <span class="live-tips">（剩余新增直播间次数：<span class="stress">{{ shopNum }}</span>次，平台今日剩余限额<span class="stress">{{ totalNum }}</span>次）</span>
       </div>
       <div class="table-con">
-        <el-table
-          :data="dataList"
-          header-cell-class-name="table-header"
-          row-class-name="table-row-low"
-          style="width: 100%"
-        >
-          <el-table-column
-            :label="$t('brand.serialNumber')"
-            type="index"
-            width="80"
-          />
-          <el-table-column
-            prop="name"
-            :label="$t('liveRoom.roomName')"
-            width="200"
-          >
+        <el-table :data="dataList" header-cell-class-name="table-header" row-class-name="table-row-low"
+          style="width: 100%">
+          <el-table-column :label="$t('brand.serialNumber')" type="index" width="80" />
+          <el-table-column prop="name" :label="$t('liveRoom.roomName')" width="200">
             <template slot-scope="scope">
               <span class="table-cell-text">
-                {{scope.row.name}}
+                {{ scope.row.name }}
               </span>
             </template>
           </el-table-column>
-          <el-table-column
-            prop="anchorName"
-            :label="$t('liveRoom.anchorNickname')"
-            width="200"
-          >
+          <el-table-column prop="anchorName" :label="$t('liveRoom.anchorNickname')" width="200">
             <template slot-scope="scope">
               <span class="table-cell-text">
-                {{scope.row.anchorName}}
+                {{ scope.row.anchorName }}
               </span>
             </template>
           </el-table-column>
-          <el-table-column
-            prop="anchorWechat"
-            :label="$t('liveRoom.anchorWechat')"
-          />
-          <el-table-column
-            prop="liveStatus"
-            :label="$t('liveRoom.liveRoomStatus')"
-          >
+          <el-table-column prop="anchorWechat" :label="$t('liveRoom.anchorWechat')" />
+          <el-table-column prop="liveStatus" :label="$t('liveRoom.liveRoomStatus')">
             <template slot-scope="scope">
-              <span
-                v-if="scope.row.liveStatus === 101"
-              >{{$t('liveRoom.live')}}</span>
-              <span v-if="scope.row.liveStatus === 102">{{$t('groups.hasNotStarted')}}</span>
-              <span v-if="scope.row.liveStatus === 103">{{$t('groups.over')}}</span>
-              <span v-if="scope.row.liveStatus === 104">{{$t('liveRoom.prohibitPlay')}}</span>
-              <span v-if="scope.row.liveStatus === 105">{{$t('liveRoom.suspend')}}</span>
-              <span v-if="scope.row.liveStatus === 106">{{$t('liveRoom.abnormal')}}</span>
-              <span v-if="scope.row.liveStatus === 107">{{$t('liveRoom.expired')}}</span>
+              <span v-if="scope.row.liveStatus === 101">{{ $t('liveRoom.live') }}</span>
+              <span v-if="scope.row.liveStatus === 102">{{ $t('groups.hasNotStarted') }}</span>
+              <span v-if="scope.row.liveStatus === 103">{{ $t('groups.over') }}</span>
+              <span v-if="scope.row.liveStatus === 104">{{ $t('liveRoom.prohibitPlay') }}</span>
+              <span v-if="scope.row.liveStatus === 105">{{ $t('liveRoom.suspend') }}</span>
+              <span v-if="scope.row.liveStatus === 106">{{ $t('liveRoom.abnormal') }}</span>
+              <span v-if="scope.row.liveStatus === 107">{{ $t('liveRoom.expired') }}</span>
             </template>
           </el-table-column>
-          <el-table-column
-            prop="roomTop"
-            :label="$t('liveRoom.whetherToTop')"
-          >
+          <el-table-column prop="roomTop" :label="$t('liveRoom.whetherToTop')">
             <template slot-scope="scope">
-              <span>{{[$t('liveRoom.notPinned'),$t('liveRoom.pinned')][scope.row.roomTop]}}</span>
+              <span>{{ [$t('liveRoom.notPinned'), $t('liveRoom.pinned')][scope.row.roomTop] }}</span>
             </template>
           </el-table-column>
-          <el-table-column
-            prop="startTime"
-            :label="$t('liveRoom.LiveStartTime')"
-            width="160"
-          />
-          <el-table-column
-            prop="endTime"
-            :label="$t('liveRoom.LiveOverTime')"
-            width="160"
-          />
-          <el-table-column
-            prop="applyTime"
-            :label="$t('order.applicationTime')"
-            width="160"
-          />
-          <el-table-column
-            :label="$t('crud.menu')"
-            fixed="right"
-            align="center"
-            width="150"
-          >
+          <el-table-column prop="startTime" :label="$t('liveRoom.LiveStartTime')" width="160" />
+          <el-table-column prop="endTime" :label="$t('liveRoom.LiveOverTime')" width="160" />
+          <el-table-column prop="applyTime" :label="$t('order.applicationTime')" width="160" />
+          <el-table-column :label="$t('crud.menu')" fixed="right" align="center" width="150">
             <template slot-scope="scope">
               <div class="text-btn-con">
-                <div
-                  class="default-btn text-btn"
-                  :class="{'disabled-btn':scope.row.liveStatus !== 101 && scope.row.liveStatus !== 102}"
-                  v-if="scope.row.roomTop === 0"
-                  @click="toTopHandle(scope.row)"
-                >
-                 {{$t('liveRoom.top')}}
+                <div class="default-btn text-btn"
+                  :class="{ 'disabled-btn': scope.row.liveStatus !== 101 && scope.row.liveStatus !== 102 }"
+                  v-if="scope.row.roomTop === 0" @click="toTopHandle(scope.row)">
+                  {{ $t('liveRoom.top') }}
                 </div>
-                <div
-                 class="default-btn text-btn"
-                 @click="toTopHandle(scope.row)"
-                 v-if="scope.row.roomTop === 1"
-                >
-                 {{$t('liveRoom.cancelTopping')}}
+                <div class="default-btn text-btn" @click="toTopHandle(scope.row)" v-if="scope.row.roomTop === 1">
+                  {{ $t('liveRoom.cancelTopping') }}
                 </div>
-                <div
-                  class="default-btn text-btn"
-                  type="text"
-                  icon="el-icon-delete"
-                  size="small"
-                  @click="deleteHandle(scope.row.id)"
-                >{{$t('user.deleteBtn')}}</div>
+                <div class="default-btn text-btn" type="text" icon="el-icon-delete" size="small"
+                  @click="deleteHandle(scope.row.id)">{{ $t('user.deleteBtn') }}</div>
               </div>
             </template>
           </el-table-column>
         </el-table>
       </div>
-      <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="page.currentPage"
-          :page-sizes="[10, 20, 50, 100]"
-          :page-size="page.pageSize"
-          :total="page.total"
-          layout="total, sizes, prev, pager, next, jumper"
-      ></el-pagination>
-      </div>
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+        :current-page="page.currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="page.pageSize" :total="page.total"
+        layout="total, sizes, prev, pager, next, jumper"></el-pagination>
+    </div>
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="refreshChange"></add-or-update>
   </div>
 </template>
@@ -283,11 +214,15 @@ export default {
       })
     },
     // 新增 / 修改
-    addOrUpdateHandle (id) {
-      this.addOrUpdateVisible = true
-      this.$nextTick(() => {
-        this.$refs.addOrUpdate.init(id)
+    addOrUpdateHandle (data) {
+      // this.addOrUpdateVisible = true
+      // this.$nextTick(() => {
+      //   this.$refs.addOrUpdate.init(id)
+      // })
+      this.$router.push({
+        path: '/live-newLiveRoom'
       })
+      sessionStorage.setItem('bbcLiveRoomData', JSON.stringify(data))
     },
     // 获取剩余可删除得数量
     getAddProdNum () {
@@ -387,6 +322,14 @@ export default {
 .mod-live-liveUser {
   .tips .text {
     color: #FF0000;
+  }
+
+  .operation-bar {
+    .live-tips {
+      .stress {
+        color: #ff4141;
+      }
+    }
   }
 }
 </style>
