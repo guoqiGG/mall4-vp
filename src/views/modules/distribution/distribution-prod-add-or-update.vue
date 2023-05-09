@@ -1,7 +1,7 @@
 <template>
   <div class="mod-distribution-prod-add-or-update">
     <el-dialog
-      :title="!dataForm.distributionProdId ? '新增分销商品' : $t('seckill.view')"
+      :title="distributionProdId==2 ? $t('seckill.edit') : $t('seckill.view')"
       :close-on-click-modal="false"
       :visible.sync="visible"
     >
@@ -11,7 +11,7 @@
         ref="dataForm"
         @keyup.enter.native="dataFormSubmit ()"
         :label-width="this.$i18n.t('language') === 'language' ? '130px' : '90px'"
-        :disabled="true"
+        :disabled="distributionProdId==2?false:true"
       >
         <el-form-item :label="$t('groups.relatedProducts')">
           <div v-if="prodData[0]!=null">
@@ -21,8 +21,14 @@
                 width="100%"
                 :pic="prodData[0].pic"
               ></prod-pic>
-              <div class="card-prod-bottom">
+              <div class="card-prod-bottom" v-if="distributionProdId==2">
                 <span class="card-prod-name">{{prodData[0].prodName}}</span>
+                <div
+                class="default-btn text-btn"
+                @click="deleteRelation"
+                style="margin-top:8px;margin-right:5px;"
+                >{{ $t("text.delBtn") }}</div
+              >
               </div>
             </el-card>
           </div>
@@ -47,7 +53,7 @@
           <el-form-item :label="$t('marketing.inviterReward')" prop="awardType">
             <el-radio-group v-model="dataForm.parentAwardSet">
               <el-radio :label="0">{{$t('seckill.close')}}</el-radio>
-              <el-radio :label="1">{{$t('seckill.open')}}</el-radio>
+              <el-radio :label="1" disabled>{{$t('seckill.open')}}</el-radio>
             </el-radio-group>
           </el-form-item>
 
@@ -88,6 +94,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <div class="default-btn" @click="visible = false">{{$t('seckill.close')}}</div>
+        <div v-if="distributionProdId==2" class="default-btn primary-btn" @click="dataFormSubmit()">{{$t('remindPop.confirm')}}</div>
       </span>
     </el-dialog>
     <!-- 弹窗, 新增 / 修改 -->
@@ -113,9 +120,11 @@ export default {
         'parentAwardNumbers': '',
         'parentAwardSet': 0
       },
+      distributionProdId:1,
       resourcesUrl: process.env.VUE_APP_RESOURCES_URL,
       levelData: [],
       prodData: [],
+      isSubmit: false,
       addProdVisible: false,
       visible: false,
       isInviterReward: true,
@@ -131,16 +140,22 @@ export default {
   methods: {
     init (data) {
       this.visible = true
+      this.isSubmit = false
       if (data) {
         this.dataForm = data
         this.prodData[0] = this.dataForm.product
       } else {
         this.$nextTick(() => {
           this.$refs['dataForm'].resetFields()
-          this.dataForm.defaultReward = 1
+          this.dataForm.defaultReward = 0
+          this.dataForm.awardProportion = 0
+          this.dataForm.awardNumberSet = 0
+          this.dataForm.parentAwardSet = 0
+          this.dataForm.awardNumbers = 1
+          this.dataForm.parentAwardNumbers = 1
+          this.dataForm.state = 1
           this.levelData = []
           this.prodData = []
-          this.distributionProdId = null
         })
       }
     },
@@ -162,7 +177,7 @@ export default {
       if (prods) {
         this.$nextTick(() => {
           this.$http({
-            url: this.$http.adornUrl('/distribution/distributionProd/count'),
+            url: this.$http.adornUrl('/platform/distributionProd/count'),
             method: 'get',
             params: this.$http.adornParams({
               prodId: prods[0].prodId
@@ -181,6 +196,7 @@ export default {
         })
       }
     },
+    
     // 表单提交
     dataFormSubmit () {
       this.$refs['dataForm'].validate((valid) => {
@@ -197,9 +213,13 @@ export default {
             this.dataForm.parentAwardNumbers = JSON.stringify(parentAwardNumberjson)
           }
           let param = this.dataForm
-
+          console.log(param.distributionProdId)
+          if (this.isSubmit) {
+            return false
+          }
+          this.isSubmit = true
           this.$http({
-            url: this.$http.adornUrl(`/distribution/distributionProd`),
+            url: this.$http.adornUrl(`/platform/distributionProd`),
             method: param.distributionProdId ? 'put' : 'post',
             data: this.$http.adornData(param)
           }).then(({ data }) => {
@@ -212,6 +232,8 @@ export default {
                 this.$emit('refreshDataList')
               }
             })
+          }).catch((e) => {
+            this.isSubmit = false
           })
         }
       })

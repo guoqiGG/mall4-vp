@@ -50,8 +50,8 @@
         class="default-btn primary-btn"
         :class="[dataListSelections.length <= 0?'disabled-btn':'','default-btn text-btn']"
         :disabled="dataListSelections.length <= 0"
-        @click="selectProd(dataListSelections.length <= 0)"
-      >确定</div>
+        @click="selectProd()"
+      >{{$t('remindPop.confirm')}}</div>
     </span>
   </el-dialog>
 </template>
@@ -145,8 +145,9 @@ export default {
       this.getDataList()
     },
     // 选择产品
-    selectProd (state) {
-      if (!state) {
+    selectProd () {
+      if (this.isShowProd) {
+        this.visible = false
         return
       }
       var prods = []

@@ -1358,6 +1358,7 @@ const en = {
     offlineReasonTip: 'Offline reason cannot be empty',
     offlineReasonTip1: 'The reason for going offline cannot exceed 100 words',
     newAdd: 'newly added',
+    edit:'Edit',
     view: 'View',
     viewInformation: 'View information',
     activityTimeRange: 'Activity time range',

@@ -117,10 +117,18 @@
           >
             <template slot-scope="scope">
               <div class="text-btn-con">
+
+                <div
+                  class="default-btn text-btn"
+                  v-if="isAuth('platform:distributionProd:update')"
+                  @click="addOrUpdateHandle(scope.row,'edit')"
+                  >{{$t("crud.updateBtn")}}</div
+                >
+
                 <div
                   v-if="isAuth('platform:distributionProd:info')"
                   class="default-btn text-btn"
-                  @click="addOrUpdateHandle(scope.row)"
+                  @click="addOrUpdateHandle(scope.row,'view')"
                 >
                   {{$t('prodList.lookOver')}}
                 </div>
@@ -140,6 +148,13 @@
                         ? $t("prodList.offShelfManage")
                         : $t("coupon.checkPending")}}
                 </div>
+
+                <div
+                class="default-btn text-btn"
+                v-if="isAuth('platform:distributionProd:delete')"
+                @click="deleteHandle(scope.row)"
+                >{{ $t("text.delBtn") }}</div
+              >
               </div>
             </template>
           </el-table-column>
@@ -211,10 +226,15 @@ export default {
   },
   methods: {
     // 新增 / 修改
-    addOrUpdateHandle (data) {
+    addOrUpdateHandle (data,opt) {
       this.addOrUpdateVisible = true
       this.$nextTick(() => {
         this.$refs.addOrUpdate.init(data)
+        if(opt=='view'){
+          this.$refs.addOrUpdate.distributionProdId=1
+        }else{
+          this.$refs.addOrUpdate.distributionProdId=2
+        }
       })
     },
     // 点击查询

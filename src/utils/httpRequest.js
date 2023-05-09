@@ -27,6 +27,7 @@ http.interceptors.request.use(config => {
       return qs.stringify(params, { arrayFormat: 'repeat' })
     }
   }
+  console.log('config',config)
   return config
 }, error => {
   return Promise.reject(error)
@@ -41,6 +42,7 @@ http.interceptors.response.use(response => {
     return response
   }
   const res = response.data
+  console.log('res',res)
   // 00000 请求成功
   if (res.code === '00000') {
     return res

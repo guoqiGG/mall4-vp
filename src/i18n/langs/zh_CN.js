@@ -1315,6 +1315,7 @@ const zhCn = {
     isDeleOper: '确定进行删除操作?',
     newAdd: '新增',
     view: '查看',
+    edit:'修改',
     viewInformation: '查看信息',
     activityTimeRange: '活动时间',
     purchaseLimitPerPerson: '每人限购',
