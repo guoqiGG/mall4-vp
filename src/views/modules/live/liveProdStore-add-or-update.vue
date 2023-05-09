@@ -106,7 +106,7 @@
           class="livePrice"
         >
           &nbsp;&nbsp;&nbsp;
-          <span class="input-tips">{{ $t("live.marketPrice") }}</span>
+          <span class="input-tips">市场价</span>
           <el-input-number
             v-model.number="dataForm.price"
             style="width: 180px"
@@ -221,14 +221,14 @@ export default {
   data () {
     var validate = (rule, value, callback) => {
       if (!/^[1-9]\d*$|^[1-9]\d*\.\d\d?$|^0\.\d\d?$/.test(value)) {
-        callback(new Error(this.$i18n.t('live.pleaseEnteThan0')))
+        callback(new Error('请输入大于0的整数或者保留两位小数的正数'))
       } else {
         callback()
       }
     }
     var valiname = (rule, value, callback) => {
       if (!value.trim()) {
-        callback(new Error(this.$i18n.t('shopProcess.inputAllSpace')))
+        callback(new Error('内容不能全为空格'))
       } else {
         callback()
       }
@@ -443,25 +443,25 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           if (this.dataForm.name === null || this.dataForm.name === '') {
-            return this.$message.error(this.$i18n.t('live.productNameEmpty'))
+            return this.$message.error('商品名称不能为空')
           }
           if (this.dataForm.coverPic === null || this.dataForm.coverPic === '') {
-            return this.$message.error(this.$i18n.t('live.productBeEmpty'))
+            return this.$message.error('商品封面不能为空')
           }
           if (!/^[1-9]\d*$|^[1-9]\d*\.\d\d?$|^0\.\d\d?$/.test(this.dataForm.price)) {
-            return this.$message.error(this.$i18n.t('live.pleaseEnteThan0'))
+            return this.$message.error('请输入大于0的整数或者保留两位小数的正数')
           }
           if (this.dataForm.priceType !== 1) {
             if (!/^[1-9]\d*$|^[1-9]\d*\.\d\d?$|^0\.\d\d?$/.test(this.dataForm.price2)) {
-              return this.$message.error(this.$i18n.t('live.pleaseEnteThan0'))
+              return this.$message.error('请输入大于0的整数或者保留两位小数的正数')
             }
             console.log(this.dataForm.priceType)
             console.log(this.dataForm.price2)
             if (this.dataForm.priceType === 3 && this.dataForm.price < this.dataForm.price2) {
-              return this.$message.error(this.$i18n.t('live.notLessThanPrice'))
+              return this.$message.error('市场价不能小于现价')
             }
             if (this.dataForm.priceType === 2 && this.dataForm.price > this.dataForm.price2) {
-              return this.$message.error(this.$i18n.t('live.cannotBePrice'))
+              return this.$message.error('前一个价格不能大于后面的价格')
             }
             if (this.dataForm.prodId === null) {
               return this.$message.error('请选择商品')

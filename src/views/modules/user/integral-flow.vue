@@ -2,7 +2,7 @@
   <div>
     <el-form :inline="true" :model="form" size="small" ref="form" class="search-form">
       <el-form-item label="团长" prop="parentId">
-        <el-select v-model="dataForm.parentId" filterable remote reserve-keyword placeholder="请输入团长手机号查询"
+        <el-select v-model="dataForm.parentId" filterable remote reserve-keyword clearable placeholder="请输入团长手机号查询"
           :remote-method="remoteMethod" :loading="loading">
           <el-option v-for="item in parentOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
@@ -14,10 +14,16 @@
           :range-separator="$t('date.tip')"></el-date-picker>
       </el-form-item>
       <el-form-item label="主播" prop="anchorId">
-        <el-select v-model="dataForm.anchorId" filterable placeholder="请选择主播">
-            <el-option v-for="item in anchorOptions" :key="item.value" :label="item.label" :value="item.value">
-            </el-option>
-          </el-select>
+        <el-select v-model="dataForm.anchorId" filterable clearable placeholder="请选择主播">
+          <el-option v-for="item in anchorOptions" :key="item.value" :label="item.label" :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="消息类型" prop="source">
+        <el-select v-model="dataForm.source" filterable clearable placeholder="请选择消息类型">
+          <el-option v-for="item in sourceTypeOptions" :key="item.value" :label="item.label" :value="item.value">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item>
         <div class="default-btn primary-btn" @click="search()">搜索</div>
@@ -26,6 +32,8 @@
       </el-form-item>
     </el-form>
     <el-table :data="dataList" style="width: 100%">
+      <el-table-column prop="nickName" label="用户昵称"></el-table-column>
+      <el-table-column prop="userMobile" label="用户手机号"></el-table-column>
       <el-table-column prop="score" label="豆数" :formatter="formatScore"></el-table-column>
       <el-table-column prop="createTime" label="时间"></el-table-column>
       <el-table-column prop="sourceName" label="消息来源"></el-table-column>
@@ -46,7 +54,8 @@ export default {
       dataForm: {
         parentId: undefined,
         time: [],
-        anchorId: undefined
+        anchorId: undefined,
+        source: undefined
       },
       page: {
         total: 0, // 总页数
@@ -58,7 +67,19 @@ export default {
       totalScore: 0,
       loading: false,
       parentOptions: [],
-      anchorOptions: []
+      anchorOptions: [],
+      sourceTypeOptions: []
+    }
+  },
+  computed: {
+    searchParams () {
+      return {
+        parentId: this.dataForm.parentId,
+        anchorId: this.dataForm.anchorId,
+        startTime: this.dataForm.time[0],
+        endTime: this.dataForm.time[1],
+        source: this.dataForm.source
+      }
     }
   },
   created () {
@@ -66,6 +87,7 @@ export default {
     this.getDataList(this.page)
     this.getDataTotal()
     this.getAnchorList()
+    this.getAnchorOptions()
   },
   methods: {
     /**
@@ -79,12 +101,7 @@ export default {
         method: 'post',
         params: this.$http.adornParams(
           Object.assign(
-            {
-              parentId: this.dataForm.parentId,
-              anchorId: this.dataForm.anchorId,
-              startTime: this.dataForm.time[0],
-              endTime: this.dataForm.time[1]
-            },
+            this.searchParams,
             {
               current: page == null ? this.page.currentPage : page.currentPage,
               size: page == null ? this.page.pageSize : page.pageSize
@@ -104,16 +121,7 @@ export default {
       this.$http({
         url: this.$http.adornUrl('/user/integral-flow/scoreflowTotal'),
         method: 'post',
-        params: this.$http.adornParams(
-          Object.assign(
-            {
-              parentId: this.dataForm.parentId,
-              anchorId: this.dataForm.anchorId,
-              startTime: this.dataForm.time[0],
-              endTime: this.dataForm.time[1]
-            }
-          ), false
-        )
+        params: this.$http.adornParams(this.searchParams, false)
       }).then(({ data }) => {
         this.totalScore = data
       }).finally(() => {
@@ -137,12 +145,7 @@ export default {
         this.$http({
           url: this.$http.adornUrl('/user/integral-flow/excelScoreflowInfo'),
           method: 'post',
-          params: this.$http.adornParams({
-            parentId: this.dataForm.parentId,
-            anchorId: this.dataForm.anchorId,
-            startTime: this.dataForm.time[0],
-            endTime: this.dataForm.time[1]
-          }),
+          params: this.$http.adornParams(this.searchParams),
           responseType: 'blob' // 解决文件下载乱码问题
         }).then(({ data }) => {
           loading.close()
@@ -236,6 +239,22 @@ export default {
           label: `${item.nickName}(${item.anchorWechat})`,
           value: item.distributionUserId
         }))
+        this.dataListLoading = false
+      })
+    },
+    // 获取消息类型列表
+    getAnchorOptions () {
+      this.dataListLoading = true
+      this.$http({
+        url: this.$http.adornUrl('/user/integral-flow/scoreflowSearchData'),
+        method: 'get'
+      }).then(({ data }) => {
+        const opts = Object.entries(data).reduce((prev, [key, value]) => {
+          prev.push({ label: value, value: key })
+          return prev
+        }, [])
+        this.sourceTypeOptions = opts
+      }).finally(() => {
         this.dataListLoading = false
       })
     }
