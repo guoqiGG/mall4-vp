@@ -213,7 +213,6 @@ export default {
             this.dataForm.parentAwardNumbers = JSON.stringify(parentAwardNumberjson)
           }
           let param = this.dataForm
-          console.log(param.distributionProdId)
           if (this.isSubmit) {
             return false
           }
