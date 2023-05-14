@@ -1,7 +1,7 @@
 <template>
   <div class="mod-distribution-prod-add-or-update">
     <el-dialog
-      :title="distributionProdId==2 ? $t('seckill.edit') : $t('seckill.view')"
+      :title="distributionProdId==2 ? $t('seckill.edit') :distributionProdId==1? $t('seckill.view'):$t('seckill.newAdd')"
       :close-on-click-modal="false"
       :visible.sync="visible"
     >

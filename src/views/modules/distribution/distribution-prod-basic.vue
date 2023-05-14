@@ -25,16 +25,22 @@
 
     <div class="main-container">
       <!-- 操作栏 -->
-      <!-- <div class="operation-bar">
-        <el-checkbox v-model="selectAll" :disabled="!dataList.length" @change="handleSelectAll" class="all-check-btn">{{$t('publics.selectAll')}}</el-checkbox>
-        <span v-if="dataListSelections.length" class="had-selected">{{$t('dataAnalysis.selected')}} {{dataListSelections.length}}</span>
+      <div class="operation-bar">
+        <!-- <el-checkbox v-model="selectAll" :disabled="!dataList.length" @change="handleSelectAll" class="all-check-btn">{{$t('publics.selectAll')}}</el-checkbox>
+        <span v-if="dataListSelections.length" class="had-selected">{{$t('dataAnalysis.selected')}} {{dataListSelections.length}}</span> -->
         <div
+        class="default-btn primary-btn"
+        v-if="isAuth('platform:distributionProd:update')"
+        @click="addOrUpdateHandle('','add')"
+        >{{ $t("crud.addTitle") }}
+      </div>
+        <!-- <div
           class="default-btn"
           :disabled="dataListSelections.length <= 0"
           @click="deleteHandle()">
           {{ $t('publics.batchDelete') }}
-        </div>
-      </div> -->
+        </div> -->
+      </div>
       <!-- 表格 -->
       <div class="table-con distribution-prod-table">
         <el-table
@@ -232,8 +238,10 @@ export default {
         this.$refs.addOrUpdate.init(data)
         if(opt=='view'){
           this.$refs.addOrUpdate.distributionProdId=1
-        }else{
+        }else if(opt=='edit'){
           this.$refs.addOrUpdate.distributionProdId=2
+        }else{
+          this.$refs.addOrUpdate.distributionProdId=3
         }
       })
     },
