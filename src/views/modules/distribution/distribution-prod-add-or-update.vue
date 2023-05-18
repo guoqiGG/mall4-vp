@@ -11,7 +11,7 @@
         ref="dataForm"
         @keyup.enter.native="dataFormSubmit ()"
         :label-width="this.$i18n.t('language') === 'language' ? '130px' : '90px'"
-        :disabled="distributionProdId==2?false:true"
+        :disabled="distributionProdId!==1?false:true"
       >
         <el-form-item :label="$t('groups.relatedProducts')">
           <div v-if="prodData[0]!=null">
@@ -21,7 +21,7 @@
                 width="100%"
                 :pic="prodData[0].pic"
               ></prod-pic>
-              <div class="card-prod-bottom" v-if="distributionProdId==2">
+              <div class="card-prod-bottom" v-if="distributionProdId!==1">
                 <span class="card-prod-name">{{prodData[0].prodName}}</span>
                 <div
                 class="default-btn text-btn"
@@ -94,7 +94,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <div class="default-btn" @click="visible = false">{{$t('seckill.close')}}</div>
-        <div v-if="distributionProdId==2" class="default-btn primary-btn" @click="dataFormSubmit()">{{$t('remindPop.confirm')}}</div>
+        <div v-if="distributionProdId!==1" class="default-btn primary-btn" @click="dataFormSubmit()">{{$t('remindPop.confirm')}}</div>
       </span>
     </el-dialog>
     <!-- 弹窗, 新增 / 修改 -->
