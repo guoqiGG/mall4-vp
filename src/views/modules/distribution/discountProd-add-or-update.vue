@@ -30,6 +30,7 @@
       </el-table-column>
 
       <el-table-column prop="prodName" header-align="center" align="center" label="产品名称"></el-table-column>
+      <el-table-column prop="price" header-align="center" align="center" label="销售价（元）"></el-table-column>
       <el-table-column align="center" width="140" label="产品图片">
         <template slot-scope="scope">
           <ImgShow :src="scope.row.pic" :imgStyle="{width:'100px',height:'100px'}" />
@@ -158,7 +159,8 @@ export default {
             discountProdId: 0,
             prodId: item.prodId,
             prodName: item.prodName,
-            pic: item.pic
+            pic: item.pic,
+            price: item.price
           })
         }
       })

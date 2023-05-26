@@ -43,21 +43,21 @@
         </el-form-item> -->
 
         <div v-if="dataForm.defaultReward === 0">
-          <el-form-item :label="$t('marketing.rewardRatio')" prop="awardType">
+          <el-form-item :label="$t('marketing.rewardRatio')" prop="awardProportion">
             <el-radio-group v-model="dataForm.awardProportion">
               <el-radio :label="0" >{{$t('marketing.proporteward')}}</el-radio>
               <el-radio :label="1">{{$t('marketing.rewardByFixedValue')}}</el-radio>
             </el-radio-group>
           </el-form-item>
 
-          <el-form-item label="合伙人奖励" prop="awardType">
+          <el-form-item label="合伙人奖励" prop="parentAwardSet">
             <el-radio-group v-model="dataForm.parentAwardSet">
               <el-radio :label="0" disabled>{{$t('seckill.close')}}</el-radio>
               <el-radio :label="1">{{$t('seckill.open')}}</el-radio>
             </el-radio-group>
           </el-form-item>
 
-          <el-form-item :label=" dataForm.awardNumberSet === 1 ? $t('marketing.amountSetting') : '团长奖励'" prop="awardType">
+          <el-form-item :label="dataForm.awardNumberSet === 1 ? $t('marketing.amountSetting') : '团长奖励'" prop="awardNumbers" :rules="[{ validator: validateAwardNumber, trigger: 'change' }]">
             <div v-if="dataForm.awardNumberSet === 0">
               <el-input v-model="dataForm.awardNumbers" size="small" :precision="2" :min="0" style="width:200px">
                 <template slot="append">
@@ -84,14 +84,18 @@
               </el-input> -->
             </div>
           </el-form-item>
-          <el-form-item label="合伙人奖励" prop="awardType" v-if="dataForm.parentAwardSet === 1">
-            <div v-if="dataForm.awardNumberSet === 0">
-              <el-input v-model="dataForm.parentAwardNumbers" size="small" :precision="2" :min="0" style="width:200px">
-                <template slot="append">
-                  <span>%</span>
-                </template>
-              </el-input>
-            </div>
+          <el-form-item
+            v-if="dataForm.parentAwardSet === 1"
+            label="合伙人奖励"
+            prop="parentAwardNumbers"
+            :rules="[{ validator: validateAwardNumber, trigger: 'change' }]"
+            >
+            <el-input v-model="dataForm.parentAwardNumbers" size="small" :precision="2" :min="0" style="width:200px">
+              <template slot="append">
+                <span v-if="dataForm.awardProportion === 1">{{ $t('distribution.dbcTip2') }}</span>
+                <span v-else>%</span>
+              </template>
+            </el-input>
           </el-form-item>
         </div>
         <el-form-item :label="$t('product.status')" prop="state">
@@ -127,7 +131,7 @@ export default {
         'awardNumberSet': 1,
         'awardNumbers': '',
         'parentAwardNumbers': '',
-        'parentAwardSet': 0,
+        'parentAwardSet': 0
       },
       distributionProdId: 1,
       resourcesUrl: process.env.VUE_APP_RESOURCES_URL,
@@ -146,6 +150,18 @@ export default {
     AddOrUpdate,
     ProdPic
   },
+  watch: {
+    'dataForm.awardProportion' () {
+      this.dataForm.awardNumbers = 0
+      this.dataForm.parentAwardNumbers = 0
+    },
+    prodData (newQuestion) {
+      if (newQuestion.length) {
+        this.dataForm.awardNumbers = 0
+        this.dataForm.parentAwardNumbers = 0
+      }
+    }
+  },
   methods: {
     init (data) {
       this.visible = true
@@ -160,8 +176,8 @@ export default {
           this.dataForm.awardProportion = 0
           this.dataForm.awardNumberSet = 0
           this.dataForm.parentAwardSet = 1
-          this.dataForm.awardNumbers = 1
-          this.dataForm.parentAwardNumbers = 1
+          this.dataForm.awardNumbers = 0
+          this.dataForm.parentAwardNumbers = 0
           this.dataForm.state = 1
           this.levelData = []
           this.prodData = []
@@ -250,6 +266,21 @@ export default {
       if (val === 0) {
         this.dataForm.awardNumbers = 0
         this.dataForm.parentAwardNumbers = 0
+      }
+    },
+    validateAwardNumber (rule, value, callback) {
+      if (this.dataForm.awardProportion === 1) {
+        if (this.prodData[0].price * 0.5 < value) {
+          callback(new Error('奖励金额不能超过商品价格的一半'))
+        } else {
+          callback()
+        }
+      } else {
+        if (value > 50) {
+          callback(new Error('奖励比例不能大于50%'))
+        } else {
+          callback()
+        }
       }
     }
   }
