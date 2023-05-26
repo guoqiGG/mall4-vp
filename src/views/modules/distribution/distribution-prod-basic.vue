@@ -232,16 +232,16 @@ export default {
   },
   methods: {
     // 新增 / 修改
-    addOrUpdateHandle (data,opt) {
+    addOrUpdateHandle (data, opt) {
       this.addOrUpdateVisible = true
       this.$nextTick(() => {
         this.$refs.addOrUpdate.init(data)
-        if(opt=='view'){
-          this.$refs.addOrUpdate.distributionProdId=1
-        }else if(opt=='edit'){
-          this.$refs.addOrUpdate.distributionProdId=2
-        }else{
-          this.$refs.addOrUpdate.distributionProdId=3
+        if (opt == 'view') {
+          this.$refs.addOrUpdate.distributionProdId = 1
+        } else if (opt == 'edit') {
+          this.$refs.addOrUpdate.distributionProdId = 2
+        } else {
+          this.$refs.addOrUpdate.distributionProdId = 3
         }
       })
     },

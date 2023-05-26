@@ -45,19 +45,19 @@
         <div v-if="dataForm.defaultReward === 0">
           <el-form-item :label="$t('marketing.rewardRatio')" prop="awardType">
             <el-radio-group v-model="dataForm.awardProportion">
-              <el-radio :label="0">{{$t('marketing.proporteward')}}</el-radio>
+              <el-radio :label="0" >{{$t('marketing.proporteward')}}</el-radio>
               <el-radio :label="1">{{$t('marketing.rewardByFixedValue')}}</el-radio>
             </el-radio-group>
           </el-form-item>
 
-          <el-form-item :label="$t('marketing.inviterReward')" prop="awardType">
+          <el-form-item label="合伙人奖励" prop="awardType">
             <el-radio-group v-model="dataForm.parentAwardSet">
-              <el-radio :label="0">{{$t('seckill.close')}}</el-radio>
-              <el-radio :label="1" disabled>{{$t('seckill.open')}}</el-radio>
+              <el-radio :label="0" disabled>{{$t('seckill.close')}}</el-radio>
+              <el-radio :label="1">{{$t('seckill.open')}}</el-radio>
             </el-radio-group>
           </el-form-item>
 
-          <el-form-item :label=" dataForm.awardNumberSet === 1 ? $t('marketing.amountSetting') : $t('marketing.defaultReward')" prop="awardType">
+          <el-form-item :label=" dataForm.awardNumberSet === 1 ? $t('marketing.amountSetting') : '团长奖励'" prop="awardType">
             <div v-if="dataForm.awardNumberSet === 0">
               <el-input v-model="dataForm.awardNumbers" size="small" :precision="2" :min="0" style="width:200px">
                 <template slot="append">
@@ -66,7 +66,7 @@
                 </template>
               </el-input>
 
-              <span
+              <!-- <span
                 v-if="dataForm.parentAwardSet === 1"
               >&nbsp; {{$t('marketing.inviterRewardAmount')}}:</span>
               <el-input
@@ -80,6 +80,15 @@
                 <template slot="append">
                   <span v-if="dataForm.awardProportion === 1">{{$t('distribution.dbcTip2')}}</span>
                   <span v-else>%</span>
+                </template>
+              </el-input> -->
+            </div>
+          </el-form-item>
+          <el-form-item label="合伙人奖励" prop="awardType" v-if="dataForm.parentAwardSet === 1">
+            <div v-if="dataForm.awardNumberSet === 0">
+              <el-input v-model="dataForm.parentAwardNumbers" size="small" :precision="2" :min="0" style="width:200px">
+                <template slot="append">
+                  <span>%</span>
                 </template>
               </el-input>
             </div>
@@ -115,12 +124,12 @@ export default {
         'state': 1,
         'defaultReward': 0,
         'awardProportion': 0,
-        'awardNumberSet': 0,
+        'awardNumberSet': 1,
         'awardNumbers': '',
         'parentAwardNumbers': '',
-        'parentAwardSet': 0
+        'parentAwardSet': 0,
       },
-      distributionProdId:1,
+      distributionProdId: 1,
       resourcesUrl: process.env.VUE_APP_RESOURCES_URL,
       levelData: [],
       prodData: [],
@@ -150,7 +159,7 @@ export default {
           this.dataForm.defaultReward = 0
           this.dataForm.awardProportion = 0
           this.dataForm.awardNumberSet = 0
-          this.dataForm.parentAwardSet = 0
+          this.dataForm.parentAwardSet = 1
           this.dataForm.awardNumbers = 1
           this.dataForm.parentAwardNumbers = 1
           this.dataForm.state = 1
@@ -196,7 +205,7 @@ export default {
         })
       }
     },
-    
+
     // 表单提交
     dataFormSubmit () {
       this.$refs['dataForm'].validate((valid) => {
