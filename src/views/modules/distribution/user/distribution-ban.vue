@@ -4,8 +4,8 @@
     <div class="search-bar">
       <el-form @submit.native.prevent :inline="true" class="search-form" ref="searchForm" :model="searchForm" size="small">
         <div class="input-row">
-          <el-form-item :label="$t('distribUserWallet.mobileTelNumber') + ':'">
-            <el-input type="text" v-model="searchForm.userMobile" :placeholder="$t('distribUserWallet.mobileTelNumber')"></el-input>
+          <el-form-item label="团长手机号:">
+            <el-input type="text" v-model="searchForm.userMobile" placeholder="团长手机号"></el-input>
           </el-form-item>
           <el-form-item prop="banReason" :label="$t('home.reasons') + ':'">
             <el-select v-model="searchForm.banReason" :placeholder="$t('home.reasons')" clearable>
@@ -42,7 +42,7 @@
           <!-- 分销员昵称 -->
           <el-table-column
             prop="nickName"
-            :label="$t('distribUserWallet.distributorNickname')"
+            label="昵称"
           >
             <template slot-scope="scope">
               <span class="table-cell-text line-clamp-one">{{scope.row.distributionUser.nickName}}</span>
@@ -51,7 +51,7 @@
           <!-- 分销员手机号 -->
           <el-table-column
             prop="userMobile"
-            :label="$t('distribUserWallet.mobileTelNumber')"
+            label="团长手机号"
           >
             <template slot-scope="scope">
               {{scope.row.distributionUser.userMobile}}

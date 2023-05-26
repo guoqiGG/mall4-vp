@@ -1,10 +1,10 @@
 <template>
   <div class="mod-marketing-distribution">
     <el-tabs @tab-click="hanldeClick">
-        <el-tab-pane :label="$t('user.distributorManagement')">
+        <el-tab-pane label="团长管理">
           <user />
         </el-tab-pane>
-        <el-tab-pane :label="$t('user.distributorAudit')">
+        <el-tab-pane label="团长审核">
           <auditing />
         </el-tab-pane>
         <el-tab-pane :label="$t('user.relationshipSearch')">

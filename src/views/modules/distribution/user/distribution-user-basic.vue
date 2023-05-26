@@ -4,8 +4,8 @@
     <div class="search-bar">
       <el-form @submit.native.prevent :inline="true" class="search-form" ref="searchForm" :model="searchForm" size="small">
         <div class="input-row">
-          <el-form-item :label="$t('distributionMsg.distriTelPhone') + ':'">
-            <el-input type="text" v-model="searchForm.userMobile" :placeholder="$t('distributionMsg.distriTelPhone')"></el-input>
+          <el-form-item label="团长手机号:">
+            <el-input type="text" v-model="searchForm.userMobile" placeholder="团长手机号"></el-input>
           </el-form-item>
           <el-form-item :label="$t('distributionMsg.inviteesPhoneNumber') + ':'">
             <el-input type="text" v-model="searchForm.parentUserMobile" :placeholder="$t('distributionMsg.inviteesPhoneNumber')"></el-input>
@@ -53,7 +53,7 @@
             fixed="left"
             width="150"
             prop="userMobile"
-            :label="$t('distributionMsg.distriTelPhone')"
+            label="团长手机号"
           >
             <template slot-scope="scope">
               {{scope.row.userMobile}}
