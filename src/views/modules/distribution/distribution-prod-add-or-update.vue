@@ -26,7 +26,7 @@
                 <div
                 class="default-btn text-btn"
                 @click="deleteRelation"
-                style="margin-top:8px;margin-right:5px;"
+                style="margin-right:5px;"
                 >{{ $t("text.delBtn") }}</div
               >
               </div>
@@ -143,6 +143,16 @@ export default {
       isInviterReward: true,
       dataRule: {
 
+      },
+      isNeedInitAwardNumber: false
+    }
+  },
+  computed: {
+    listenChange() {
+      return {
+        isNeedInitAwardNumber: this.isNeedInitAwardNumber,
+        prodData: this.prodData,
+        awardProportion: this.dataForm.awardProportion
       }
     }
   },
@@ -151,22 +161,17 @@ export default {
     ProdPic
   },
   watch: {
-    'dataForm.awardProportion' () {
+    'listenChange'(newVal, oldVal) {
+      if (newVal.isNeedInitAwardNumber !== oldVal.isNeedInitAwardNumber) return
       this.dataForm.awardNumbers = 0
-      this.dataForm.parentAwardNumbers = 0
     },
-    prodData (newQuestion) {
-      if (newQuestion.length) {
-        this.dataForm.awardNumbers = 0
-        this.dataForm.parentAwardNumbers = 0
-      }
-    }
   },
   methods: {
     init (data) {
       this.visible = true
       this.isSubmit = false
       if (data) {
+        this.isNeedInitAwardNumber = true
         this.dataForm = data
         this.prodData[0] = this.dataForm.product
       } else {
@@ -182,6 +187,7 @@ export default {
           this.levelData = []
           this.prodData = []
         })
+        this.isNeedInitAwardNumber = false
       }
     },
 
@@ -270,13 +276,13 @@ export default {
     },
     validateAwardNumber (rule, value, callback) {
       if (this.dataForm.awardProportion === 1) {
-        if (this.prodData[0].price * 0.5 < value) {
+        if (this.prodData[0].price * 0.5 < parseFloat(value)) {
           callback(new Error('奖励金额不能超过商品价格的一半'))
         } else {
           callback()
         }
       } else {
-        if (value > 50) {
+        if (parseFloat(value) > 50) {
           callback(new Error('奖励比例不能大于50%'))
         } else {
           callback()
@@ -286,5 +292,12 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+.mod-distribution-prod-add-or-update {
+  .card-prod-bottom {
+    display: flex;
+    align-items: center;
+  }
+}
+
 </style>
