@@ -1193,6 +1193,9 @@ const zhCn = {
     superAdmin: '（超级管理员）'
   },
   coupon: {
+    voucher: '代金券',
+    discountCoupon: '折扣券',
+    launchStatus: '投放状态',
     offlineReasonTips: '请输入下线原因',
     offlineReasonNotEmpty: '下线原因不能为空',
     modifyCoupon: '修改优惠券',
@@ -1251,6 +1254,7 @@ const zhCn = {
     effectiveAfterReceiving: '领取后生效',
     AfterReceipt: '领券以后',
     day: '天',
+    effectiveDays: '天生效',
     validDate: '有效天数',
     restrictionsPerPerson: '每人限领',
     sheet: '张',
@@ -1315,7 +1319,7 @@ const zhCn = {
     isDeleOper: '确定进行删除操作?',
     newAdd: '新增',
     view: '查看',
-    edit:'修改',
+    edit: '修改',
     viewInformation: '查看信息',
     activityTimeRange: '活动时间',
     purchaseLimitPerPerson: '每人限购',

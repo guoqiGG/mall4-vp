@@ -66,7 +66,7 @@
         <div class="operation-bar">
           <div
             class="default-btn primary-btn"
-            v-if="isAuth('seckill:seckill:save')"
+            v-if="isAuth('platform:coupon:save')"
             @click="addOrUpdateHandle()"
             >{{ $t("crud.addTitle") }}
           </div>
@@ -215,6 +215,12 @@
               >
               <template slot-scope="scope">
                 <div class="text-btn-con">
+                  <div
+                    class="default-btn text-btn"
+                    v-if="isAuth('platform:coupon:update')"
+                    @click="addOrUpdateHandle(scope.row.couponId)"
+                    >修改</div
+                  >
                   <div
                     class="default-btn text-btn"
                     @click="addOrUpdateHandle(scope.row.couponId)"
@@ -447,9 +453,11 @@ export default {
     },
     // 新增 / 修改
     addOrUpdateHandle (val) {
-      this.addOrUpdateVisible = true
-      this.$nextTick(() => {
-        this.$refs.addOrUpdate.init(val)
+      this.$router.push({
+        path: '/marketing-new-coupon',
+        query: {
+          couponId: val
+        }
       })
     },
     // 删除
