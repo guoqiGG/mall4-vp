@@ -28,7 +28,7 @@
                   <i class="el-icon-question performanceAttribution" />
                 </el-tooltip>
               </el-radio>
-              <el-radio :label="1">{{ $t('distribution.paTip2') }}
+              <el-radio :label="1" :disabled="true">{{ $t('distribution.paTip2') }}
                 <el-tooltip class="item" effect="light" placement="right">
                   <div slot="content"   class="performanceAttribution-content">
                     {{ $t('distribution.promptPaTip2') }}
