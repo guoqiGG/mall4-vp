@@ -50,6 +50,11 @@
         >
           <el-input v-model="dataForm.updateTime" size="small" :readonly="!isEdit"></el-input>
         </el-form-item>
+        <el-form-item label="合伙人" prop="shopId">
+          <el-select v-model="dataForm.shopId" size="small" :disabled="!isEdit" :readonly="!isEdit" :style="{ width: '100%' }">
+            <el-option v-for="item in distributorOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
 
         <el-form-item :label="$t('distributionMsg.viewUserAppalyInfo')">
           <div class="default-btn" @click="info(dataForm)">{{$t('distributionMsg.clickView')}}</div>
@@ -81,13 +86,17 @@ export default {
         'state': null,
         'reason': null,
         'remarks': null,
-        'msg': null
+        'msg': null,
+        shopId: null
       },
       addProdVisible: false,
       infoVisible: false,
       isSubmit: false,
       visible: false,
       dataRule: {
+        shopId: [
+          { required: true, message: '请选择合伙人', trigger: 'change' }
+        ],
         state: [
           { required: true, message: this.$i18n.t('distributionMsg.tip2'), trigger: 'change' }
         ],
@@ -100,11 +109,17 @@ export default {
         msg: [
           { max: 1000, message: this.$i18n.t('recruit.limitLangTip2').replace('255', '1000'), trigger: 'blur' }
         ]
-      }
+      },
+      distributorOptions: []
     }
   },
   components: {
     Info
+  },
+  mounted () {
+    if (this.distributorOptions.length === 0) {
+      this.getDataList()
+    }
   },
   methods: {
     init (data, isEdit) {
@@ -159,6 +174,23 @@ export default {
             this.isSubmit = false
           })
         }
+      })
+    },
+    // 分销人数据
+    getDataList () {
+      this.dataListLoading = true
+      this.$http({
+        url: this.$http.adornUrl('/shop/shopAuditing/page'),
+        method: 'get',
+        params: {
+          'current': 1,
+          'size': 9999
+        }
+      }).then(({ data }) => {
+        this.distributorOptions = data.records.map(({ shopName, shopId }) => ({
+          value: shopId,
+          label: shopName
+        }))
       })
     }
   }
