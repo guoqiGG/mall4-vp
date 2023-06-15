@@ -326,7 +326,7 @@ export default {
         console.log(this.dataForm)
         if (this.dataForm.id) {
           this.$http({
-            url: this.$http.adornUrl('/multishop/live/liveRoom/info/' + this.dataForm.id),
+            url: this.$http.adornUrl('/live/liveRoom/info/' + this.dataForm.id),
             method: 'get',
             params: this.$http.adornParams()
           }).then(({ data }) => {
@@ -368,7 +368,7 @@ export default {
           this.dataForm.endTime = this.dataForm.endTime && this.endTimeValue ? this.dataForm.endTime + ' ' + this.endTimeValue + ':00' : ''
           this.isSubmit = true
           this.$http({
-            url: this.$http.adornUrl('/multishop/live/liveRoom'),
+            url: this.$http.adornUrl('/live/liveRoom'),
             method: this.dataForm.id ? 'put' : 'post',
             data: this.$http.adornData(this.dataForm)
           }).then(({ data }) => {
