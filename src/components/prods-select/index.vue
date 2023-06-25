@@ -52,6 +52,7 @@
           <template slot-scope="scope">
             <div>
               <el-radio
+                class="select-prod-radio"
                 :label="scope.row.prodId"
                 v-model="singleSelectProdId"
                 @change.native="getSelectProdRow(scope.row)"
@@ -372,6 +373,13 @@ export default {
   margin-top: 15px;
   display: flex;
   justify-content: flex-end;
+}
+
+.select-prod-radio.el-radio {
+  ::v-deep .el-radio__inner {
+    width: 18px;
+    height: 18px;
+  }
 }
 </style>
 

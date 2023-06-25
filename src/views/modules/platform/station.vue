@@ -57,6 +57,26 @@
           </el-table-column>
 
           <el-table-column
+            fixed
+            prop="distributionUsername"
+            label="团长姓名"
+            width="80">
+            <template slot-scope="scope">
+              <span class="table-cell-text">{{ scope.row.distributionUsername || '-' }}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            fixed
+            prop="distributionUsermoile"
+            label="团长电话"
+            width="120">
+            <template slot-scope="scope">
+              <span class="table-cell-text">{{ scope.row.distributionUsermoile || '-' }}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column
             prop="stationName"
             :label="$t('order.pickUpPoint')"
             width="260">
