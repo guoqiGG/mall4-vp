@@ -213,7 +213,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$http({
-          url: this.$http.adornUrl('/platform/live/liveProdStore/' + id),
+          url: this.$http.adornUrl('/live/liveProdStore/' + id),
           method: 'delete',
           data: this.$http.adornData({})
         }).then(({ data }) => {
