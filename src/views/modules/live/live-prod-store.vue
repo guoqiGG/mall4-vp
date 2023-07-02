@@ -136,7 +136,7 @@ export default {
         this.theData = JSON.parse(JSON.stringify(this.searchForm))
       }
       this.$http({
-        url: this.$http.adornUrl('/platform/live/liveProdStore/page'),
+        url: this.$http.adornUrl('/live/liveProdStore/page'),
         method: 'get',
         params: this.$http.adornParams(
           Object.assign(
@@ -156,7 +156,7 @@ export default {
     // 获取剩余可新增得数量
     getAddProdNum () {
       this.$http({
-        url: this.$http.adornUrl('/platform/live/liveProdStore/getAddProdNum'),
+        url: this.$http.adornUrl('/live/liveProdStore/getAddProdNum'),
         method: 'get',
         params: this.$http.adornParams()
       }).then(({ data }) => {
