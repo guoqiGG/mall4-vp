@@ -291,7 +291,7 @@ export default {
             url: this.$http.adornUrl('/distribution/distributionUser/changeParentDistribution'),
             method: 'get',
             params: this.$http.adornParams(Object.assign({
-              distributionUserId: this.editRecord.distributionUserId,
+              userId: this.editRecord.user.userId,
               parentId: this.editForm.parentId
             }, this.theParams))
           }).then(({ success }) => {
