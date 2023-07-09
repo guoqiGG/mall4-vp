@@ -36,11 +36,19 @@
               <span class="table-cell-text">{{scope.row.levelName}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="img" fixed :label="$t('user.bgImg')">
+          <el-table-column prop="picFrame" fixed label="会员头像边框">
             <template slot-scope="scope">
               <div class="table-cell-image">
-                <img :src="resourcesUrl + scope.row.img" width="140" height="60" v-if="scope.row.img" @error="scope.row.img=''" />
-                <span style="line-height: 60px" v-if="!scope.row.img">{{$t('prodList.noPictures')}}</span>
+                <img :src="resourcesUrl + scope.row.picFrame" width="140" height="60" v-if="scope.row.picFrame" @error="scope.row.picFrame = ''" />
+                <span style="line-height: 60px" v-if="!scope.row.picFrame">{{ $t('prodList.noPictures') }}</span>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="img" fixed label="会员等级图标">
+            <template slot-scope="scope">
+              <div class="table-cell-image">
+                <img :src="resourcesUrl + scope.row.img" width="140" height="60" v-if="scope.row.img" @error="scope.row.img = ''" />
+                <span style="line-height: 60px" v-if="!scope.row.img">{{ $t('prodList.noPictures') }}</span>
               </div>
             </template>
           </el-table-column>
