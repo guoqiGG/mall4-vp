@@ -24,7 +24,7 @@
         v-if="dataForm.type !== 2 && isSecondLevel === false"
         :label="this.$i18n.t('category.categoryPicture')"
         prop="pic"
-        :required="isRequiredImg"
+        :required="true"
       >
         <img-upload v-model="dataForm.pic"></img-upload>
         <span v-if="dataForm.parentId === 0"
@@ -61,7 +61,7 @@
         </div>
       </template>
       <!-- 选择上级分类 -->
-      <el-form-item :label="this.$i18n.t('category.categoryParent')">
+      <!-- <el-form-item :label="this.$i18n.t('category.categoryParent')">
         <el-cascader
           size="small"
           expand-trigger="hover"
@@ -73,7 +73,7 @@
           @change="handleChange"
           style="width: 100%"
         ></el-cascader>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item
         v-if="dataForm.type !== 2"
         :label="this.$i18n.t('hotSearch.seq')"
@@ -88,7 +88,7 @@
           :label="this.$i18n.t('hotSearch.seq')"
         ></el-input-number>
       </el-form-item>
-      <el-form-item v-if="this.selectedCategory.length === 2" :label="this.$i18n.t('category.deductionRate')" prop="deductionRate">
+      <el-form-item :label="this.$i18n.t('category.deductionRate')" prop="deductionRate">
         <el-input-number
           class="input-num"
           v-model.number="dataForm.deductionRate"
@@ -130,14 +130,6 @@ import { treeDataTranslate, idList } from '@/utils'
 import ImgUpload from '@/components/img-upload'
 export default {
   data () {
-    // 一级分类图片不必传
-    const validNoEmptyImg = (rule, value, callback) => {
-      if (this.selectedCategory.length > 0 && !value) {
-        callback(new Error(this.$i18n.t('category.categoryPicNull')))
-      } else {
-        callback()
-      }
-    }
     return {
       visible: false,
       isSecondLevel: false,
@@ -152,23 +144,21 @@ export default {
         pic: '',
         deductionRate: ''
       },
-      isRequiredImg: false, // 图片分类一级不必填
       cascaderKey: 'cascaderKey',
       isSubmit: false,
       dataRule: {
-        // pic: [
-        //   {
-        //     required: true,
-        //     message: this.$i18n.t('category.categoryPicNull'),
-        //     trigger: 'blur'
-        //   }
-        // ]
         pic: [
-          {validator: validNoEmptyImg, trigger: 'blur'}
+          {
+            required: true,
+            message: this.$i18n.t('category.categoryPicNull'),
+            trigger: 'blur'
+          }
         ]
+        // pic: [
+        //   {validator: validNoEmptyImg, trigger: 'blur'}
+        // ]
       },
       categoryList: [],
-      selectedCategory: [],
       categoryTreeProps: {
         value: 'categoryId',
         label: 'categoryName',
@@ -191,9 +181,6 @@ export default {
       },
       deep: true // true 深度监听
     },
-    selectedCategory (list) {
-      this.isRequiredImg = !!list.length
-    }
   },
   components: {
     ImgUpload
@@ -327,16 +314,16 @@ export default {
     },
     // 表单提交
     dataFormSubmit () {
-      console.log(this.selectedCategory.length)
-      if (this.selectedCategory.length === 0) {
-        this.dataForm.grade = 0
-      }
-      if (this.selectedCategory.length === 1) {
-        this.dataForm.grade = 1
-      }
-      if (this.selectedCategory.length === 2) {
-        this.dataForm.grade = 2
-      }
+      // console.log(this.selectedCategory.length)
+      // if (this.selectedCategory.length === 0) {
+      //   this.dataForm.grade = 0
+      // }
+      // if (this.selectedCategory.length === 1) {
+      //   this.dataForm.grade = 1
+      // }
+      // if (this.selectedCategory.length === 2) {
+      //   this.dataForm.grade = 2
+      // }
       for (const item of this.categoryLangList) {
         if (!item.categoryName) {
           this.$message.error(this.$i18n.t('publics.categoryNoNull'))
