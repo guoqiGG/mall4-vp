@@ -74,6 +74,16 @@
                 <div :class="[scope.row.status === 1 ? 'disabled-btn' : '', 'default-btn text-btn']"
                   @click="deleteHandle(scope.row.liveProdStoreId, scope.row.status)">{{ $t('remindPop.delete') }}</div>
               </div>
+              <div
+                  class="default-btn text-btn"
+                  v-if="isAuth('live:liveProdStore:submitVerify') && (scope.row.status === 0 || scope.row.status === 5)"
+                  @click="submitVerify(scope.row.liveProdStoreId)"
+                  >{{
+                    scope.row.status === 5
+                    ? '重新审核'
+                    : '提交审核'
+                  }}
+                </div>
             </template>
           </el-table-column>
         </el-table>
