@@ -61,7 +61,7 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.$http({
-            url: this.$http.adornUrl(`/user/scoreExplainConfig/`),
+            url: this.$http.adornUrl(`/user/scoreExplainConfig`),
             method: this.dataForm.id ? 'put' : 'post',
             data: this.$http.adornData({
               'paramKey': 'SCORE_QUESTION',
