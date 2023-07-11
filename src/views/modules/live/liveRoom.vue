@@ -100,6 +100,8 @@
                   {{ $t('liveRoom.cancelTopping') }}
                 </div>
                 <div class="default-btn text-btn" type="text" icon="el-icon-delete" size="small"
+                  @click="addOrUpdateHandle(scope.row)">编辑</div>
+                <div class="default-btn text-btn" type="text" icon="el-icon-delete" size="small"
                   @click="deleteHandle(scope.row.id)">{{ $t('user.deleteBtn') }}</div>
               </div>
             </template>
@@ -170,7 +172,8 @@ export default {
           label: this.$i18n.t('liveRoom.notPinned')
         }
       ],
-      totalNum: 0
+      totalNum: 0,
+      shopNum: 0
     }
   },
   components: {

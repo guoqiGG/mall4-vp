@@ -24,7 +24,6 @@
         <el-input
           size="small"
           v-model="dataForm.name "
-          :disabled="dataForm.id !== 0 "
           maxlength="17"
           show-word-limit
         ></el-input>
@@ -34,7 +33,6 @@
           size="small"
           v-model="dataForm.anchorName"
           maxlength="15"
-          :disabled="dataForm.id !== 0 "
           show-word-limit
         ></el-input>
       </el-form-item>
@@ -43,7 +41,6 @@
           size="small"
           v-model="dataForm.anchorWechat"
           maxlength="20"
-          :disabled="dataForm.id !== 0 "
           show-word-limit
         ></el-input>
       <p class="live-tips">每个直播间需要绑定一个用作核实主播身份，不会展示给观众。</p>
@@ -66,13 +63,13 @@
           <el-form-item prop="startTime">
             <el-date-picker
               size="small"
-              :disabled="dataForm.id !== 0 "
               v-model="dataForm.startTime"
               type="date"
-              :placeholder="this.$i18n.t('live.chooseStartDate')"
+              placeholder="选择开始日期"
               :picker-options="pickerOptions"
               value-format="yyyy-MM-dd"
               style="width:144px"
+              @change="changeLiveTime"
             ></el-date-picker>
             <el-time-select
               v-model="startTimeValue"
@@ -83,8 +80,8 @@
               }"
               size="small"
               style="width:101px"
-              :disabled="dataForm.id !== 0"
-              placeholder="生效时间">
+              @change="changeLiveTime"
+              placeholder="开始时间时间">
             </el-time-select>
           </el-form-item>
           <div class="tip">至</div>
@@ -92,12 +89,12 @@
             <el-date-picker
               size="small"
               v-model="dataForm.endTime"
-              :disabled="dataForm.id !== 0 "
               type="date"
               placeholder="选择结束日期"
               :picker-options="pickerOptions"
               value-format="yyyy-MM-dd"
               style="width:144px"
+              @change="changeLiveTime"
             ></el-date-picker>
             <el-time-select
               v-model="endTimeValue"
@@ -108,8 +105,8 @@
               }"
               size="small"
               style="width:101px"
-              :disabled="dataForm.id !== 0"
-              placeholder="失效时间">
+              @change="changeLiveTime"
+              placeholder="结束时间">
             </el-time-select>
           </el-form-item>
           <br />
@@ -119,27 +116,25 @@
         <p class="live-tips" >开播时间需要在当前时间的15分钟后 并且开始时间不能在6个月后,开播时间和结束时间间隔不得短于30分钟，不得超过24小时</p>
       </el-form-item>
       <el-form-item label="直播背景图" prop="coverImg">
-        <img-upload v-model="dataForm.coverImg" :maxSize="2" :disabled="dataForm.id !== 0 " />
+        <img-upload v-model="dataForm.coverImg" :maxSize="2" />
         <p class="live-tips" >建议尺寸：1080像素 * 1920像素，图片大小不得超过2M</p>
       </el-form-item>
       <el-form-item label="主播分享图" prop="shareImg">
-        <img-upload v-model="dataForm.shareImg" :maxSize="1" :disabled="dataForm.id !== 0 " />
+        <img-upload v-model="dataForm.shareImg" :maxSize="1" />
         <p class="live-tips" >建议尺寸：800像素 * 640像素，图片大小不得超过1M。</p>
       </el-form-item>
       <el-form-item label="直播封面图" prop="feedsImg">
-        <img-upload v-model="dataForm.feedsImg" :maxSize="0.1" :disabled="dataForm.id !== 0 " />
+        <img-upload v-model="dataForm.feedsImg" :maxSize="0.1" />
         <p class="live-tips" >建议尺寸：图片建议大小为 800像素 * 800像素，图片大小不得超过100KB。</p>
       </el-form-item>
       <el-form-item label="是否被收录" prop="isFeedsPublic">
         <el-radio
           v-model="dataForm.isFeedsPublic"
           :label="1"
-          :disabled="dataForm.id !== 0 "
         >开启</el-radio>
         <el-radio
           v-model="dataForm.isFeedsPublic"
           :label="0"
-          :disabled="dataForm.id !== 0 "
         >关闭</el-radio>
         <br />
         <p class="live-tips" >开启后本场直播将有可能被官方推荐,直播间创建完成后可以再修改。</p>
@@ -148,34 +143,26 @@
         <el-radio
           v-model="dataForm.screenType"
           :label="0"
-          :disabled="dataForm.id !== 0 "
         >竖屏</el-radio>
         <el-radio v-model="dataForm.screenType" :label="1" disabled>横屏</el-radio>
         <!-- :disabled="dataForm.id !== 0 ||" -->
       </el-form-item>
       <el-form-item label="直播间功能" prop="closeLike">
-        <el-checkbox v-model="closeLike" :disabled="dataForm.id !== 0 ">点赞</el-checkbox>
-        <el-checkbox v-model="closeComment" :disabled="dataForm.id !== 0 ">评论</el-checkbox>
+        <el-checkbox v-model="closeLike">点赞</el-checkbox>
+        <el-checkbox v-model="closeComment">评论</el-checkbox>
         <el-checkbox
           v-model="closeGoods"
-          :disabled="dataForm.id !== 0 "
         >商品货架</el-checkbox>
         <br />
-        <el-checkbox v-model="closeReplay" :disabled="dataForm.id !== 0 ">回放</el-checkbox>
-        <el-checkbox v-model="closeShare" :disabled="dataForm.id !== 0 ">分享</el-checkbox>
-        <el-checkbox v-model="closeKf" :disabled="dataForm.id !== 0 ">客服</el-checkbox>
+        <el-checkbox v-model="closeReplay">回放</el-checkbox>
+        <el-checkbox v-model="closeShare">分享</el-checkbox>
+        <el-checkbox v-model="closeKf">客服</el-checkbox>
       </el-form-item>
       <el-form-item>
         <div class="default-btn" @click="back()">取消</div>
           <div
-            v-if="!dataForm.id"
             class="default-btn primary-btn"
             @click="dataFormSubmit()"
-          >确定</div>
-          <div
-            v-if="dataForm.id"
-            class="default-btn primary-btn"
-            @click="back()"
           >确定</div>
         </el-form-item>
     </el-form>
@@ -191,21 +178,28 @@ export default {
     var validatorDateRange = (rule, value, callback) => {
       if (rule.field === 'startTime' && (!this.startTimeValue || !this.dataForm.startTime)) {
         callback(new Error(this.$i18n.t('publics.noNull')))
+        return;
       }
       if (rule.field === 'endTime' && (!this.endTimeValue || !this.dataForm.endTime)) {
         callback(new Error(this.$i18n.t('publics.noNull')))
+        return;
       }
       let startTime = this.dataForm.startTime + ' ' + this.startTimeValue + ':00'
       let endTime = this.dataForm.endTime + ' ' + this.endTimeValue + ':00'
       if (rule.field === 'startTime' && new Date() > Date.parse(startTime)) {
-        callback(new Error(this.$i18n.t('groups.startTime')))
-      }
-      if (rule.field === 'startTime' && Date.parse(startTime) >= Date.parse(endTime)) {
-        callback(new Error(this.$i18n.t('marketing.timeCanThanOrEqualTo')))
+        callback(new Error('活动开始时间不能少于当前时间'))
+        return;
       }
       if (rule.field === 'endTime' && new Date() > Date.parse(endTime)) {
-        callback(new Error(this.$i18n.t('groups.endTime')))
+        callback(new Error('活动结束时间不能少于当前时间'))
+        return;
       }
+      if (['startTime', 'endTime'].includes(rule.field) && Date.parse(startTime) >= Date.parse(endTime)) {
+        callback(new Error(this.$i18n.t('marketing.timeCanThanOrEqualTo')))
+      }
+      // else {
+      //   this.$refs['dataForm'].clearValidate(['startTime', 'endTime'])
+      // }
       callback()
     }
     return {
@@ -278,11 +272,11 @@ export default {
         ],
         startTime: [
           { required: true, message: this.$i18n.t('publics.noNull'), trigger: 'blur' },
-          { required: true, validator: validatorDateRange, trigger: 'blur' }
+          { required: true, validator: validatorDateRange, trigger: 'change' }
         ],
         endTime: [
           { required: true, message: this.$i18n.t('publics.noNull'), trigger: 'blur' },
-          { required: true, validator: validatorDateRange, trigger: 'blur' }
+          { required: true, validator: validatorDateRange, trigger: 'change' }
         ]
       },
       startTimeValue: '',
@@ -296,7 +290,7 @@ export default {
     const flag = sessionStorage.getItem('bbcLiveRoomData') !== 'undefined'
     const data = flag ? JSON.parse(sessionStorage.getItem('bbcLiveRoomData')) : null
     this.init(data)
-    let title = !this.dataForm.id ? this.$t('live.addNewLiveRoom') : this.$t('live.viewLRoomInfo')
+    let title = !this.dataForm.id ? this.$t('live.addNewLiveRoom') : '直播间信息'
     this.$store.commit('common/replaceSelectMenu', title)
   },
   methods: {
@@ -342,13 +336,15 @@ export default {
               this.closeReplay = data.roomToolsVo.closeReplay === 0
               this.closeShare = data.roomToolsVo.closeShare === 0
               this.closeKf = data.roomToolsVo.closeKf === 0
+            } else {
+              this.dataForm.roomToolsVo = {}
             }
           })
         }
       })
     },
     // 表单提交
-    dataFormSubmit () {
+    dataFormSubmit() {
       this.dataForm.roomToolsVo.closeLike = this.closeLike ? 0 : 1
       this.dataForm.roomToolsVo.closeGoods = this.closeGoods ? 0 : 1
       this.dataForm.roomToolsVo.closeComment = this.closeComment ? 0 : 1
@@ -395,6 +391,13 @@ export default {
       this.$router.push({
         path: '/live-liveRoom'
       })
+    },
+    changeLiveTime() {
+      let startTime = this.dataForm.startTime + ' ' + this.startTimeValue + ':00'
+      let endTime = this.dataForm.endTime + ' ' + this.endTimeValue + ':00'
+      if (Date.parse(startTime) < Date.parse(endTime)) {
+        this.$refs['dataForm'].clearValidate(['startTime', 'endTime'])
+      }
     }
   }
 }
