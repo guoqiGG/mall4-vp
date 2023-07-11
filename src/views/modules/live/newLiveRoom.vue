@@ -363,8 +363,9 @@ export default {
           this.dataForm.startTime = this.dataForm.startTime && this.startTimeValue ? this.dataForm.startTime + ' ' + this.startTimeValue + ':00' : ''
           this.dataForm.endTime = this.dataForm.endTime && this.endTimeValue ? this.dataForm.endTime + ' ' + this.endTimeValue + ':00' : ''
           this.isSubmit = true
+          const apiURL = this.dataForm.id ? '/live/liveRoom/update' : '/live/liveRoom'
           this.$http({
-            url: this.$http.adornUrl('/live/liveRoom'),
+            url: this.$http.adornUrl(apiURL),
             method: this.dataForm.id ? 'put' : 'post',
             data: this.$http.adornData(this.dataForm)
           }).then(({ data }) => {
