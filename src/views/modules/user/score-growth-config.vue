@@ -11,17 +11,19 @@
         <!-- <explain ref="explain" /> -->
         <expire ref="expire" />
         <question ref="question" />
+        <growth-show ref="growthShow" />
         <level ref="level" />
       </el-tab-pane>
     </el-tabs>
   </div>
-</template> 
+</template>
 <script>
 import score from './score-config.vue'
 import growth from './growth-config.vue'
 // import explain from './score-explain-config.vue'
 import expire from './score-expire-config.vue'
 import question from './score-question-config.vue'
+import growthShow from './score-growth-show.vue';
 import level from './level-show-config.vue'
 export default {
   data () {
@@ -37,7 +39,8 @@ export default {
     // explain,
     expire,
     level,
-    question
+    question,
+    growthShow
   }
 }
 </script>
