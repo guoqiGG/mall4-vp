@@ -50,8 +50,8 @@
         >
           <el-input v-model="dataForm.updateTime" size="small" :readonly="!isEdit"></el-input>
         </el-form-item>
-        <el-form-item label="合伙人" prop="shopId">
-          <el-select v-model="dataForm.shopId" size="small" :disabled="!isEdit" :readonly="!isEdit" :style="{ width: '100%' }">
+        <el-form-item label="合伙人" prop="shopId" :required="dataForm.state == 1 ? true : false">
+          <el-select :rules="dataForm.state == 1 ? {type:'array', required: true, message: '请选择合伙人', trigger: 'change'} : ''" v-model="dataForm.shopId" size="small" :disabled="!isEdit" :readonly="!isEdit" :style="{ width: '100%' }" >
             <el-option v-for="item in distributorOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
@@ -94,9 +94,9 @@ export default {
       isSubmit: false,
       visible: false,
       dataRule: {
-        shopId: [
-          { required: true, message: '请选择合伙人', trigger: 'change' }
-        ],
+        // shopId: [
+        //   { required: true, message: '请选择合伙人', trigger: 'change' }
+        // ],
         state: [
           { required: true, message: this.$i18n.t('distributionMsg.tip2'), trigger: 'change' }
         ],
