@@ -30,7 +30,11 @@
                 type="texe"
               ></el-input>
             </el-form-item>
-            <el-form-item :label="$t('user.bgImg')" prop="img">
+            <el-form-item label="会员头像边框" prop="img">
+              <img-upload v-model="dataForm.picFrame"></img-upload>
+              <div class="el-form-item-tips">{{ $t("webInfoConfig.imgsTip") + '320*170' + $t("webInfoConfig.px") }}</div>
+            </el-form-item>
+            <el-form-item label="会员等级图标" prop="img">
               <img-upload v-model="dataForm.img"></img-upload>
               <div class="el-form-item-tips">{{ $t("webInfoConfig.imgsTip") + '320*170' + $t("webInfoConfig.px") }}</div>
             </el-form-item>
@@ -324,6 +328,7 @@ export default {
         term: 1,
         termType: 1,
         img: '',
+        picFrame: '',
         discount: 10,
         discountRange: 0,
         discountType: 0,
@@ -359,6 +364,9 @@ export default {
         img: [
           { required: true, message: this.$i18n.t('user.bgImgCannotEmpty'), trigger: 'blur' }
         ],
+        picFrame: [
+          { required: true, message: '请选择会员等级边框', trigger: 'blur' }
+        ],
         term: [
           { required: true, validator: validateTime, trigger: 'blur' }
         ],
@@ -393,7 +401,7 @@ export default {
         this.dataForm = userLevels[index]
 
         const lang = localStorage.getItem('bbcLang') || 'zh_CN'
-        const levelName = lang==='zh_CN'?'dataForm.levelNameCn':'dataForm.levelNameEn'
+        const levelName = lang === 'zh_CN' ? 'dataForm.levelNameCn' : 'dataForm.levelNameEn'
         this.$watch(levelName, function (newVal, oldVal) {
           if(levelName==='dataForm.levelNameEn'&& !newVal){
              this.dataForm.levelName = this.dataForm.levelNameCn
@@ -600,6 +608,11 @@ export default {
     checkData () {
       if (!this.dataForm.img) {
         this.msg = this.$i18n.t('user.bgImgCannotEmpty')
+        this.isCheckSccuss = false
+        return false
+      }
+      if (!this.dataForm.picFrame) {
+        this.msg = '会员头像边框不能为空'
         this.isCheckSccuss = false
         return false
       }

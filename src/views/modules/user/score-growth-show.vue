@@ -1,6 +1,6 @@
 <template>
   <div class="distribution-recruit-set gray-box top-redius border-bottom-gray">
-    <div class="title">{{ $t("user.memberBenefitsPageDisplaySet") }}</div>
+    <div class="title">成长值攻略</div>
     <el-form @submit.native.prevent
       ref="dataForm"
       label-width="100px"
@@ -10,13 +10,13 @@
       :rules="dataRule"
       :model="dataForm"
     >
-      <el-form-item :label="$t('user.displayContent')" prop="paramValue">
+      <el-form-item label="成长值攻略" prop="paramValue">
         <tiny-mce
           ref="tinyMce"
           v-model="dataForm.paramValue"
-          style="width: 900px"
+          style="width: 95%"
           :key="tinymceFlag"
-        ></tiny-mce>
+          ></tiny-mce>
       </el-form-item>
     </el-form>
     <div class="default-btn" @click="dataFormSubmit()">{{
@@ -39,18 +39,17 @@ export default {
     // 获取数据
     getData () {
       this.$http({
-        url: this.$http.adornUrl('/user/scoreExplainConfig/info/' + 'LEVEL_SHOW'),
+        url: this.$http.adornUrl('/user/scoreExplainConfig/info/' + 'GROWTH_SHOW'),
         method: 'get',
         params: this.$http.adornParams()
       }).then(({ data }) => {
         if (data !== null) {
-          this.dataForm = data
           this.$nextTick(() => {
+            this.dataForm = data
             this.$refs.tinyMce.setContent(data.paramValue)
           })
         }
       })
-      // this.$refs['dataForm'].resetFields()
     },
     // 设置数据
     setDate (data) {
@@ -64,9 +63,9 @@ export default {
             url: this.$http.adornUrl(`/user/scoreExplainConfig`),
             method: this.dataForm.id ? 'put' : 'post',
             data: this.$http.adornData({
-              'paramKey': 'LEVEL_SHOW',
+              'paramKey': 'GROWTH_SHOW',
               'paramValue': this.dataForm.paramValue,
-              'remark': this.$i18n.t('user.levelPageConfiguration')
+              'remark': '成长攻略配置'
             })
           }).then(({ data }) => {
             // this.getData()
@@ -91,7 +90,7 @@ export default {
       },
       dataRule: {
         paramValue: [
-          { required: true, message: this.$i18n.t('product.content'), trigger: 'brue' }
+          { required: true, message: '成长值攻略不能为空', trigger: 'brue' }
         ]
       }
     }

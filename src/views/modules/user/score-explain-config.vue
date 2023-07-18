@@ -62,7 +62,7 @@ export default {
         if (valid) {
           let param = this.dataForm
           this.$http({
-            url: this.$http.adornUrl(`/user/scoreExplainConfig/`),
+            url: this.$http.adornUrl(`/user/scoreExplainConfig`),
             method: this.dataForm.id ? 'put' : 'post',
             data: this.$http.adornData(param)
           }).then(({ data }) => {

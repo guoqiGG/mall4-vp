@@ -74,6 +74,16 @@
                 <div :class="[scope.row.status === 1 ? 'disabled-btn' : '', 'default-btn text-btn']"
                   @click="deleteHandle(scope.row.liveProdStoreId, scope.row.status)">{{ $t('remindPop.delete') }}</div>
               </div>
+              <div
+                  class="default-btn text-btn"
+                  v-if="isAuth('live:liveProdStore:submitVerify') && (scope.row.status === 0 || scope.row.status === 5)"
+                  @click="submitVerify(scope.row.liveProdStoreId)"
+                  >{{
+                    scope.row.status === 5
+                    ? '重新审核'
+                    : '提交审核'
+                  }}
+                </div>
             </template>
           </el-table-column>
         </el-table>
@@ -136,7 +146,7 @@ export default {
         this.theData = JSON.parse(JSON.stringify(this.searchForm))
       }
       this.$http({
-        url: this.$http.adornUrl('/platform/live/liveProdStore/page'),
+        url: this.$http.adornUrl('/live/liveProdStore/page'),
         method: 'get',
         params: this.$http.adornParams(
           Object.assign(
@@ -156,7 +166,7 @@ export default {
     // 获取剩余可新增得数量
     getAddProdNum () {
       this.$http({
-        url: this.$http.adornUrl('/platform/live/liveProdStore/getAddProdNum'),
+        url: this.$http.adornUrl('/live/liveProdStore/getAddProdNum'),
         method: 'get',
         params: this.$http.adornParams()
       }).then(({ data }) => {
@@ -213,7 +223,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$http({
-          url: this.$http.adornUrl('/platform/live/liveProdStore/' + id),
+          url: this.$http.adornUrl('/live/liveProdStore/' + id),
           method: 'delete',
           data: this.$http.adornData({})
         }).then(({ data }) => {
