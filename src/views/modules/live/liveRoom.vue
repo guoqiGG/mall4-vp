@@ -99,7 +99,7 @@
                 <div class="default-btn text-btn" @click="toTopHandle(scope.row)" v-if="scope.row.roomTop === 1">
                   {{ $t('liveRoom.cancelTopping') }}
                 </div>
-                <div class="default-btn text-btn" type="text" icon="el-icon-delete" size="small"
+                <div v-if="scope.row.liveStatus===102" class="default-btn text-btn" type="text" icon="el-icon-delete" size="small"
                   @click="addOrUpdateHandle(scope.row)">编辑</div>
                 <div class="default-btn text-btn" type="text" icon="el-icon-delete" size="small"
                   @click="deleteHandle(scope.row.id)">{{ $t('user.deleteBtn') }}</div>
