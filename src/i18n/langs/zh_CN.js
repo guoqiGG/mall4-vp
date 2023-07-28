@@ -3641,7 +3641,7 @@ const zhCn = {
     userInfo: '用户信息',
     integerGreaterThanZero: '请输入大于0的整数',
     userTag: '会员标签',
-    userTagDefaultTxt: '请选择会员标签'
+    userTagDefaultTxt: '请选择会员标签',
   },
   finaManage: {
     statisticalTime: '统计时间',

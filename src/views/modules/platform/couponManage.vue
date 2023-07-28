@@ -12,14 +12,14 @@
               <el-option :label="$t('coupon.expired')" :value="0"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item prop="putonStatus" :label="$t('coupon.deliveryStatus') + ':'" label-width="80px"  class="search-form-item">
+          <!-- <el-form-item prop="putonStatus" :label="$t('coupon.deliveryStatus') + ':'" label-width="80px"  class="search-form-item">
             <el-select v-model="searchForm.putonStatus" :placeholder="$t('coupon.deliveryStatus')">
               <el-option :label="$t('coupon.cancelLaunch')" :value="-1"></el-option>
               <el-option :label="$t('coupon.launched')" :value="1"></el-option>
               <el-option :label="$t('coupon.waitAutoLaunch')" :value="0"></el-option>
               <el-option :label="$t('coupon.waitLaunch')" :value="4"></el-option>
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item
             :label="$t('coupon.expire')+':'"
             label-width="70px"
