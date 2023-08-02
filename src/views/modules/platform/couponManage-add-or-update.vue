@@ -34,7 +34,7 @@
         ></el-input>
       </el-form-item> -->
       <el-form-item :label="$t('coupon.deliveryStatus')" size="mini" prop="putonStatus">
-        <el-radio-group v-model="dataForm.putonStatus" :disabled="dataForm.putonStatus < 0">
+        <el-radio-group v-model="dataForm.putonStatus">
           <!-- <el-radio :label="0">{{$t("coupon.waitAutoLaunch")}}
             <el-tooltip class="item" effect="light" placement="top">
               <div slot="content">{{ $t("coupon.launchTip")}}</div>
@@ -44,7 +44,7 @@
             </el-tooltip>
           </el-radio> -->
           <el-radio :label="1">{{$t("coupon.launched")}}</el-radio>
-          <!-- <el-radio :label="4">{{$t("coupon.waitLaunch")}}</el-radio>
+          <!-- <el-radio :label="4">{{$t("coupon.waitLaunch")}}</el-radio> -->
           <el-radio :disabled="true" :label="-1">{{ $t("coupon.cancelLaunch") }}
             <el-tooltip class="item" effect="light" placement="top">
               <div slot="content">{{ $t("coupon.launchTip1")}}</div>
@@ -52,7 +52,7 @@
              <i class="el-icon-question"></i>
             </span>
             </el-tooltip>
-          </el-radio> -->
+          </el-radio>
         </el-radio-group>
       </el-form-item>
       <!-- 投放时间 -->
@@ -663,7 +663,7 @@ export default {
           this.dataForm.launchTime = this.dataForm.launchTime && this.launchTimeValue ? this.dataForm.launchTime + ' ' + this.launchTimeValue + ':00' : ''
           this.dataForm.startTime = this.dataForm.startTime && this.startTimeValue ? this.dataForm.startTime + ' ' + this.startTimeValue + ':00' : ''
           this.dataForm.endTime = this.dataForm.endTime && this.endTimeValue ? this.dataForm.endTime + ' ' + this.endTimeValue + ':00' : ''
-          if (this.dataForm.couponType === 1 && (parseFloat(this.dataForm.cashCondition) <= parseFloat(this.dataForm.reduceAmount))) {
+          if (this.dataForm.couponType === 1 && (parseFloat(this.dataForm.cashCondition) < parseFloat(this.dataForm.reduceAmount))) {
             this.$message.error(this.$i18n.t('coupon.amounnCannotBe'))
             return false
           }

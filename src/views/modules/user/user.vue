@@ -1,63 +1,36 @@
 <template>
   <div class="mod-user">
     <div class="search-bar">
-      <el-form @submit.native.prevent :inline="true" class="search-form" ref="searchForm" :model="searchForm" size="small">
+      <el-form @submit.native.prevent :inline="true" class="search-form" ref="searchForm" :model="searchForm"
+        size="small">
         <div class="input-row">
           <el-form-item prop="nickName" :label="$t('users.name') + ':'">
-            <el-input v-model="searchForm.nickName" type="text" clearable  :placeholder="$t('users.name')"></el-input>
+            <el-input v-model="searchForm.nickName" type="text" clearable :placeholder="$t('users.name')"></el-input>
           </el-form-item>
           <el-form-item prop="userMobile" :label="$t('publics.mobilePhone') + ':'">
-            <el-input v-model="searchForm.userMobile" type="text" clearable maxlength="11" :placeholder="$t('publics.mobilePhone')"></el-input>
+            <el-input v-model="searchForm.userMobile" type="text" clearable maxlength="11"
+              :placeholder="$t('publics.mobilePhone')"></el-input>
           </el-form-item>
           <el-form-item prop="levelType" :label="$t('user.memberType') + ':'">
-            <el-cascader
-                ref="memberCascader"
-                v-model="memberLevelVal"
-                :options="levelTypes"
-                :props="{ checkStrictly: true }"
-                clearable
-                @change="handleMemberTypeChange"
-              />
+            <el-cascader ref="memberCascader" v-model="memberLevelVal" :options="levelTypes"
+              :props="{ checkStrictly: true }" clearable @change="handleMemberTypeChange" />
           </el-form-item>
           <el-form-item prop="status" :label="$t('publics.status') + ':'">
-            <el-select v-model="searchForm.status" clearable  :placeholder="$t('publics.status')">
-              <el-option
-                v-for="item in status"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+            <el-select v-model="searchForm.status" clearable :placeholder="$t('publics.status')">
+              <el-option v-for="item in status" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
           </el-form-item>
-          <p/>
-          <el-form-item :label="$t('user.registrationTime')+':'">
-            <el-date-picker
-              size="small"
-              v-model="createDateRange"
-              type="datetimerange"
-              :range-separator="$t('date.tip')"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              :start-placeholder="$t('text.startTime')"
-              :end-placeholder="$t('date.end')"
-              @change="createTimeChange"
-            ></el-date-picker>
+          <p />
+          <el-form-item :label="$t('user.registrationTime') + ':'">
+            <el-date-picker size="small" v-model="createDateRange" type="datetimerange" :range-separator="$t('date.tip')"
+              value-format="yyyy-MM-dd HH:mm:ss" :start-placeholder="$t('text.startTime')"
+              :end-placeholder="$t('date.end')" @change="createTimeChange"></el-date-picker>
           </el-form-item>
-          <el-form-item :label="$t('user.userTag')+':'" prop="userTag">
-            <el-select
-              value-key="userTagId"
-              v-model="searchForm.userTag"
-              v-el-select-loadmore="loadmore"
-              multiple
-              clearable
-              collapse-tags
-              :placeholder="$t('user.userTagDefaultTxt')"
-            >
-              <el-option
-                v-for="item in tagList"
-                :key="item.userTagId"
-                :label="item.tagName"
-                :value="item"
-              >
+          <el-form-item :label="$t('user.userTag') + ':'" prop="userTag">
+            <el-select value-key="userTagId" v-model="searchForm.userTag" v-el-select-loadmore="loadmore" multiple
+              clearable collapse-tags :placeholder="$t('user.userTagDefaultTxt')">
+              <el-option v-for="item in tagList" :key="item.userTagId" :label="item.tagName" :value="item">
               </el-option>
             </el-select>
           </el-form-item>
@@ -71,239 +44,110 @@
 
     <div class="main-container">
       <div class="operation-bar">
-        <div
-            v-if="isAuth('user:userLevel:updateGrowth')"
-            class="primary-btn default-btn"
-            :class="{'disabled-btn': dataListSelections.length <= 0}"
-            @click="updateGrowth()"
-          >{{$t('user.updateGrowth')}}</div>
-          <div
-            class="primary-btn default-btn"
-            @click="updateTags()"
-            :class="{'disabled-btn': dataListSelections.length <= 0}"
-          >{{$t('user.tagging')}}</div>
-          <div
-            v-if="isAuth('user:userLevel:updateScore')"
-            class="primary-btn default-btn"
-            @click="updateScore()"
-            :class="{'disabled-btn': dataListSelections.length <= 0}"
-          >{{$t('user.updateScore')}}</div>
-          <div
-            v-if="isAuth('platform:coupon:sendUserCoupon')"
-            class="primary-btn default-btn"
-            @click="updateCoupon()"
-            :class="{'disabled-btn': dataListSelections.length <= 0}"
-          >{{$t('user.sendCoupons')}}</div>
-          <div
-            v-if="isAuth('platform:user:updateBalance')"
-            class="primary-btn default-btn"
-            @click="updateBalance(null,1)"
-            :class="{'disabled-btn': dataListSelections.length <= 0}"
-          >{{$t('user.modifyBalance')}}</div>
-          <div
-            v-if="isAuth('platform:user:import')"
-            class="primary-btn default-btn"
-            @click="importUser()"
-            :disabled="importDisabled"
-          >{{$t('user.userImport')}}</div>
-          <div
-            class="primary-btn default-btn"
-            @click="exportUser()"
-            :disabled="exportDisabled"
-          >{{$t('user.export')}}</div>
+        <div v-if="isAuth('user:userLevel:updateGrowth')" class="primary-btn default-btn"
+          :class="{ 'disabled-btn': dataListSelections.length <= 0 }" @click="updateGrowth()">{{ $t('user.updateGrowth')
+          }}
+        </div>
+        <div class="primary-btn default-btn" @click="updateTags()"
+          :class="{ 'disabled-btn': dataListSelections.length <= 0 }">{{ $t('user.tagging') }}</div>
+        <div v-if="isAuth('user:userLevel:updateScore')" class="primary-btn default-btn" @click="updateScore()"
+          :class="{ 'disabled-btn': dataListSelections.length <= 0 }">{{ $t('user.updateScore') }}</div>
+        <div v-if="isAuth('platform:coupon:sendUserCoupon')" class="primary-btn default-btn" @click="updateCoupon()"
+          :class="{ 'disabled-btn': dataListSelections.length <= 0 }">{{ $t('user.sendCoupons') }}</div>
+        <div v-if="isAuth('platform:coupon:sendUserVoucher')" class="primary-btn default-btn" @click="updateVoucher()"
+          :class="{ 'disabled-btn': dataListSelections.length <= 0 }">{{ $t('user.sendVouchers') }}</div>
+        <div v-if="isAuth('platform:user:updateBalance')" class="primary-btn default-btn" @click="updateBalance(null, 1)"
+          :class="{ 'disabled-btn': dataListSelections.length <= 0 }">{{ $t('user.modifyBalance') }}</div>
+        <div v-if="isAuth('platform:user:import')" class="primary-btn default-btn" @click="importUser()"
+          :disabled="importDisabled">{{ $t('user.userImport') }}</div>
+        <div class="primary-btn default-btn" @click="exportUser()" :disabled="exportDisabled">{{ $t('user.export') }}
+        </div>
       </div>
       <div class="table-con">
-          <div v-if="dataList.length === 0" class="empty-text">{{$t('user.noData')}}</div>
-          <el-table
-            :data="dataList"
-            header-cell-class-name="table-header"
-            row-class-name="table-row-low"
-            style="width: 100%"
-            @selection-change="selectionChange"
-          >
-            <el-table-column
-              fixed
-              type="selection"
-              width="60">
-            </el-table-column>
-            <el-table-column
-              fixed
-              :label="$t('users.name')"
-              prop="nickName"
-              align="left"
-              width="120"
-            />
-            <el-table-column
-              fixed
-              prop="pic"
-              :label="$t('publics.profilePicture')"
-            >
-              <template slot-scope="scope">
-                <div class="table-cell-image">
-                  <img src="~@/assets/img/userImg.jpg" v-if="!scope.row.pic" width="130px" />
-                  <img :src="scope.row.pic" v-else @error="scope.row.pic=''" />
+        <div v-if="dataList.length === 0" class="empty-text">{{ $t('user.noData') }}</div>
+        <el-table :data="dataList" header-cell-class-name="table-header" row-class-name="table-row-low"
+          style="width: 100%" @selection-change="selectionChange">
+          <el-table-column fixed type="selection" width="60">
+          </el-table-column>
+          <el-table-column fixed :label="$t('users.name')" prop="nickName" align="left" width="120" />
+          <el-table-column fixed prop="pic" :label="$t('publics.profilePicture')">
+            <template slot-scope="scope">
+              <div class="table-cell-image">
+                <img src="~@/assets/img/userImg.jpg" v-if="!scope.row.pic" width="130px" />
+                <img :src="scope.row.pic" v-else @error="scope.row.pic = ''" />
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="userMobile" width="120" :label="$t('publics.mobilePhone')">
+            <template slot-scope="scope">
+              <div>{{ scope.row.userMobile }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="levelName" width="120" :label="$t('user.membershipLevel')" />
+          <el-table-column prop="levelType" width="120" :label="$t('user.memberType')">
+            <template slot-scope="scope">
+              <span>{{ [$t('user.ordinaryMember'), $t('user.paidMembership')][scope.row.levelType] }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="coupons" width="120" :label="$t('user.coupons')" />
+          <el-table-column prop="vouchers" width="120" :label="$t('user.vouchers')" />
+          <el-table-column prop="growth" width="120" :label="$t('user.growth')" />
+          <el-table-column prop="score" width="120" :label="$t('user.userScore')" />
+          <el-table-column prop="sumScore" width="120" :label="$t('user.cumulativeScore')" />
+          <el-table-column prop="status" width="120" :label="$t('publics.status')">
+            <template slot-scope="scope">
+              <span>{{ [$t('publics.disable'), $t('publics.normal')][scope.row.status] }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column width="150" prop="userRegtime" :label="$t('user.registrationTime')">
+            <template slot-scope="scope">
+              <div>{{ scope.row.userRegtime || '-' }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column width="150" prop="reConsTime" :label="$t('user.lastConsumptionTime')">
+            <template slot-scope="scope">
+              <div>{{ scope.row.reConsTime || '-' }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column width="120" prop="consAmount" :label="$t('user.consumptionAmount')">
+            <template slot-scope="scope">
+              <div>{{ scope.row.consAmount || '-' }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column width="120" prop="actualAmount" :label="$t('user.actuallypaid')">
+            <template slot-scope="scope">
+              <div>{{ scope.row.actualAmount || '-' }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column width="120" prop="consTimes" :label="$t('user.consumptionTimes')" />
+          <el-table-column width="120" prop="averDiscount" :label="$t('user.averageDiscount')" />
+          <el-table-column width="120" prop="rechargeAmount" :label="$t('user.rechargeAmount')" />
+          <el-table-column width="120" prop="rechargeTimes" :label="$t('user.rechargeTimes')" />
+          <el-table-column width="120" prop="afterSaleAmount" :label="$t('home.refundAmount')" />
+          <el-table-column width="120" prop="afterSaleTimes" :label="$t('user.refundTimes')" />
+          <el-table-column width="120" prop="currentBalance" :label="$t('user.currentBalance')" />
+          <el-table-column width="120" prop="sumBalance" :label="$t('user.cumulativeBalances')" />
+          <el-table-column fixed="right" align="center" :label="$t('crud.menu')" width="230">
+            <template slot-scope="scope">
+              <div class="text-btn-con">
+                <div class="text-btn default-btn" v-if="isAuth('plateform:user:update')"
+                  @click.stop="addOrUpdateHandle(scope.row.userId)">{{ $t('coupon.edit') }}</div>
+                <div class="default-btn text-btn" v-if="isAuth('platform:user:updateBalance')"
+                  @click.stop="updateBalance(scope.row.userId, 0, scope.row.currentBalance)">{{ $t('user.modifyBalance')
+                  }}
                 </div>
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="userMobile"
-              width="120"
-              :label="$t('publics.mobilePhone')"
-            >
-              <template slot-scope="scope">
-                <div>{{scope.row.userMobile}}</div>
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="levelName"
-              width="120"
-              :label="$t('user.membershipLevel')"
-            />
-            <el-table-column
-              prop="levelType"
-              width="120"
-              :label="$t('user.memberType')"
-            >
-              <template slot-scope="scope">
-                <span>{{[$t('user.ordinaryMember'),$t('user.paidMembership')][scope.row.levelType]}}</span>
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="growth"
-              width="120"
-              :label="$t('user.growth')"
-            />
-            <el-table-column
-              prop="score"
-              width="120"
-              :label="$t('user.userScore')"
-            />
-            <el-table-column
-              prop="sumScore"
-              width="120"
-              :label="$t('user.cumulativeScore')"
-            />
-            <el-table-column
-              prop="status"
-              width="120"
-              :label="$t('publics.status')"
-            >
-              <template slot-scope="scope">
-                <span>{{[$t('publics.disable'),$t('publics.normal')][scope.row.status]}}</span>
-              </template>
-            </el-table-column>
-            <el-table-column
-              width="150"
-              prop="userRegtime"
-              :label="$t('user.registrationTime')"
-            >
-              <template slot-scope="scope">
-                <div>{{scope.row.userRegtime || '-'}}</div>
-              </template>
-            </el-table-column>
-            <el-table-column
-              width="150"
-              prop="reConsTime"
-              :label="$t('user.lastConsumptionTime')"
-            >
-              <template slot-scope="scope">
-                <div>{{scope.row.reConsTime || '-'}}</div>
-              </template>
-            </el-table-column>
-            <el-table-column
-              width="120"
-              prop="consAmount"
-              :label="$t('user.consumptionAmount')"
-            >
-              <template slot-scope="scope">
-                <div>{{scope.row.consAmount || '-'}}</div>
-              </template>
-            </el-table-column>
-            <el-table-column
-              width="120"
-              prop="actualAmount"
-              :label="$t('user.actuallypaid')"
-            >
-              <template slot-scope="scope">
-                <div>{{scope.row.actualAmount || '-'}}</div>
-              </template>
-            </el-table-column>
-            <el-table-column
-              width="120"
-              prop="consTimes"
-              :label="$t('user.consumptionTimes')"
-            />
-            <el-table-column
-              width="120"
-              prop="averDiscount"
-              :label="$t('user.averageDiscount')"
-            />
-            <el-table-column
-              width="120"
-              prop="rechargeAmount"
-              :label="$t('user.rechargeAmount')"
-            />
-            <el-table-column
-              width="120"
-              prop="rechargeTimes"
-              :label="$t('user.rechargeTimes')"
-            />
-            <el-table-column
-              width="120"
-              prop="afterSaleAmount"
-              :label="$t('home.refundAmount')"
-            />
-            <el-table-column
-              width="120"
-              prop="afterSaleTimes"
-              :label="$t('user.refundTimes')"
-            />
-            <el-table-column
-              width="120"
-              prop="currentBalance"
-              :label="$t('user.currentBalance')"
-            />
-            <el-table-column
-              width="120"
-              prop="sumBalance"
-              :label="$t('user.cumulativeBalances')"
-            />
-            <el-table-column
-              fixed="right"
-              align="center"
-              :label="$t('crud.menu')"
-              width="230"
-              >
-              <template slot-scope="scope">
-                <div class="text-btn-con">
-                  <div
-                    class="text-btn default-btn"
-                    v-if="isAuth('plateform:user:update')"
-                    @click.stop="addOrUpdateHandle(scope.row.userId)"
-                  >{{$t('coupon.edit')}}</div>
-                  <div
-                    class="default-btn text-btn"
-                    v-if="isAuth('platform:user:updateBalance')"
-                    @click.stop="updateBalance(scope.row.userId, 0, scope.row.currentBalance)"
-                  >{{$t('user.modifyBalance')}}</div>
-                </div>
-              </template>
-            </el-table-column>
+              </div>
+            </template>
+          </el-table-column>
 
-            <div slot="empty">
-              &nbsp;
-            </div>
-          </el-table>
+          <div slot="empty">
+            &nbsp;
+          </div>
+        </el-table>
       </div>
-      <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="page.currentPage"
-          :page-sizes="[10, 20, 50, 100]"
-          :page-size="page.pageSize"
-          :total="page.total"
-          layout="total, sizes, prev, pager, next, jumper"
-      ></el-pagination>
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+        :current-page="page.currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="page.pageSize" :total="page.total"
+        layout="total, sizes, prev, pager, next, jumper"></el-pagination>
     </div>
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="refreshChange"></add-or-update>
@@ -311,7 +155,10 @@
     <update-score v-if="updateScoreVisible" ref="updateScore" @refreshDataList="refreshChange"></update-score>
     <update-tags v-if="updateTagsVisible" ref="updateTags" @refreshDataList="refreshChange"></update-tags>
     <update-balance v-if="updateBalanceVisible" ref="updateBalance" @refreshDataList="refreshChange"></update-balance>
-    <update-coupon v-if="updateCouponVisible" ref="updateCoupon" :getWay="1" @refreshDataList="refreshChange"></update-coupon>
+    <update-coupon v-if="updateCouponVisible" ref="updateCoupon" :getWay="1"
+      @refreshDataList="refreshChange"></update-coupon>
+    <update-voucher v-if="updateVoucherVisible" ref="updateVoucher" :getWay="1"
+      @refreshDataList="refreshChange"></update-voucher>
     <import-user v-if="importUserVisible" ref="importUser" @refreshDataList="refreshChange"></import-user>
   </div>
 </template>
@@ -323,13 +170,14 @@ import UpdateScore from './update-user-score'
 import UpdateTags from './update-user-tags'
 import UpdateBalance from './update-user-balance'
 import UpdateCoupon from './update-user-copon'
+import UpdateVoucher from './update-user-voucher'
 import ImportUser from './excel-user-import'
 import { clearLoginInfo } from '@/utils'
 
 export default {
   directives: {
     'el-select-loadmore': {
-      bind (el, binding) {
+      bind(el, binding) {
         // 获取element-ui定义好的scroll盒子
         const SELECTWRAP_DOM = el.querySelector('.el-select-dropdown .el-select-dropdown__wrap')
         SELECTWRAP_DOM.addEventListener('scroll', function () {
@@ -348,16 +196,16 @@ export default {
       }
     }
   },
-  data () {
+  data() {
     return {
       theData: null, // 保存上次点击查询的请求条件
-
       dataList: [],
       dataListLoading: false,
       exportDisabled: false,
       importDisabled: false,
       updateBalanceVisible: false,
       updateCouponVisible: false,
+      updateVoucherVisible: false,
       dataListSelections: [],
       addOrUpdateVisible: false,
       updateGrowthVisible: false,
@@ -418,10 +266,11 @@ export default {
     UpdateScore,
     UpdateTags,
     UpdateCoupon,
+    UpdateVoucher,
     ImportUser,
     UpdateBalance
   },
-  mounted () {
+  mounted() {
     this.getMemberLevelList()
     this.getDataList(this.page)
     this.getMemberTags()
@@ -430,7 +279,7 @@ export default {
     /**
      * 切换付费会员等级
      */
-    handleMemberTypeChange (val) {
+    handleMemberTypeChange(val) {
       this.searchForm.levelType = val[0]
       this.searchForm.level = val[1] || ''
       this.$refs.memberCascader.dropDownVisible = false
@@ -438,7 +287,7 @@ export default {
     /**
      * 获取会员等级列表
      */
-    getMemberLevelList () {
+    getMemberLevelList() {
       for (let index = 0; index < 2; index++) {
         this.$http({
           url: this.$http.adornUrl('/user/userLevel/list'),
@@ -460,7 +309,7 @@ export default {
       }
     },
     // 获取数据列表  /admin/user/page
-    getDataList (page, newData = false) {
+    getDataList(page, newData = false) {
       if (newData || !this.theData) {
         this.theData = JSON.parse(JSON.stringify(this.searchForm))
       }
@@ -485,14 +334,14 @@ export default {
       })
     },
     // 新增 / 修改
-    addOrUpdateHandle (id) {
+    addOrUpdateHandle(id) {
       this.addOrUpdateVisible = true
       this.$nextTick(() => {
         this.$refs.addOrUpdate.init(id)
       })
     },
     // 条件查询 JSON.stringify(arr)
-    searchChange (newData = false) {
+    searchChange(newData = false) {
       var arr = ''
       if (this.searchForm.userTag.length !== 0) {
         this.searchForm.userTag.forEach(item => {
@@ -504,18 +353,18 @@ export default {
       this.getDataList(this.page, newData)
     },
     // 刷新回调用
-    refreshChange () {
+    refreshChange() {
       this.getDataList(this.page)
     },
-    handleSizeChange (val) {
+    handleSizeChange(val) {
       this.page.pageSize = val
       this.getDataList(this.page)
     },
-    handleCurrentChange (val) {
+    handleCurrentChange(val) {
       this.page.currentPage = val
       this.getDataList(this.page)
     },
-    resetForm (formName) {
+    resetForm(formName) {
       this.$refs[formName].resetFields()
       this.searchForm.userTag = []
       this.searchForm.userRegStartTime = null
@@ -523,7 +372,7 @@ export default {
       this.memberLevelVal = null
       this.createDateRange = []
     },
-    createTimeChange () {
+    createTimeChange() {
       if (!this.createDateRange || this.createDateRange.length === 0) {
         this.searchForm.userRegStartTime = null
         this.searchForm.userRegEndTime = null
@@ -533,11 +382,11 @@ export default {
       }
     },
     // 多选变化
-    selectionChange (val) {
+    selectionChange(val) {
       this.dataListSelections = val
     },
     // 修改成长值
-    updateGrowth (id) {
+    updateGrowth(id) {
       if (this.dataListSelections.length <= 0) {
         return
       }
@@ -551,7 +400,7 @@ export default {
       })
     },
     // 修改成长值
-    updateScore (id) {
+    updateScore(id) {
       if (this.dataListSelections.length <= 0) {
         return
       }
@@ -564,7 +413,7 @@ export default {
         this.$refs.updateScore.init(ids)
       })
     },
-    updateTags (id) {
+    updateTags(id) {
       if (this.dataListSelections.length <= 0) {
         return
       }
@@ -578,7 +427,7 @@ export default {
       })
     },
     // type 1 批次充值 0修改余额
-    updateBalance (id, type, balance) {
+    updateBalance(id, type, balance) {
       if (this.dataListSelections.length <= 0 && type) {
         return
       }
@@ -591,7 +440,7 @@ export default {
         this.$refs.updateBalance.init(ids, type, balance)
       })
     },
-    updateCoupon (id) {
+    updateCoupon(id) {
       if (this.dataListSelections.length <= 0) {
         return
       }
@@ -604,8 +453,21 @@ export default {
         this.$refs.updateCoupon.init(ids)
       })
     },
+    updateVoucher(id) {
+      if (this.dataListSelections.length <= 0) {
+        return
+      }
+      var ids = id ? [id] : this.dataListSelections.map(item => {
+        return item.userId
+      })
+      // console.log(ids)
+      this.updateVoucherVisible = true
+      this.$nextTick(() => {
+        this.$refs.updateVoucher.init(ids)
+      })
+    },
     //  选择指定列进行排序
-    changeTableSort (column) {
+    changeTableSort(column) {
       // 获取字段名称和排序类型
       var fieldName = column.prop
       var sortingType = column.order
@@ -617,7 +479,7 @@ export default {
     /**
      * 导入用户
      */
-    importUser () {
+    importUser() {
       this.importUserVisible = true
       this.$nextTick(() => {
         this.$refs.importUser.init()
@@ -626,7 +488,7 @@ export default {
     /**
      * 导出单品
      */
-    exportUser () {
+    exportUser() {
       this.exportDisabled = true
       const loading = this.$loading({
         lock: true,
@@ -684,7 +546,7 @@ export default {
       })
     },
     // 国际化
-    getVipInternationalization (data) {
+    getVipInternationalization(data) {
       if (!data) return
       const lang = localStorage.getItem('bbcLang') || 'zh_CN'
       data.map(element => {
@@ -705,20 +567,20 @@ export default {
     /**
      * 获取会员标签列表
      */
-    getMemberTags () {
+    getMemberTags() {
       this.$http({
         url: this.$http.adornUrl('/user/userTag/byTagType'),
         method: 'get',
         params: this.$http.adornParams(
           this.tagSearchParam
         )
-      }).then(({data}) => {
+      }).then(({ data }) => {
         if (!data) return
         this.tagTotal = data.total
         this.tagList = [...this.tagList, ...data.records]
       })
     },
-    loadmore () {
+    loadmore() {
       this.tagSearchParam.current++
       if (this.tagList.length < this.tagTotal) {
         this.getMemberTags()
@@ -732,42 +594,49 @@ export default {
   .tips .text {
     color: #FF0000;
   }
- ::v-deep .el-table__fixed{
+
+  ::v-deep .el-table__fixed {
     height: auto !important;
     bottom: 16px !important;
+
     &::before {
       background-color: transparent !important;
     }
   }
- ::v-deep .el-table__fixed-right{
+
+  ::v-deep .el-table__fixed-right {
     height: auto !important;
     bottom: 16px !important;
+
     &::before {
       background-color: transparent !important;
     }
   }
 
 }
- .TagS {
-   margin-right: 10px !important;
- }
+
+.TagS {
+  margin-right: 10px !important;
+}
 
 .table-con {
   position: relative;
 }
 
- .empty-text {
+.empty-text {
   position: absolute;
   z-index: 4;
   top: 50%;
   left: 50%;
   color: #909399;
- }
-  ::v-deep .export-load {
-    top: -50% !important;
-  }
-  ::v-deep .el-select .el-select__tags > span > .el-tag.el-tag--info:nth-last-child(2) {
-    max-width: 120px;
-  }
+}
+
+::v-deep .export-load {
+  top: -50% !important;
+}
+
+::v-deep .el-select .el-select__tags>span>.el-tag.el-tag--info:nth-last-child(2) {
+  max-width: 120px;
+}
 </style>
 
