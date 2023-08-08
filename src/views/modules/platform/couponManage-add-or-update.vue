@@ -34,17 +34,17 @@
         ></el-input>
       </el-form-item> -->
       <el-form-item :label="$t('coupon.deliveryStatus')" size="mini" prop="putonStatus">
-        <el-radio-group v-model="dataForm.putonStatus">
-          <!-- <el-radio :label="0">{{$t("coupon.waitAutoLaunch")}}
+        <el-radio-group v-model="dataForm.putonStatus" :disabled="dataForm.putonStatus < 0">
+          <el-radio :label="0">{{$t("coupon.waitAutoLaunch")}}
             <el-tooltip class="item" effect="light" placement="top">
               <div slot="content">{{ $t("coupon.launchTip")}}</div>
               <span>
              <i class="el-icon-question"></i>
             </span>
             </el-tooltip>
-          </el-radio> -->
+          </el-radio>
           <el-radio :label="1">{{$t("coupon.launched")}}</el-radio>
-          <!-- <el-radio :label="4">{{$t("coupon.waitLaunch")}}</el-radio> -->
+          <el-radio :label="4">{{$t("coupon.waitLaunch")}}</el-radio>
           <el-radio :disabled="true" :label="-1">{{ $t("coupon.cancelLaunch") }}
             <el-tooltip class="item" effect="light" placement="top">
               <div slot="content">{{ $t("coupon.launchTip1")}}</div>
@@ -82,7 +82,7 @@
       </el-form-item>
       <el-form-item :label="$t('coupon.getWay')" size="mini" prop="getWay">
         <el-radio-group v-model="dataForm.getWay">
-          <!-- <el-radio :label="0">{{$t("coupon.receiveDirectly")}}</el-radio> -->
+          <el-radio :label="0">{{$t("coupon.receiveDirectly")}}</el-radio>
           <el-radio :label="1">{{$t("coupon.exchangeOrSystemIssue")}}
             <el-tooltip class="item" effect="light" placement="top">
               <div slot="content">{{ $t("coupon.getWayTip")}}</div>
@@ -97,7 +97,7 @@
       <el-form-item :label="$t('coupon.couponType')" size="mini" prop="couponType">
         <el-radio-group v-model="dataForm.couponType" :disabled="dataForm.couponId !== 0">
           <el-radio :label="1">{{$t("coupon.cashCoupon")}}</el-radio>
-          <!-- <el-radio :label="2">{{$t("coupon.discountVoucher")}}</el-radio> -->
+          <el-radio :label="2">{{$t("coupon.discountVoucher")}}</el-radio>
           <!-- <el-radio :label="3">兑换券</el-radio> -->
         </el-radio-group>
       </el-form-item>
@@ -151,7 +151,7 @@
       <el-form-item :label="$t('coupon.effectiveType')" np size="mini" prop="validTimeType">
         <el-radio-group v-model="dataForm.validTimeType" :disabled="dataForm.couponId !== 0">
           <el-radio :label="1">{{$t("coupon.fixedTime")}}</el-radio>
-          <!-- <el-radio :label="2">{{$t("coupon.effectiveAfterReceiving")}}</el-radio> -->
+          <el-radio :label="2">{{$t("coupon.effectiveAfterReceiving")}}</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item
@@ -362,7 +362,7 @@ export default {
         couponDiscount: 0,
         cashCondition: 0,
         validTimeType: 1,
-        getWay: 1,
+        getWay: 0,
         launchTime: null,
         startTime: null,
         endTime: null,
@@ -371,7 +371,7 @@ export default {
         stocks: 1,
         suitableProdType: 0,
         limitNum: 1,
-        putonStatus: 1,
+        putonStatus: 0,
         couponProds: []
       },
       isSubmit: false,
@@ -482,7 +482,7 @@ export default {
         couponDiscount: 0,
         cashCondition: 0,
         validTimeType: 1,
-        getWay: 1,
+        getWay: 0,
         launchTime: null,
         startTime: null,
         endTime: null,
@@ -491,7 +491,7 @@ export default {
         stocks: 1,
         suitableProdType: 0,
         limitNum: 1,
-        putonStatus: 1,
+        putonStatus: 0,
         couponProds: []
       }
     },
@@ -663,7 +663,7 @@ export default {
           this.dataForm.launchTime = this.dataForm.launchTime && this.launchTimeValue ? this.dataForm.launchTime + ' ' + this.launchTimeValue + ':00' : ''
           this.dataForm.startTime = this.dataForm.startTime && this.startTimeValue ? this.dataForm.startTime + ' ' + this.startTimeValue + ':00' : ''
           this.dataForm.endTime = this.dataForm.endTime && this.endTimeValue ? this.dataForm.endTime + ' ' + this.endTimeValue + ':00' : ''
-          if (this.dataForm.couponType === 1 && (parseFloat(this.dataForm.cashCondition) < parseFloat(this.dataForm.reduceAmount))) {
+          if (this.dataForm.couponType === 1 && (parseFloat(this.dataForm.cashCondition) <= parseFloat(this.dataForm.reduceAmount))) {
             this.$message.error(this.$i18n.t('coupon.amounnCannotBe'))
             return false
           }
