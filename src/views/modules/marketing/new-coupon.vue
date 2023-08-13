@@ -10,27 +10,11 @@
         }}
       </div>
     </div>
-    <el-form @submit.native.prevent
-      :model="dataForm"
-      :rules="dataRule"
-      ref="dataForm"
-      @keyup.enter.native="dataFormSubmit()"
-      class="form-box"
-      label-width="auto"
-    >
-      <el-form-item
-        :label="this.$i18n.t('marketing.couponName')"
-        prop="couponName"
-      >
-        <el-input
-          v-model="dataForm.couponName"
-          maxlength="20"
-          show-word-limit
-          size="small"
-          class="coupon-input"
-          :placeholder="this.$i18n.t('marketing.couponName')"
-          :disabled="dataForm.couponId !== 0"
-        ></el-input>
+    <el-form @submit.native.prevent :model="dataForm" :rules="dataRule" ref="dataForm"
+      @keyup.enter.native="dataFormSubmit()" class="form-box" label-width="auto">
+      <el-form-item :label="this.$i18n.t('marketing.couponName')" prop="couponName">
+        <el-input v-model="dataForm.couponName" maxlength="20" show-word-limit size="small" class="coupon-input"
+          :placeholder="this.$i18n.t('marketing.couponName')" :disabled="dataForm.couponId !== 0"></el-input>
       </el-form-item>
       <!-- <el-form-item
         :label="this.$i18n.t('marketing.couponSubtitle')"
@@ -46,147 +30,81 @@
           show-word-limit
         ></el-input>
       </el-form-item> -->
-      <el-form-item
-        :label="this.$i18n.t('coupon.launchStatus')"
-        size="mini"
-        prop="putonStatus"
-      >
+      <el-form-item :label="this.$i18n.t('coupon.launchStatus')" size="mini" prop="putonStatus">
         <el-radio-group v-model="dataForm.putonStatus" :disabled="dataForm.putonStatus < 0">
           <el-radio :label="0">{{ $t("coupon.waitAutoLaunch") }}
             <el-tooltip class="item" effect="light" placement="top">
-              <div slot="content">{{ $t("coupon.launchTip")}}</div>
+              <div slot="content">{{ $t("coupon.launchTip") }}</div>
               <span>
-             <i class="el-icon-question"></i>
-            </span>
+                <i class="el-icon-question"></i>
+              </span>
             </el-tooltip>
           </el-radio>
           <el-radio :label="1">{{ $t("coupon.launched") }}</el-radio>
           <el-radio :label="4">{{ $t("coupon.waitLaunch") }}</el-radio>
-          <el-radio :label="-1" :disabled="true" >{{ $t("coupon.cancelLaunch") }}
+          <el-radio :label="-1" :disabled="true">{{ $t("coupon.cancelLaunch") }}
             <el-tooltip class="item" effect="light" placement="top">
-              <div slot="content">{{ $t("coupon.launchTip1")}}</div>
+              <div slot="content">{{ $t("coupon.launchTip1") }}</div>
               <span>
-             <i class="el-icon-question"></i>
-            </span>
+                <i class="el-icon-question"></i>
+              </span>
             </el-tooltip>
           </el-radio>
         </el-radio-group>
       </el-form-item>
 
       <!-- 投放时间 -->
-      <el-form-item
-        :label="this.$i18n.t('coupon.timeToMarket')"
-        prop="launchTime"
-        v-if="dataForm.putonStatus === 0"
-      >
-        <el-date-picker
-          v-model="dataForm.launchTime"
-          value-format="yyyy-MM-dd"
-          type="date"
-          size="small"
-          :placeholder="this.$i18n.t('coupon.chooseLaunchTime')"
-          style="width:140px"
-        ></el-date-picker>
-        <el-time-select
-          v-model="launchTimeValue"
-          :picker-options="{
-            start: '00:00',
-            step: '00:30',
-            end: '23:30'
-          }"
-          size="small"
-          style="width:100px"
-          :placeholder="this.$i18n.t('coupon.timeToMarket')">
+      <el-form-item :label="this.$i18n.t('coupon.timeToMarket')" prop="launchTime" v-if="dataForm.putonStatus === 0">
+        <el-date-picker v-model="dataForm.launchTime" value-format="yyyy-MM-dd" type="date" size="small"
+          :placeholder="this.$i18n.t('coupon.chooseLaunchTime')" style="width:140px"></el-date-picker>
+        <el-time-select v-model="launchTimeValue" :picker-options="{
+          start: '00:00',
+          step: '00:30',
+          end: '23:30'
+        }" size="small" style="width:100px" :placeholder="this.$i18n.t('coupon.timeToMarket')">
         </el-time-select>
       </el-form-item>
       <el-form-item :label="$t('coupon.getWay')" size="mini" prop="getWay">
         <el-radio-group v-model="dataForm.getWay">
-          <el-radio :label="0">{{$t("coupon.receiveDirectly")}}</el-radio>
-          <el-radio :label="1">{{$t("coupon.exchangeOrSystemIssue")}}</el-radio>
+          <el-radio :label="0">{{ $t("coupon.receiveDirectly") }}</el-radio>
+          <el-radio :label="1">{{ $t("coupon.exchangeOrSystemIssue") }}</el-radio>
           <!-- <el-radio :label="3">兑换券</el-radio> -->
         </el-radio-group>
       </el-form-item>
       <!-- 优惠券类型 -->
-      <el-form-item
-        :label="this.$i18n.t('coupon.couponType')"
-        size="mini"
-        prop="couponType"
-      >
-        <el-radio-group
-          v-model="dataForm.couponType"
-          :disabled="dataForm.couponId !== 0"
-        >
+      <el-form-item :label="this.$i18n.t('coupon.couponType')" size="mini" prop="couponType">
+        <el-radio-group v-model="dataForm.couponType" :disabled="dataForm.couponId !== 0">
           <el-radio :label="1">{{ $t("coupon.voucher") }}</el-radio>
           <el-radio :label="2" :disabled="true">{{ $t("coupon.discountCoupon") }}</el-radio>
           <!-- <el-radio :label="3">兑换券</el-radio> -->
         </el-radio-group>
       </el-form-item>
-      <el-form-item
-        :label="this.$i18n.t('marketing.conditionsOfUse')"
-        prop="cashCondition"
-      >
-        <el-input
-          size="small"
-          class="coupon-input1"
-          type="text"
-          v-model="dataForm.cashCondition"
-          :placeholder="this.$i18n.t('marketing.conditionsOfUse')"
-          style="width:240px"
-          @blur="toFloat('cashCondition')"
-          :disabled="dataForm.couponId !== 0"
-        >
+      <el-form-item :label="this.$i18n.t('marketing.conditionsOfUse')" prop="cashCondition">
+        <el-input size="small" class="coupon-input1" type="text" v-model="dataForm.cashCondition"
+          :placeholder="this.$i18n.t('marketing.conditionsOfUse')" style="width:240px" @blur="toFloat('cashCondition')"
+          :disabled="dataForm.couponId !== 0">
           <template slot="prepend">{{ $t("marketing.full") }}</template>
           <template slot="append">{{ $t("platform.dollar") }}</template>
         </el-input>
       </el-form-item>
-      <el-form-item
-        :label="this.$i18n.t('marketing.reductionAmount')"
-        prop="reduceAmount"
-        v-if="dataForm.couponType === 1"
-      >
-        <el-input
-          v-model="dataForm.reduceAmount"
-          size="small"
-          class="coupon-input1"
-          @blur="toFloat('reduceAmount')"
-          :placeholder="this.$i18n.t('marketing.reductionAmount')"
-          type="number"
-          :max="99999"
-          :min="0.01"
-          :step="0.01"
-          style="width:240px"
-          :disabled="dataForm.couponId !== 0"
-        >
+      <el-form-item :label="this.$i18n.t('marketing.reductionAmount')" prop="reduceAmount"
+        v-if="dataForm.couponType === 1">
+        <el-input v-model="dataForm.reduceAmount" size="small" class="coupon-input1" @blur="toFloat('reduceAmount')"
+          :placeholder="this.$i18n.t('marketing.reductionAmount')" type="number" :max="99999" :min="0.01" :step="0.01"
+          style="width:240px" :disabled="dataForm.couponId !== 0">
           <template slot="append">{{ $t("platform.dollar") }}</template>
         </el-input>
       </el-form-item>
-      <el-form-item
-        :label="this.$i18n.t('marketing.discountAmount')"
-        prop="couponDiscount"
-        v-if="dataForm.couponType === 2"
-      >
-        <el-input
-          v-model="dataForm.couponDiscount"
-          :placeholder="this.$i18n.t('marketing.pleaseEnterDiscount')"
-          type="text"
-          @blur="toFloat('couponDiscount')"
-          size="small"
-          class="coupon-input1"
-          :disabled="dataForm.couponId !== 0"
-        >
+      <el-form-item :label="this.$i18n.t('marketing.discountAmount')" prop="couponDiscount"
+        v-if="dataForm.couponType === 2">
+        <el-input v-model="dataForm.couponDiscount" :placeholder="this.$i18n.t('marketing.pleaseEnterDiscount')"
+          type="text" @blur="toFloat('couponDiscount')" size="small" class="coupon-input1"
+          :disabled="dataForm.couponId !== 0">
           <template slot="append">{{ $t("marketing.fold") }}</template>
         </el-input>
       </el-form-item>
-      <el-form-item
-        :label="this.$i18n.t('coupon.effectiveType')"
-        np
-        size="mini"
-        prop="validTimeType"
-      >
-        <el-radio-group
-          v-model="dataForm.validTimeType"
-          :disabled="dataForm.couponId !== 0"
-        >
+      <el-form-item :label="this.$i18n.t('coupon.effectiveType')" np size="mini" prop="validTimeType">
+        <el-radio-group v-model="dataForm.validTimeType" :disabled="dataForm.couponId !== 0">
           <el-radio :label="1">{{ $t("marketing.fixedTime") }}</el-radio>
           <el-radio :label="2">{{
             $t("marketing.effectiveAfterReceipt")
@@ -195,95 +113,46 @@
       </el-form-item>
       <!-- 固定时间数据 START -->
       <div v-if="dataForm.validTimeType === 1">
-        <el-form-item
-          :label="this.$i18n.t('coupon.startTime')"
-          prop="startTime"
-          v-if="dataForm.validTimeType === 1"
-        >
-          <el-date-picker
-            :disabled="dataForm.couponId !== 0"
-            v-model="dataForm.startTime"
-            value-format="yyyy-MM-dd"
-            type="date"
-            size="small"
-            style="width:140px"
-            :placeholder="this.$i18n.t('marketing.chooseStartTime')"
-          ></el-date-picker>
-          <el-time-select
-          v-model="startTimeValue"
-          :picker-options="{
+        <el-form-item :label="this.$i18n.t('coupon.startTime')" prop="startTime" v-if="dataForm.validTimeType === 1">
+          <el-date-picker :disabled="dataForm.couponId !== 0" v-model="dataForm.startTime" value-format="yyyy-MM-dd"
+            type="date" size="small" style="width:140px"
+            :placeholder="this.$i18n.t('marketing.chooseStartTime')"></el-date-picker>
+          <el-time-select v-model="startTimeValue" :picker-options="{
             start: '00:00',
             step: '00:30',
             end: '23:30'
-          }"
-          size="small"
-          style="width:100px"
-          :disabled="dataForm.couponId !== 0"
-          :placeholder="this.$i18n.t('coupon.startTime')">
-        </el-time-select>
+          }" size="small" style="width:100px" :disabled="dataForm.couponId !== 0"
+            :placeholder="this.$i18n.t('coupon.startTime')">
+          </el-time-select>
         </el-form-item>
-        <el-form-item
-          :label="this.$i18n.t('coupon.endTime')"
-          prop="endTime"
-          v-if="dataForm.validTimeType === 1"
-        >
-          <el-date-picker
-            size="small"
-            v-model="dataForm.endTime"
-            value-format="yyyy-MM-dd"
-            type="date"
-            style="width:140px"
-            :placeholder="this.$i18n.t('marketing.chooseEndTime')"
-            :disabled="dataForm.putonStatus < 0"
-          ></el-date-picker>
-          <el-time-select
-          v-model="endTimeValue"
-          :picker-options="{
+        <el-form-item :label="this.$i18n.t('coupon.endTime')" prop="endTime" v-if="dataForm.validTimeType === 1">
+          <el-date-picker size="small" v-model="dataForm.endTime" value-format="yyyy-MM-dd" type="date"
+            style="width:140px" :placeholder="this.$i18n.t('marketing.chooseEndTime')"
+            :disabled="dataForm.putonStatus < 0"></el-date-picker>
+          <el-time-select v-model="endTimeValue" :picker-options="{
             start: '00:00',
             step: '00:30',
             end: '23:30'
-          }"
-          size="small"
-          :disabled="dataForm.putonStatus < 0"
-          style="width:100px"
-          :placeholder="this.$i18n.t('coupon.endTime')">
-        </el-time-select>
+          }" size="small" :disabled="dataForm.putonStatus < 0" style="width:100px"
+            :placeholder="this.$i18n.t('coupon.endTime')">
+          </el-time-select>
         </el-form-item>
       </div>
       <!-- 固定时间数据 END -->
       <!-- 领取后生效数据 START -->
-      <el-form-item
-        :label="this.$i18n.t('marketing.afterReceivingTheCoupon')"
-        prop="afterReceiveDays"
+      <el-form-item :label="this.$i18n.t('marketing.afterReceivingTheCoupon')" prop="afterReceiveDays"
         v-if="dataForm.validTimeType === 2">
-        <el-input
-          v-model="dataForm.afterReceiveDays"
-          type="number"
-          size="small"
-          class="coupon-input1"
-          oninput="if(value>3652)value=1"
-          :max="3652"
-          style="width:240px"
-          :disabled="dataForm.couponId !== 0">
+        <el-input v-model="dataForm.afterReceiveDays" type="number" size="small" class="coupon-input1"
+          oninput="if(value>3652)value=1" :max="3652" style="width:240px" :disabled="dataForm.couponId !== 0">
           <template slot="append">{{ $t("marketing.effectiveDays") }}</template>
         </el-input>
         <el-tooltip class="item" effect="dark" :content="$t('marketing.maxTimeTip')" placement="top">
           <i class="el-icon-info"></i>
         </el-tooltip>
       </el-form-item>
-      <el-form-item
-        :label="this.$i18n.t('marketing.validDate')"
-        prop="validDays"
-        v-if="dataForm.validTimeType === 2">
-        <el-input
-          v-model="dataForm.validDays"
-          type="number"
-          size="small"
-          class="coupon-input1"
-          oninput="if(value>3652)value=1"
-          :max="3652"
-          style="width:240px"
-          :disabled="dataForm.couponId !== 0">
+      <el-form-item :label="this.$i18n.t('marketing.validDate')" prop="validDays" v-if="dataForm.validTimeType === 2">
+        <el-input v-model="dataForm.validDays" type="number" size="small" class="coupon-input1"
+          oninput="if(value>3652)value=1" :max="3652" style="width:240px" :disabled="dataForm.couponId !== 0">
           <template slot="append">{{ $t("formData.day") }}</template>
         </el-input>
         <el-tooltip class="item" effect="dark" :content="$t('marketing.maxTimeTip')" placement="top">
@@ -292,82 +161,57 @@
       </el-form-item>
       <!-- 领取后生效数据 END -->
       <!-- 每人限领 -->
-      <el-form-item
-        :label="this.$i18n.t('marketing.perPerson')"
-        prop="limitNum"
-      >
-        <el-input v-model="dataForm.limitNum" size="small" @blur="toFloat('limitNum')"
-          class="coupon-input1" type="number" :disabled="dataForm.putonStatus < 0" style="width:240px">
+      <el-form-item :label="this.$i18n.t('marketing.perPerson')" prop="limitNum">
+        <el-input v-model="dataForm.limitNum" size="small" @blur="toFloat('limitNum')" class="coupon-input1" type="number"
+          :disabled="dataForm.putonStatus < 0" style="width:240px">
           <template slot="append">{{ $t("marketing.piece") }}</template>
         </el-input>
       </el-form-item>
       <!-- 库存 -->
       <el-form-item :label="this.$i18n.t('marketing.inventory')" prop="stocks">
-        <el-input
-          v-model="dataForm.stocks"
-          type="number"
-          size="small"
-          class="coupon-input1"
-          @blur="toFloat('stocks')"
-          style="width:240px"
-          :disabled="dataForm.couponId !== 0"
-        >
+        <el-input v-model="dataForm.stocks" type="number" size="small" class="coupon-input1" @blur="toFloat('stocks')"
+          style="width:240px" :disabled="dataForm.couponId !== 0">
           <template slot="append">{{ $t("marketing.piece") }}</template>
         </el-input>
       </el-form-item>
       <!-- 适用商品 -->
-      <el-form-item
-        :label="this.$i18n.t('marketing.applicableGoods')"
-        size="mini"
-        prop="suitableProdType"
-      >
+      <el-form-item :label="this.$i18n.t('marketing.applicableGoods')" size="mini" prop="suitableProdType">
         <el-radio-group v-model="dataForm.suitableProdType" :disabled="dataForm.putonStatus < 0">
           <el-radio :label="0">{{ $t("marketing.allProdsPar") }}</el-radio>
           <el-radio :label="1">{{ $t("marketing.participateInD") }}</el-radio>
           <el-radio :label="2">{{ $t("marketing.specifiedProduct") }}</el-radio>
+          <el-radio :label="3">指定分类</el-radio>
         </el-radio-group>
       </el-form-item>
+      <!-- 分类 -->
+      <el-form-item style="width: 100%"  size="small" v-if="dataForm.suitableProdType === 3">
+        <el-select v-model="dataForm.goodsGroup" placeholder="选择指定分类">
+          <el-option v-for="(item, index) in categoryList" :key="index" :label="item.categoryName"
+            :value="item.categoryId">
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item>
-        <div
-          plain
-          v-if="
-            dataForm.suitableProdType === 1 || dataForm.suitableProdType === 2
-          "
-          @click="prodsSelectHandle()"
-          class="default-btn"
-          >{{ $t("product.select") }}</div
-        >
+        <div plain v-if="dataForm.suitableProdType === 1 || dataForm.suitableProdType === 2
+          " @click="prodsSelectHandle()" class="default-btn">{{ $t("product.select") }}</div>
       </el-form-item>
       <!-- 商品 -->
-      <el-form-item style="width: 100%" v-if="dataForm.suitableProdType !== 0">
+      <el-form-item style="width: 100%" v-if="dataForm.suitableProdType === 1 || dataForm.suitableProdType === 2">
         <el-row>
-          <el-col
-            v-for="(couponProd, index) in dataForm.couponProds"
-            :key="index"
-          >
-            <el-card
-              :body-style="{ padding: '0px' }"
-              style="height: 160px; width: 120px"
-            >
+          <el-col v-for="(couponProd, index) in dataForm.couponProds" :key="index">
+            <el-card :body-style="{ padding: '0px' }" style="height: 160px; width: 120px">
               <!-- <img :src="couponProd.pic" style="height: 104px; width: 100%" /> -->
-              <prod-pic
-                height="104px"
-                width="100%"
-                :pic="couponProd.pic"
-              ></prod-pic>
+              <prod-pic height="104px" width="100%" :pic="couponProd.pic"></prod-pic>
               <div class="card-prod-bottom">
                 <span class="card-prod-name">{{ couponProd.prodName }}</span>
-                <el-button
-                  type="text"
-                  class="card-prod-name-button"
-                  @click="deleteProd(index)"
-                  >{{ $t("text.delBtn") }}</el-button
-                >
+                <el-button type="text" class="card-prod-name-button" @click="deleteProd(index)">{{ $t("text.delBtn")
+                }}</el-button>
               </div>
             </el-card>
           </el-col>
         </el-row>
       </el-form-item>
+
       <el-form-item>
         <div class="default-btn" @click="back()">{{
           $t("crud.filter.cancelBtn")
@@ -378,11 +222,7 @@
       </el-form-item>
     </el-form>
     <!-- 商品选择弹窗-->
-    <prods-select
-      v-if="prodsSelectVisible"
-      ref="prodsSelect"
-      @refreshSelectProds="selectCouponProds"
-    ></prods-select>
+    <prods-select v-if="prodsSelectVisible" ref="prodsSelect" @refreshSelectProds="selectCouponProds"></prods-select>
   </div>
 </template>
 
@@ -392,7 +232,7 @@ import { Debounce } from '@/utils/debounce'
 import ProdPic from '@/components/prod-pic'
 import { getDateTimeRange, getParseTime } from '@/utils/datetime'
 export default {
-  data () {
+  data() {
     var validate = (rule, value, callback) => {
       if (!/^[1-9]\d*$|^[1-9]\d*\.\d\d?$|^0\.\d\d?$/.test(value)) {
         callback(new Error(this.$i18n.t('coupon.pleaseThan0')))
@@ -506,13 +346,15 @@ export default {
         suitableProdType: 0,
         limitNum: 1,
         putonStatus: 0,
-        couponProds: []
+        couponProds: [],
+        goodsGroup: ''
       },
       page: {
         total: 0, // 总页数
         currentPage: 1, // 当前页数
         pageSize: 10 // 每页显示多少条
       },
+      categoryList: [],//商品分类
       putonStatus: 0,
       errorTip: false,
       dataListSelections: [],
@@ -586,7 +428,7 @@ export default {
     ProdsSelect,
     ProdPic
   },
-  mounted () {
+  mounted() {
     const couponId = this.$route.query.couponId
     this.init(couponId)
     let title = couponId ? this.$i18n.t('marketing.modifyCoupon') : this.$i18n.t('marketing.newCoupon')
@@ -594,7 +436,7 @@ export default {
   },
   methods: {
     // 获取数据列表
-    init (couponId) {
+    init(couponId) {
       this.dataForm.couponId = couponId || 0
       this.putonStatus = 0
       this.$nextTick(() => {
@@ -610,8 +452,23 @@ export default {
           this.getDataList()
         }
       })
+      this.getCategoryList()
     },
-    getDataList () {
+    // 获取平台分类列表
+    getCategoryList() {
+      this.dataListLoading = true
+      this.$http({
+        url: this.$http.adornUrl('/prod/category/listCategoryByGrade'),
+        method: 'get',
+        params: this.$http.adornParams({
+          grade: 0
+        })
+      }).then(({ data }) => {
+        this.categoryList = data
+        this.dataListLoading = false
+      })
+    },
+    getDataList() {
       this.$http({
         url: this.$http.adornUrl(`/platform/coupon/info/${this.dataForm.couponId}`),
         method: 'get',
@@ -628,7 +485,7 @@ export default {
       })
     },
     // 选择点击事件
-    selectChangeHandle (selection) {
+    selectChangeHandle(selection) {
       this.dataList.forEach((tableItem) => {
         let selectedProdIndex = selection.findIndex((selectedProd) => {
           if (!selectedProd) {
@@ -644,7 +501,7 @@ export default {
         }
       })
     },
-    toFloat (type) {
+    toFloat(type) {
       let val = parseFloat(this.dataForm[type])
       if (val) {
         this.dataForm[type] = val
@@ -664,7 +521,7 @@ export default {
      * @param {*} number 输入金额
      * @param {*} maxNumber 限制的最大值
      */
-    formatNumber (number, maxNumber) {
+    formatNumber(number, maxNumber) {
       number = parseFloat(number.toFixed(2))
       if (!number) {
         return
@@ -678,18 +535,18 @@ export default {
       return number
     },
     // 显示添加指定商品弹框
-    prodsSelectHandle () {
+    prodsSelectHandle() {
       this.prodsSelectVisible = true
       this.$nextTick(() => {
         this.$refs.prodsSelect.init(this.dataForm.couponProds)
       })
     },
     // 删除指定商品
-    deleteProd (index) {
+    deleteProd(index) {
       this.dataForm.couponProds.splice(index, 1)
     },
     // 添加指定商品
-    selectCouponProds (prods) {
+    selectCouponProds(prods) {
       this.prodsSelectVisible = false
       if (prods) {
         this.dataForm.couponProds = prods
@@ -735,8 +592,12 @@ export default {
             return false
           }
           console.log(this.dataForm.suitableProdType, this.dataForm.couponProds)
-          if (this.dataForm.suitableProdType !== 0 && this.dataForm.couponProds.length === 0) {
+          if ((this.dataForm.suitableProdType === 1 || this.dataForm.suitableProdType === 2) && this.dataForm.couponProds.length === 0) {
             this.$message.error(this.$i18n.t('marketing.pleaseSelectAProduct'))
+            return false
+          }
+          if(this.dataForm.suitableProdType===3&&!this.dataForm.goodsGroup){
+            this.$message.error('请选择指定分类')
             return false
           }
           this.$http({
@@ -761,7 +622,8 @@ export default {
               'suitableProdType': this.dataForm.suitableProdType,
               'limitNum': this.dataForm.limitNum,
               'putonStatus': this.dataForm.putonStatus,
-              'couponProds': this.dataForm.couponProds
+              'couponProds': this.dataForm.couponProds,
+              'goodsGroup': this.dataForm.goodsGroup,
             })
           }).then(({ data }) => {
             this.$message({
@@ -781,7 +643,7 @@ export default {
         }
       })
     }, 1500),
-    back () {
+    back() {
       this.$router.push('/marketing-coupon/coupon')
     }
   }
@@ -789,23 +651,28 @@ export default {
 </script>
 <style lang="scss" scoped>
 .mod-coupon-add-or-update {
-  .el-col{
+  .el-col {
     width: 130px;
   }
+
   .coupon-input {
     width: 520px;
   }
+
   .coupon-input1 {
     width: 220px;
   }
+
   .form-box {
     margin-left: 40px;
   }
 }
-.el-date-editor >>>.el-input__suffix>.el-icon-circle-close {
+
+.el-date-editor>>>.el-input__suffix>.el-icon-circle-close {
   display: none
 }
-.el-date-editor >>>.el-input__suffix>.el-icon-circle-check {
+
+.el-date-editor>>>.el-input__suffix>.el-icon-circle-check {
   display: none
 }
 </style>

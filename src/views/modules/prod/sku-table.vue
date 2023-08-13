@@ -1,53 +1,31 @@
 <template>
   <div class="mod-prod-sku-table">
-    <el-form-item
-      :label="this.$i18n.t('prodSku.priceAndInventory')"
-      :label-width="this.$i18n.t('language') === 'English' ? '150px' : '130px'"
-    >
+    <el-form-item :label="this.$i18n.t('prodSku.priceAndInventory')"
+      :label-width="this.$i18n.t('language') === 'English' ? '150px' : '130px'">
       <div class="sku-table-con">
         <!--sku列表-->
         <div class="table-con">
-          <el-table
-            :data="lists"
-            header-cell-class-name="table-header"
-            :span-method="tableSpanMethod"
-            row-class-name="table-row"
-            border
-          >
-            <el-table-column
-              v-for="(leftTitle, index) in tableLeftTitles"
-              :key="index"
-              :label="
-                $t('language') === 'English'
-                  ? leftTitle.tagNameEn
-                  : leftTitle.tagName
-              "
-            >
-            <!-- scope.row.propertiesEn &&  -->
+          <el-table :data="lists" header-cell-class-name="table-header" :span-method="tableSpanMethod"
+            row-class-name="table-row" border>
+            <el-table-column v-for="(leftTitle, index) in tableLeftTitles" :key="index" :label="$t('language') === 'English'
+              ? leftTitle.tagNameEn
+              : leftTitle.tagName
+              ">
+              <!-- scope.row.propertiesEn &&  -->
               <template slot-scope="scope">
                 <div v-if="scope.row.properties">
                   {{
-                    scope.row.properties.split(";")[index].substring(scope.row.properties.split(";")[index].indexOf(':') + 1)
+                    scope.row.properties.split(";")[index].substring(scope.row.properties.split(";")[index].indexOf(':') +
+                      1)
                   }}
                 </div>
               </template>
             </el-table-column>
             <!-- 市场价 -->
-            <el-table-column
-              prop="oriPrice"
-              :label="this.$i18n.t('prodList.marketValue')"
-            >
+            <el-table-column prop="oriPrice" :label="this.$i18n.t('prodList.marketValue')">
               <template slot-scope="scope">
-                <input
-                  v-model.number="scope.row.oriPrice"
-                  type="number"
-                  :precision="2"
-                  :max="100000000"
-                  :min="0"
-                  :step="0.01"
-                  :disabled="!scope.row.status"
-                  class="tag-input-width"
-                  @blur="
+                <input v-model.number="scope.row.oriPrice" type="number" :precision="2" :max="100000000" :min="0"
+                  :step="0.01" :disabled="!scope.row.status" class="tag-input-width" @blur="
                     handleInputValue(
                       scope.row.oriPrice,
                       scope.$index,
@@ -55,26 +33,14 @@
                       0,
                       100000000
                     )
-                  "
-                />
+                    " />
               </template>
             </el-table-column>
             <!-- 售价 -->
-            <el-table-column
-              prop="price"
-              :label="this.$i18n.t('prodList.salesPrice')"
-            >
+            <el-table-column prop="price" :label="this.$i18n.t('prodList.salesPrice')">
               <template slot-scope="scope">
-                <input
-                  v-model.number="scope.row.price"
-                  type="number"
-                  :precision="2"
-                  :max="100000000"
-                  :min="0.01"
-                  :step="0.01"
-                  :disabled="!scope.row.status"
-                  class="tag-input-width"
-                  @blur="
+                <input v-model.number="scope.row.price" type="number" :precision="2" :max="100000000" :min="0.01"
+                  :step="0.01" :disabled="!scope.row.status" class="tag-input-width" @blur="
                     handleInputValue(
                       scope.row.price,
                       scope.$index,
@@ -82,26 +48,14 @@
                       0.01,
                       100000000
                     )
-                  "
-                />
+                    " />
               </template>
             </el-table-column>
             <!-- 氢春豆价 -->
-            <el-table-column
-              prop="skuScore"
-              :label="this.$i18n.t('product.scorePrice')"
-            >
+            <el-table-column prop="skuScore" :label="this.$i18n.t('product.scorePrice')">
               <template slot-scope="scope">
-                <input
-                  v-model.number="scope.row.skuScore"
-                  type="number"
-                  :precision="2"
-                  :max="100000000"
-                  :min="1"
-                  :step="1"
-                  :disabled="!scope.row.status"
-                  class="tag-input-width"
-                  @blur="
+                <input v-model.number="scope.row.skuScore" type="number" :precision="2" :max="100000000" :min="1"
+                  :step="1" :disabled="!scope.row.status" class="tag-input-width" @blur="
                     handleInputValue(
                       scope.row.skuScore,
                       scope.$index,
@@ -109,56 +63,61 @@
                       1,
                       100000000
                     )
-                  "
-                />
+                    " />
+              </template>
+            </el-table-column>
+            <!-- 选择礼品券 -->
+            <el-table-column prop="giftList2" label="礼品券">
+              <template slot-scope="scope">
+                <el-select v-model="scope.row.giftList2" multiple @change="selectGift">
+                  <el-option v-for="item in giftListArray" :key="item.id" :label="item.name" :value="item.id">
+                  </el-option>
+                </el-select>
+              </template>
+            </el-table-column>
+            <!-- 礼品券数量 -->
+            <el-table-column prop="giftNumber" label="礼品券数量">
+              <template slot-scope="scope">
+                <input v-model.number="scope.row.giftNumber" type="number" :max="9999999" :min="0" :step="1"
+                  :disabled="!scope.row.status" class="tag-input-width" @keyup="
+                    scope.row.giftNumber = String(scope.row.giftNumber).match(/[^0-9]/)
+                      ? ''
+                      : scope.row.giftNumber
+                    " @blur="
+    handleInputValue(
+      scope.row.giftNumber,
+      scope.$index,
+      'giftNumber',
+      0,
+      9999999
+    )
+    " />
               </template>
             </el-table-column>
             <!-- 库存 -->
-            <el-table-column
-              prop="stocks"
-              :label="this.$i18n.t('product.stocks')"
-            >
+            <el-table-column prop="stocks" :label="this.$i18n.t('product.stocks')">
               <template slot-scope="scope">
-                <input
-                  v-model.number="scope.row.stocks"
-                  type="number"
-                  :max="9999999"
-                  :min="0"
-                  :step="1"
-                  :disabled="!scope.row.status"
-                  class="tag-input-width"
-                  @keyup="
+                <input v-model.number="scope.row.stocks" type="number" :max="9999999" :min="0" :step="1"
+                  :disabled="!scope.row.status" class="tag-input-width" @keyup="
                     scope.row.stocks = String(scope.row.stocks).match(/[^0-9]/)
                       ? ''
                       : scope.row.stocks
-                  "
-                  @blur="
-                    handleInputValue(
-                      scope.row.stocks,
-                      scope.$index,
-                      'stocks',
-                      0,
-                      9999999
-                    )
-                  "
-                />
+                    " @blur="
+    handleInputValue(
+      scope.row.stocks,
+      scope.$index,
+      'stocks',
+      0,
+      9999999
+    )
+    " />
               </template>
             </el-table-column>
             <!-- 重量 -->
-            <el-table-column
-              prop="weight"
-              :label="this.$i18n.t('prodList.prodWeight')"
-            >
+            <el-table-column prop="weight" :label="this.$i18n.t('prodList.prodWeight')">
               <template slot-scope="scope">
-                <input
-                  v-model.number="scope.row.weight"
-                  type="number"
-                  :max="100000000"
-                  :min="0"
-                  :step="0.01"
-                  :disabled="!scope.row.status"
-                  class="tag-input-width"
-                  @blur="
+                <input v-model.number="scope.row.weight" type="number" :max="100000000" :min="0" :step="0.01"
+                  :disabled="!scope.row.status" class="tag-input-width" @blur="
                     handleInputValue(
                       scope.row.weight,
                       scope.$index,
@@ -166,25 +125,14 @@
                       0,
                       100000000
                     )
-                  "
-                />
+                    " />
               </template>
             </el-table-column>
             <!-- 体积 -->
-            <el-table-column
-              prop="volume"
-              :label="this.$i18n.t('prodList.prodVolume')"
-            >
+            <el-table-column prop="volume" :label="this.$i18n.t('prodList.prodVolume')">
               <template slot-scope="scope">
-                <input
-                  v-model.number="scope.row.volume"
-                  type="number"
-                  :max="100000000"
-                  :min="0"
-                  :step="0.01"
-                  :disabled="!scope.row.status"
-                  class="tag-input-width"
-                  @blur="
+                <input v-model.number="scope.row.volume" type="number" :max="100000000" :min="0" :step="0.01"
+                  :disabled="!scope.row.status" class="tag-input-width" @blur="
                     handleInputValue(
                       scope.row.volume,
                       scope.$index,
@@ -192,47 +140,24 @@
                       0,
                       100000000
                     )
-                  "
-                />
+                    " />
               </template>
             </el-table-column>
             <!-- 编码 -->
-            <el-table-column
-              prop="partyCode"
-              :label="this.$i18n.t('product.prodCode')"
-              width="220px"
-            >
+            <el-table-column prop="partyCode" :label="this.$i18n.t('product.prodCode')" width="220px">
               <template slot-scope="scope">
-                <input
-                  ref="partyCodeInt"
-                  v-model="scope.row.partyCode"
-                  type="text"
-                  maxlength="36"
-                  :disabled="!scope.row.status"
-                  class="tag-input-width text-input party-code"
-                  @blur="validatePartyCode(scope)"
-                />
+                <input ref="partyCodeInt" v-model="scope.row.partyCode" type="text" maxlength="36"
+                  :disabled="!scope.row.status" class="tag-input-width text-input party-code"
+                  @blur="validatePartyCode(scope)" />
               </template>
             </el-table-column>
-            <el-table-column
-              fixed="right"
-              :label="this.$i18n.t('text.menu')"
-              align="center"
-            >
+            <el-table-column fixed="right" :label="this.$i18n.t('text.menu')" align="center">
               <!-- :width="this.$i18n.t('language') === 'English' ? '210' : '120'" -->
               <template slot-scope="scope">
-                <div
-                  class="default-btn text-btn"
-                  @click="changeSkuStatus(`${scope.$index}`)"
-                  v-if="scope.row.status"
-                >
+                <div class="default-btn text-btn" @click="changeSkuStatus(`${scope.$index}`)" v-if="scope.row.status">
                   {{ $t("publics.disable") }}
                 </div>
-                <div
-                  class="default-btn text-btn"
-                  @click="changeSkuStatus(`${scope.$index}`)"
-                  v-else
-                >
+                <div class="default-btn text-btn" @click="changeSkuStatus(`${scope.$index}`)" v-else>
                   {{ $t("shop.ena") }}
                 </div>
               </template>
@@ -244,19 +169,15 @@
         <div class="batch-settings-box">
           <div class="set-txt">
             <span class="default-btn text-btn" @click="switchSet">{{
-                $t("groups.batchSettings")
-              }}</span>
+              $t("groups.batchSettings")
+            }}</span>
             <span class="weak-txt">{{ $t("prodSku.postProductTips14") }}</span>
           </div>
           <div v-if="isEdit" class="batch-settings-tb">
             <!-- 头部 -->
             <ul class="batch-settings-Head">
-              <li
-                class="head-item"
-                v-for="(item, i) in tableLeftTitles"
-                :key="i"
-              >
-                {{item.tagName}}
+              <li class="head-item" v-for="(item, i) in tableLeftTitles" :key="i">
+                {{ item.tagName }}
               </li>
               <li class="head-item">{{ $t("prodList.marketValue") }}</li>
               <li class="head-item">{{ $t("prodList.salesPrice") }}</li>
@@ -268,7 +189,7 @@
                 {{ $t("prodList.prodWeight") }}
               </li>
               <li class="head-item">
-                {{$t("prodList.prodVolume")}}
+                {{ $t("prodList.prodVolume") }}
               </li>
               <li class="coding"></li>
               <li class="head-item"></li>
@@ -278,37 +199,17 @@
             <el-form @submit.native.prevent :inline="true" class="demo-form-inline">
               <div class="batch-settings-con">
                 <div class="item" v-for="(item, i) in batchList" :key="i">
-                  <el-select
-                    v-model="item.value"
-                    size="small"
-                    class="bat-set-item"
-                    :placeholder="$t('tip.select')"
-                    @change="changeValue"
-                  >
-                    <el-option
-                      :key="-1"
-                      :label="$t('date.a')"
-                      :value="-1"
-                    />
-                    <el-option
-                      v-for="(el,index) in item.tagItems"
-                      :key="index"
-                      :label="el.propValue"
-                      :value="el.propValue"
-                    />
+                  <el-select v-model="item.value" size="small" class="bat-set-item" :placeholder="$t('tip.select')"
+                    @change="changeValue">
+                    <el-option :key="-1" :label="$t('date.a')" :value="-1" />
+                    <el-option v-for="(el, index) in item.tagItems" :key="index" :label="el.propValue"
+                      :value="el.propValue" />
                   </el-select>
                 </div>
 
                 <div class="item">
-                  <input
-                    v-model.number="dataFrom.oriPrice"
-                    type="number"
-                    :precision="2"
-                    :max="100000000"
-                    :min="0"
-                    :step="0.01"
-                    class="tag-input-width"
-                    @blur="
+                  <input v-model.number="dataFrom.oriPrice" type="number" :precision="2" :max="100000000" :min="0"
+                    :step="0.01" class="tag-input-width" @blur="
                       handleInputValue(
                         dataFrom.oriPrice,
                         null,
@@ -316,19 +217,11 @@
                         0,
                         100000000
                       )
-                    "
-                  />
+                      " />
                 </div>
                 <div class="item">
-                  <input
-                    v-model.number="dataFrom.price"
-                    type="number"
-                    :precision="2"
-                    :max="100000000"
-                    :min="0.01"
-                    :step="0.01"
-                    class="tag-input-width"
-                    @blur="
+                  <input v-model.number="dataFrom.price" type="number" :precision="2" :max="100000000" :min="0.01"
+                    :step="0.01" class="tag-input-width" @blur="
                       handleInputValue(
                         dataFrom.price,
                         null,
@@ -336,19 +229,11 @@
                         0.01,
                         100000000
                       )
-                    "
-                  />
+                      " />
                 </div>
                 <div class="item">
-                  <input
-                    v-model.number="dataFrom.skuScore"
-                    type="number"
-                    :precision="2"
-                    :max="100000000"
-                    :min="1"
-                    :step="1"
-                    class="tag-input-width"
-                    @blur="
+                  <input v-model.number="dataFrom.skuScore" type="number" :precision="2" :max="100000000" :min="1"
+                    :step="1" class="tag-input-width" @blur="
                       handleInputValue(
                         dataFrom.skuScore,
                         null,
@@ -356,42 +241,27 @@
                         1,
                         100000000
                       )
-                    "
-                  />
+                      " />
                 </div>
                 <div class="item">
-                  <input
-                    v-model.number="dataFrom.stocks"
-                    type="number"
-                    :max="9999999"
-                    :min="0"
-                    :step="1"
-                    class="tag-input-width"
-                    @keyup="
+                  <input v-model.number="dataFrom.stocks" type="number" :max="9999999" :min="0" :step="1"
+                    class="tag-input-width" @keyup="
                       dataFrom.stocks = String(dataFrom.stocks).match(/[^0-9]/)
                         ? ''
                         : dataFrom.stocks
-                    "
-                    @blur="
-                      handleInputValue(
-                        dataFrom.stocks,
-                        null,
-                        'stocks',
-                        0,
-                        9999999
-                      )
-                    "
-                  />
+                      " @blur="
+    handleInputValue(
+      dataFrom.stocks,
+      null,
+      'stocks',
+      0,
+      9999999
+    )
+    " />
                 </div>
                 <div class="item">
-                  <input
-                    v-model.number="dataFrom.weight"
-                    type="number"
-                    :max="100000000"
-                    :min="0"
-                    :step="0.01"
-                    class="tag-input-width"
-                    @blur="
+                  <input v-model.number="dataFrom.weight" type="number" :max="100000000" :min="0" :step="0.01"
+                    class="tag-input-width" @blur="
                       handleInputValue(
                         dataFrom.weight,
                         null,
@@ -399,18 +269,11 @@
                         0,
                         100000000
                       )
-                    "
-                  />
+                      " />
                 </div>
                 <div class="item">
-                  <input
-                    v-model.number="dataFrom.volume"
-                    type="number"
-                    :max="100000000"
-                    :min="0"
-                    :step="0.01"
-                    class="tag-input-width"
-                    @blur="
+                  <input v-model.number="dataFrom.volume" type="number" :max="100000000" :min="0" :step="0.01"
+                    class="tag-input-width" @blur="
                       handleInputValue(
                         dataFrom.volume,
                         null,
@@ -418,8 +281,7 @@
                         0,
                         100000000
                       )
-                    "
-                  />
+                      " />
                 </div>
                 <div class="coding"></div>
                 <div class="item"></div>
@@ -451,7 +313,7 @@ import { flatten as genFlatten } from '@/utils'
 import Big from 'big.js'
 
 export default {
-  data () {
+  data() {
     return {
       batchList: [],
       // 表格数据
@@ -468,7 +330,9 @@ export default {
         skuScore: null,
         stocks: null,
         weight: null,
-        volume: null
+        volume: null,
+        giftList2: [],
+        giftNumber: null
       },
       partyCodeErrTips: false
     }
@@ -486,32 +350,36 @@ export default {
     },
     prodNameEn: {
       default: ''
+    },
+    giftListArray: {
+      default: [],
+      type: Array
     }
   },
   watch: {
     lists: {
       deep: true,
       immediate: true,
-      handler (val) {
+      handler(val) {
 
       }
     },
     skuTags: {
       deep: true,
       immediate: true,
-      handler () {
+      handler() {
         this.lists = genFlatten(this.skuTags, this.lists, this.defalutSku)
         this.computeRowspan()
       }
     },
-    value (val) {},
+    value(val) { },
     prodNameCn: function () {
       this.skuAddProdName()
     },
     prodNameEn: function () {
       this.skuAddProdName()
     },
-    rowSpan: function () {}
+    rowSpan: function () { }
   },
   created: function () {
     this.isEdit = false
@@ -525,12 +393,14 @@ export default {
         stocks: 0,
         volume: 0,
         weight: 0,
-        skuScore: 0
+        skuScore: 0,
+        giftList2: [],
+        giftNumber: 0
       })
     }
   },
   computed: {
-    tableLeftTitles () {
+    tableLeftTitles() {
       this.batchList = JSON.parse(JSON.stringify(this.skuTags))
       this.batchList.forEach(el => {
         if (!el.value) {
@@ -540,7 +410,7 @@ export default {
       return this.skuTags
     },
     skuTags: {
-      get () {
+      get() {
         return this.$store.state.prod.skuTags.filter((item) => {
           return !!(
             item.tagItems &&
@@ -550,23 +420,30 @@ export default {
         })
       }
     },
-    defalutSku () {
+    defalutSku() {
       return this.$store.state.prod.defalutSku
-    }
+    },
+
   },
   methods: {
-    init (skuList) {
+    init(skuList) {
       // this.initing = true
       this.lists = genFlatten(this.skuTags, skuList, this.defalutSku)
+
       this.computeRowspan()
     },
-    getTableSpecData () {
+    selectGift(value) {
+      console.log(value)
+      // this.$set(this.dataFrom, 'giftList2', value)
+      // console.log(this.dataFrom.giftList2, this.lists.giftList2)
+    },
+    getTableSpecData() {
       return this.lists
     },
-    getDataList () {
+    getDataList() {
       return this.lists
     },
-    changeSkuImg (propValue, img) {
+    changeSkuImg(propValue, img) {
       // 把对应的sku图片修改
       for (let i = 0; i < this.lists.length; i++) {
         if (!this.lists[i].properties) {
@@ -579,12 +456,12 @@ export default {
         }
       }
     },
-    clearSkuImg () {
+    clearSkuImg() {
       for (let i = 0; i < this.lists.length; i++) {
         this.lists[i].pic = ''
       }
     },
-    computeRowspan () {
+    computeRowspan() {
       this.rowspan = []
       const rowspan = (index) => {
         let span = []
@@ -615,14 +492,14 @@ export default {
         rowspan(index)
       })
     },
-    checkIsEqualByIndex (str1, str2, index, splitStr = ':') {
+    checkIsEqualByIndex(str1, str2, index, splitStr = ':') {
       let strArr1 = str1.split(';')
       let strArr2 = str2.split(';')
       let temp1 = [strArr1[index].slice(0, strArr1[index].indexOf(':')), strArr1[index].substring(strArr1[index].indexOf(':') + 1)]
       let temp2 = [strArr2[index].slice(0, strArr2[index].indexOf(':')), strArr2[index].substring(strArr2[index].indexOf(':') + 1)]
       return temp1[1] === temp2[1]
     },
-    tableSpanMethod ({ row, column, rowIndex, columnIndex }) {
+    tableSpanMethod({ row, column, rowIndex, columnIndex }) {
       for (let i = 0; i < this.skuTags.length; i++) {
         if (columnIndex === i) {
           if (this.rowspan[i] && this.rowspan[i][rowIndex]) {
@@ -639,11 +516,11 @@ export default {
         }
       }
     },
-    changeSkuStatus (tagIndex) {
+    changeSkuStatus(tagIndex) {
       this.lists[tagIndex].status = this.lists[tagIndex].status ? 0 : 1
       this.$emit('input', this.lists)
     },
-    skuAddProdName () {
+    skuAddProdName() {
       // if (this.initing) {
       //   return
       // }
@@ -668,20 +545,20 @@ export default {
       this.$emit('input', skuList)
     },
     // 清除已选择的单品
-    clearSingleProds () {
+    clearSingleProds() {
       for (let i = 0; i < this.lists.length; i++) {
         this.lists[i].skuSingleProds = []
       }
       this.$emit('input', this.lists)
     },
     // 清除所有sku的库存
-    clearStocks () {
+    clearStocks() {
       for (let i = 0; i < this.lists.length; i++) {
         this.lists[i].stocks = 0
       }
       this.$emit('input', this.lists)
     },
-    switchSet () {
+    switchSet() {
       this.isEdit = !this.isEdit
       if (!this.isEdit) {
         this.dataFrom.oriPrice = null
@@ -693,10 +570,10 @@ export default {
         this.dataFrom.partyCode = ''
       }
     },
-    changeValue () {
+    changeValue() {
       this.$forceUpdate() // 刷新
     },
-    batchSet () {
+    batchSet() {
       this.lists.forEach((sku) => {
         let isBatch = true
         sku.properties.split(';').forEach((el, index) => {
@@ -740,7 +617,7 @@ export default {
      * @param min 最小值
      * @param max 最大值
      */
-    handleInputValue (data, index, dataFields, min, max) {
+    handleInputValue(data, index, dataFields, min, max) {
       if (index !== undefined && index !== null) {
         // 表格
         if (+data > max) {
@@ -762,7 +639,8 @@ export default {
           dataFields === 'oriPrice' ||
           dataFields === 'volume' ||
           dataFields === 'weight' ||
-          dataFields === 'skuScore'
+          dataFields === 'skuScore' ||
+          dataFields === 'giftNumber'
         ) {
           this.$set(this.lists[index], dataFields, this.checkInput(data))
         }
@@ -784,20 +662,21 @@ export default {
           dataFields === 'oriPrice' ||
           dataFields === 'volume' ||
           dataFields === 'weight' ||
-          dataFields === 'skuScore'
+          dataFields === 'skuScore' ||
+          dataFields === 'giftNumber'
         ) {
           this.$set(this.dataFrom, dataFields, this.checkInput(data))
         }
       }
       // if (dataFields === 'stocks') {
-        this.$emit('input', this.lists)
+      this.$emit('input', this.lists)
       // }
     },
 
     /**
      * 只允许输入正数和小数(保留小数点后两位)
      */
-    checkInput (num) {
+    checkInput(num) {
       if (num) {
         var tmpVal = String(num).replace(/[^\d^\\.]/g, '')
         var reg = /^(0|([1-9]\d*))(\.\d{1,2})?$/ // 最多允许后输入两位小数
@@ -818,7 +697,7 @@ export default {
     /**
      * 编码输入框校验
      */
-    validatePartyCode (scope) {
+    validatePartyCode(scope) {
       const { row, $index } = scope
       // 纯空格校验
       if (validNoEmptySpace(row.partyCode)) {
@@ -829,7 +708,7 @@ export default {
       this.check(row, $index)
     },
 
-    check (row, $index) {
+    check(row, $index) {
       if (
         row.partyCode &&
         this.lists.find(
@@ -856,6 +735,7 @@ export default {
     cursor: pointer;
     position: relative;
     overflow: hidden;
+
     .pic-uploader-icon {
       font-size: 28px;
       color: #8c939d;
@@ -864,25 +744,31 @@ export default {
       line-height: 120px;
       text-align: center;
     }
+
     .pic {
       width: 120px;
       height: 120px;
       display: block;
     }
   }
+
   .pic-uploader-component .el-upload:hover {
     border-color: #409eff;
   }
+
   .del {
     color: #155bd4;
     cursor: pointer;
   }
+
   .tag-input-width.el-input-number--small {
     width: 100%;
   }
+
   .tag-input-width.party-code::placeholder {
     color: #999;
   }
+
   .tag-input-width.party-code.err-tips {
     border-color: #d40000;
   }
@@ -897,18 +783,22 @@ export default {
     height: 32px;
     line-height: 32px;
     box-sizing: border-box;
+
     &:focus {
       outline: 0;
     }
   }
+
   .tag-input-width.text-input {
     padding-right: 5px;
   }
+
   // 表格+批量设置
   .sku-table-con {
     display: block;
     padding: 10px;
     border: 1px solid #dcdcdc;
+
     .table-header {
       background: #f8f8f8;
     }
@@ -917,14 +807,17 @@ export default {
     .batch-settings-box {
       .set-txt {
         padding-top: 10px;
+
         .weak-txt {
           color: #999;
           font-size: 12px;
           margin-left: 5px;
         }
       }
+
       .batch-settings-tb {
         margin: 10px 0;
+
         // 头部
         ul,
         li {
@@ -933,22 +826,26 @@ export default {
           padding: 0;
           line-height: 1em;
         }
+
         .batch-settings-Head {
           display: flex;
           align-items: center;
           justify-content: space-between;
           padding: 15px 0;
           background: #f8f8f8;
+
           .stress {
             font-size: 14px;
             color: #d40000;
             margin-right: 3px;
           }
+
           li.head-item {
             flex: 1;
             padding: 0 10px;
             font-weight: bold;
           }
+
           .coding {
             width: 220px;
           }
@@ -959,16 +856,19 @@ export default {
           align-items: center;
           justify-content: space-between;
           padding: 15px 0;
+
           .item {
             flex: 1;
             padding: 0 10px;
-            & >>> .el-form-item,
-            & >>> .el-form-item__content {
+
+            &>>>.el-form-item,
+            &>>>.el-form-item__content {
               width: 100%;
               margin-right: 0;
             }
           }
-          .coding{
+
+          .coding {
             width: 220px;
           }
         }
@@ -988,7 +888,8 @@ export default {
 .filter-submitBtn span {
   color: #fff !important;
 }
-div >>> .el-table tbody tr:hover > td {
+
+div>>>.el-table tbody tr:hover>td {
   background-color: #ffffff;
 }
 </style>

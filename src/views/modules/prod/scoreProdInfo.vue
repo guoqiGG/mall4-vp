@@ -2,42 +2,30 @@
   <div class="mod-prod-info">
     <!-- 步骤 -->
     <div class="post-step">
-      <div class="step-item" :class="{'active': postingSteps === 1 || postingSteps === 2}">
+      <div class="step-item" :class="{ 'active': postingSteps === 1 || postingSteps === 2 }">
         <!-- 01、选择商品类目 -->
         <div class="step-txt">01、{{ $t("product.selectProductCategory") }}</div>
       </div>
-      <div class="step-item" :class="{'active': postingSteps === 2}">
+      <div class="step-item" :class="{ 'active': postingSteps === 2 }">
         <!-- 02、编辑商品信息 -->
         <div class="step-txt">02、{{ $t("product.editProductInfo") }}</div>
       </div>
 
     </div>
 
-<!-- 基本信息  -->
-  <div class="title" v-if="postingSteps === 1">
-     {{this.$i18n.t('shopProcess.basicInfo')}}
-  </div>
+    <!-- 基本信息  -->
+    <div class="title" v-if="postingSteps === 1">
+      {{ this.$i18n.t('shopProcess.basicInfo') }}
+    </div>
 
     <!-- <div class="title">新增氢春豆商品</div> -->
     <el-form ref="dataForm" :model="dataForm" label-width="150px" size="small">
       <!-- 选择语言 -->
-      <el-form-item
-        v-show="postingSteps === 1"
-        :label="this.$i18n.t('product.selectLanguage')"
-        v-if="langItemList.length > 1"
-      >
-        <el-select
-          v-model="curLang"
-          multiple
-          :placeholder="this.$i18n.t('product.tip1')"
-          class="select-lang"
-          @change="selectLang"
-        >
-          <el-option
-            v-for="item in langItemList"
-            :key="item.lang"
-            :label="item.name"
-            :value="item.lang">
+      <el-form-item v-show="postingSteps === 1" :label="this.$i18n.t('product.selectLanguage')"
+        v-if="langItemList.length > 1">
+        <el-select v-model="curLang" multiple :placeholder="this.$i18n.t('product.tip1')" class="select-lang"
+          @change="selectLang">
+          <el-option v-for="item in langItemList" :key="item.lang" :label="item.name" :value="item.lang">
           </el-option>
         </el-select>
         <div class="el-form-item-tips">{{ $t("product.postProductTips2") }}</div>
@@ -45,11 +33,9 @@
 
       <!-- 商品名称 -->
       <div v-show="postingSteps === 1" class="prod-name-box">
-        <template v-for="(item,index) in dataForm.prodLangList">
-          <el-form-item
-            :label=" $t('product.prodName') + (langItemList.length === 1 ? '' : `(${item.langName})`)"
-            class="prod-name-con is-required"
-          >
+        <template v-for="(item, index) in dataForm.prodLangList">
+          <el-form-item :label="$t('product.prodName') + (langItemList.length === 1 ? '' : `(${item.langName})`)"
+            class="prod-name-con is-required">
             <el-input class="prod-name-input" v-model.trim="item.prodName" maxlength="60" />
             <div class="el-form-item-tips">{{ $t("product.prodNameTip") }}</div>
           </el-form-item>
@@ -57,11 +43,10 @@
       </div>
       <!-- 商品卖点 -->
       <div v-show="postingSteps === 1" class="prod-name-box">
-        <template v-for="(item,index) in dataForm.prodLangList">
+        <template v-for="(item, index) in dataForm.prodLangList">
           <el-form-item
-            :label=" $t('product.productSellingPoints') + (langItemList.length === 1 ? '' : `(${item.langName})`)"
-            class="prod-name-con"
-          >
+            :label="$t('product.productSellingPoints') + (langItemList.length === 1 ? '' : `(${item.langName})`)"
+            class="prod-name-con">
             <el-input v-model="item.brief" maxlength="100" />
             <div class="el-form-item-tips">{{ $t("product.productSellingPointsTip") }}</div>
           </el-form-item>
@@ -72,40 +57,31 @@
         <video-upload v-model="dataForm.video" />
       </el-form-item>
       <el-form-item v-show="postingSteps === 1" :label="this.$i18n.t('discount.commodityPictures')"
-      class="productImg-label"
-      >
+        class="productImg-label">
         <!-- <mul-pic-upload v-model="dataForm.imgs" /> -->
         <imgs-upload v-model="dataForm.imgs" />
-        <span>{{$t("platform.recommImgSize")}}800*800，{{$t("product.picUploadTips")}}</span>
+        <span>{{ $t("platform.recommImgSize") }}800*800，{{ $t("product.picUploadTips") }}</span>
       </el-form-item>
 
-    <!-- 规格库存 -->
-    <div class="title" v-if="postingSteps === 1">
-      {{this.$i18n.t('prodSku.specStock')}}
-    </div>
-    <sku-tag v-show="postingSteps === 1" ref="skuTag" @change="skuTagChangeSkuHandler" :skuList="dataForm.skuList"></sku-tag>
-    <sku-table
-      v-show="postingSteps === 1"
-      ref="skuTable"
-      v-model="dataForm.skuList"
-      :prodNameCn.sync="prodNameCn"
-      :prodNameEn.sync="prodNameEn"
-      :prodLangList='dataForm.prodLangList'
-    ></sku-table>
-
-    <!-- 运费 -->
+      <!-- 规格库存 -->
       <div class="title" v-if="postingSteps === 1">
-        {{this.$i18n.t('freight.shippinngs')}}
+        {{ this.$i18n.t('prodSku.specStock') }}
       </div>
-      <prod-transport
-        v-show="postingSteps === 1"
-        v-model="dataForm.deliveryTemplateId"
-        :dataForm="dataForm"
-      ></prod-transport>
+      <sku-tag v-show="postingSteps === 1" ref="skuTag" @change="skuTagChangeSkuHandler"
+        :skuList="dataForm.skuList"></sku-tag>
+      <sku-table v-show="postingSteps === 1" ref="skuTable" v-model="dataForm.skuList" :prodNameCn.sync="prodNameCn"
+        :prodNameEn.sync="prodNameEn" :prodLangList='dataForm.prodLangList' :giftListArray="giftListArray"></sku-table>
+
+      <!-- 运费 -->
+      <div class="title" v-if="postingSteps === 1">
+        {{ this.$i18n.t('freight.shippinngs') }}
+      </div>
+      <prod-transport v-show="postingSteps === 1" v-model="dataForm.deliveryTemplateId"
+        :dataForm="dataForm"></prod-transport>
 
       <!-- 商品详情 -->
       <el-tabs v-show="postingSteps === 2" type="card">
-        <el-tab-pane v-for="(item,index) in dataForm.prodLangList" :key="index" :label="`${item.langName}详情`">
+        <el-tab-pane v-for="(item, index) in dataForm.prodLangList" :key="index" :label="`${item.langName}详情`">
           <el-form-item :label="$i18n.t('homes.productDetails')">
             <tiny-mce v-model="item.content" ref="content" style="width:95%"></tiny-mce>
           </el-form-item>
@@ -134,12 +110,8 @@
       </div>
     </div>
     <!-- 品牌选择弹窗-->
-    <brand-select
-      v-if="brandSelectVisible"
-      ref="brandSelect"
-      :isSingle="true"
-      @refreshSelectBrand="selectBrand"
-    ></brand-select>
+    <brand-select v-if="brandSelectVisible" ref="brandSelect" :isSingle="true"
+      @refreshSelectBrand="selectBrand"></brand-select>
   </div>
 </template>
 
@@ -157,7 +129,7 @@ import ProdTransport from './prod-transport'
 // import { treeDataTranslate, idList } from '@/utils'
 
 export default {
-  data () {
+  data() {
     return {
       curLang: [1],
       postingSteps: 1,
@@ -200,14 +172,15 @@ export default {
       resourcesUrl: process.env.VUE_APP_RESOURCES_URL,
       // 语言列表
       langItemList: [],
-      masterLangInfo: {name: '', lang: ''}
+      masterLangInfo: { name: '', lang: '' },
+      giftListArray: [],// 礼品券数组
     }
   },
   watch: {
     'dataForm.imgs': {
       deep: true, // 深度监听设置为 true
       immediate: true,
-      handler (newV, oldV) {
+      handler(newV, oldV) {
         if (newV.split(',').length > 9) {
           this.dataForm.imgs = oldV
           this.errorMsg(this.$i18n.t('product.downloadTemplateTips3'))
@@ -217,7 +190,7 @@ export default {
     'dataForm.prodLangList': {
       deep: true, // 深度监听设置为 true
       immediate: true,
-      handler () {
+      handler() {
         this.skuTagChangeSkuHandler(this.dataForm.skuList)
       }
     }
@@ -234,18 +207,30 @@ export default {
     ProdTransport
   },
   computed: {
-    defalutSku () {
+    defalutSku() {
       return this.$store.state.prod.defalutSku
     }
   },
-  mounted () {
+  mounted() {
     this.dataForm.prodId = this.$route.query.prodId
     // this.getCategoryList()
     // this.getCategoryTree()
     this.getDataList()
+    this.getGiftList()
   },
   methods: {
-    getLangList () {
+    // 获取礼品券接口
+    getGiftList() {
+      this.$http({
+        url: this.$http.adornUrl('/platform/search/prod/get/list'),
+        params: this.$http.adornParams(
+          Object.assign({ current: 1, size: 10000 }), false
+        )
+      }).then(({ data }) => {
+        this.giftListArray = data.records
+      })
+    },
+    getLangList() {
       this.$http({
         url: this.$http.adornUrl('/sys/lang'),
         method: 'get',
@@ -288,11 +273,11 @@ export default {
       })
     },
     // 上一步
-    prevStep () {
+    prevStep() {
       this.postingSteps = 1
     },
     // 下一步
-    nextStep () {
+    nextStep() {
       this.$refs['dataForm'].validate((valid) => {
         const langList = this.dataForm.prodLangList
         for (const item of langList) {
@@ -312,7 +297,7 @@ export default {
           return
         }
         if (!this.dataForm.skuList.find(el => el.status)) {
-        // 至少要启用一种商品规格
+          // 至少要启用一种商品规格
           this.$message({
             message: this.$i18n.t('product.enableSpec'),
             type: 'error',
@@ -325,6 +310,15 @@ export default {
         //   this.errorMsg('请选择一个所属品牌')
         //   return
         // }
+
+        this.dataForm.skuList.forEach((e) => {
+            if (e.giftList2) {
+              e.giftList = e.giftList2.toString()
+            } else {
+              e.giftList = ''
+            }
+        })
+
         // 校验sku列表
         this.checkSkuList()
         if (this.isCheck) {
@@ -349,10 +343,10 @@ export default {
         this.postingSteps = 2
       })
     },
-        /**
-     * 选择语言(中文信息必填)
-     */
-    selectLang (value) {
+    /**
+ * 选择语言(中文信息必填)
+ */
+    selectLang(value) {
       this.curLang = JSON.parse(JSON.stringify(value))
       if (!value.length) {
         this.curLang = [this.masterLangInfo.lang]
@@ -370,7 +364,7 @@ export default {
         if (!tempArr.find(f => f.lang == item)) {
           const fd = this.langItemList.find(it => it.lang === item)
           if (fd) {
-            tempArr.splice(index, 0, {langName: fd.name, brief: '', content: '', lang: item, prodId: this.dataForm.prodId, prodName: ''})
+            tempArr.splice(index, 0, { langName: fd.name, brief: '', content: '', lang: item, prodId: this.dataForm.prodId, prodName: '' })
           }
         }
       })
@@ -385,7 +379,7 @@ export default {
       })
     },
     // 获取分类数据
-    getDataList () {
+    getDataList() {
       this.isSubmit = false
       if (this.dataForm.prodId) {
         // 获取产品数据
@@ -394,7 +388,11 @@ export default {
           method: 'get',
           params: this.$http.adornParams()
         }).then(({ data }) => {
-          this.dataForm = data
+          let data2 = data
+          data2.skuList.forEach(e => {
+            e.giftList2 =e.giftList? e.giftList.split(',').map(Number):[]
+          })
+          this.dataForm = data2
           // 获取语言列表
           this.getLangList()
 
@@ -440,7 +438,7 @@ export default {
       }
     },
     // 表单提交
-    dataFormSubmit () {
+    dataFormSubmit() {
       this.$refs['dataForm'].validate((valid) => {
         const langList = this.dataForm.prodLangList
         for (const item of langList) {
@@ -460,7 +458,7 @@ export default {
           return
         }
         if (!this.dataForm.skuList.find(el => el.status)) {
-        // 至少要启用一种商品规格
+          // 至少要启用一种商品规格
           this.$message({
             message: this.$i18n.t('product.enableSpec'),
             type: 'error',
@@ -472,7 +470,15 @@ export default {
         // if (!this.dataForm.brandName) {
         //   this.errorMsg('请选择一个所属品牌')
         //   return
-        // }
+        // } if (e.giftList2) {
+          this.dataForm.skuList.forEach((e) => {
+            if (e.giftList2) {
+              e.giftList = e.giftList2.toString()
+            } else {
+              e.giftList = ''
+            }
+          })
+
         // 校验sku列表
         this.checkSkuList()
         if (this.isCheck) {
@@ -489,6 +495,7 @@ export default {
         }
         this.dataForm.prodName = this.dataForm.prodLangList[0].prodName || ''
         let param = Object.assign({}, this.dataForm)
+
         // 设置价格和库存
         this.paramSetPriceAndStocks(param)
         param.deliveryMode = undefined
@@ -549,7 +556,7 @@ export default {
     /**
      * 品牌删除按钮
      */
-    handleClose () {
+    handleClose() {
       this.dataForm.brandId = null
       this.brandName = ''
       this.dataForm.brandName = this.brandName
@@ -557,7 +564,7 @@ export default {
     /**
      * 显示添加指定品牌弹框
      */
-    brandSelectHandle () {
+    brandSelectHandle() {
       this.brandSelectVisible = true
       this.$nextTick(() => {
         this.$refs.brandSelect.init()
@@ -566,7 +573,7 @@ export default {
     /**
      * 添加指定品牌
      */
-    selectBrand (brands) {
+    selectBrand(brands) {
       if (brands) {
         this.brandName = brands[0].brandName
         this.dataForm.brandId = brands[0].brandId
@@ -578,11 +585,11 @@ export default {
     /**
      * 删除视频
      */
-    deleteVideo () {
+    deleteVideo() {
       this.dataForm.video = null
     },
 
-    checkSkuList () {
+    checkSkuList() {
       this.dataForm.skuList.forEach(item => {
         this.isCheck = false
         // if (!item.pic) {
@@ -610,9 +617,19 @@ export default {
           this.value = this.$i18n.t('product.emptyStocks')
           return false
         }
+        if (item.giftList2.length && !item.giftNumber) {
+          this.isCheck = true
+          this.value = '礼品券数量不能为空'
+          return false
+        }
+        if (!item.giftList2.length && item.giftNumber) {
+          this.isCheck = true
+          this.value = '请选择礼品券'
+          return false
+        }
       })
     },
-    paramSetPriceAndStocks (param) {
+    paramSetPriceAndStocks(param) {
       // 获取规格属性信息
       // param.skuList = this.$refs.prodSpec.getTableSpecData()
       // 商品库存
@@ -658,7 +675,7 @@ export default {
       //   param.skuList[0].prodNameEn = this.dataForm.prodNameEn
       // }
     },
-    skuTagChangeSkuHandler (skuList) {
+    skuTagChangeSkuHandler(skuList) {
       // const prodNameCn = this.prodNameCn
       // const prodNameEn = this.prodNameEn
       const prodName = this.dataForm.prodLangList[0] ? this.dataForm.prodLangList[0].prodName : ''
@@ -679,7 +696,7 @@ export default {
       })
       this.dataForm.skuList = skuList
     },
-    errorMsg (message) {
+    errorMsg(message) {
       this.$message({
         message: message,
         type: 'error',
@@ -690,40 +707,45 @@ export default {
 }
 </script>
 <style>
- .el-upload--picture-card{
-    background: #ffffff;
-  }
-  .productImg-label .el-form-item__label:before{
-    content: '*';
-    color: #F56C6C;
-    margin-right: 4px;
-  }
-  .productImg-label .el-upload--picture-card i {
-    position: absolute;
-    top: 39%;
-    left: 37%;
-  }
-  /* .stress {
+.el-upload--picture-card {
+  background: #ffffff;
+}
+
+.productImg-label .el-form-item__label:before {
+  content: '*';
+  color: #F56C6C;
+  margin-right: 4px;
+}
+
+.productImg-label .el-upload--picture-card i {
+  position: absolute;
+  top: 39%;
+  left: 37%;
+}
+
+/* .stress {
           color: #FF2120;
           padding-right: 5px;
         } */
 
-.mod-prod-info .el-textarea__inner:focus{
-  border-color:#c0c4cc !important;
+.mod-prod-info .el-textarea__inner:focus {
+  border-color: #c0c4cc !important;
 }
-
 </style>
 <style lang="scss" scoped>
-.mod-prod-info{
+.mod-prod-info {
+
   // 步骤
   .post-step {
     margin-bottom: 30px;
     display: flex;
     align-content: center;
     justify-content: space-between;
+
     .step-item {
       position: relative;
       flex: 1;
+
       .step-txt {
         display: block;
         font-size: 14px;
@@ -733,17 +755,20 @@ export default {
         padding: 12px 0;
       }
     }
+
     .step-item.active {
       .step-txt {
         color: #fff;
         background: #155bd4;
       }
     }
+
     // 右箭头
     .step-item:not(:last-child) {
       .step-txt {
         margin-right: 10px;
       }
+
       &::after {
         position: absolute;
         top: 0;
@@ -756,11 +781,13 @@ export default {
         border-bottom: 20px solid transparent;
       }
     }
+
     .step-item.active:not(:last-child) {
       &::after {
         border-left: 10px solid #155bd4;
       }
     }
+
     // 左箭头
     .step-item:not(:first-child) {
       &::before {
@@ -778,13 +805,14 @@ export default {
   }
 
   /* 每项内容的标题 */
-  .title{
+  .title {
     margin: 5px 0 28px 0px;
     padding-left: 15px;
     background-color: #f6f6f6;
     line-height: 40px;
     font-weight: 800;
   }
+
   // 底部固定操作栏
   .prod-footer {
     width: calc(100% - 250px);
@@ -796,6 +824,7 @@ export default {
     z-index: 3;
     margin-top: 20px;
     margin-right: 20px;
+
     .foot {
       display: flex;
       align-items: center;
@@ -803,6 +832,7 @@ export default {
       padding: 10px 0;
       background: #fff;
       box-sizing: border-box;
+
       .inner {
         .default-btn.save-btn {
           border-color: #155bd4;
@@ -811,6 +841,7 @@ export default {
       }
     }
   }
+
   // 选择语言
   .select-lang {
     display: block;
@@ -820,25 +851,27 @@ export default {
   & ::v-deep .el-input__inner {
     color: #303133;
   }
+
   // 商品名称
   .prod-name-box {
-    & >>> .el-input__inner {
+    &>>>.el-input__inner {
       width: 400px;
-      padding: 0 8px!important;
+      padding: 0 8px !important;
     }
+
     .prod-name-con {
       display: inline-block;
       margin-right: 15px;
     }
-    .prod-name-input{
+
+    .prod-name-input {
       width: 400px;
     }
   }
 }
-
 </style>
 <style scoped>
-.mod-prod-info /deep/ .el-form-item__label{
+.mod-prod-info /deep/ .el-form-item__label {
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
   -webkit-text-overflow: ellipsis;

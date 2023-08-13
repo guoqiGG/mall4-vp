@@ -1,19 +1,9 @@
 <template>
   <div>
-    <el-dialog
-      :title="type"
-      :close-on-click-modal="false"
-      :visible.sync="visible"
-      :before-close="handleDialogClose"
-      width="810px"
-    >
-      <el-form @submit.native.prevent
-        :model="dataForm"
-        :rules="dataRule"
-        ref="dataForm"
-        @keyup.enter.native="dataFormSubmit()"
-        :label-width="$t('language') === 'English' ? '110px' : '80px'"
-      >
+    <el-dialog :title="type" :close-on-click-modal="false" :visible.sync="visible" :before-close="handleDialogClose"
+      width="810px">
+      <el-form @submit.native.prevent :model="dataForm" :rules="dataRule" ref="dataForm"
+        @keyup.enter.native="dataFormSubmit()" :label-width="$t('language') === 'English' ? '110px' : '80px'">
         <!-- <el-form-item
           :label="this.$i18n.t('live.updateReminder')"
           prop="pic"
@@ -27,147 +17,70 @@
           >
         </el-form-item> -->
         <el-form-item label="商品封面" prop="pic" class="livePic">
-          <img-upload
-            v-model="dataForm.coverPic"
-            :maxSize="0.08"
-            :disabled="dataForm.status !== 0 && dataForm.liveProdStoreId !== 0"
-            :imgSizeLimit="true"
-          ></img-upload>
-          <span
-            >建议尺寸：300像素 * 300像素，图片大小不得超过80K</span
-          >
+          <img-upload v-model="dataForm.coverPic" :maxSize="0.08"
+            :disabled="dataForm.status !== 0 && dataForm.liveProdStoreId !== 0" :imgSizeLimit="true"></img-upload>
+          <span>建议尺寸：300像素 * 300像素，图片大小不得超过80K</span>
         </el-form-item>
         <el-form-item label="商品名称" class="liveName" prop="name">
-          <el-input
-            size="small"
-            v-model="dataForm.name"
-            maxlength="14"
-            show-word-limit
-            :disabled="dataForm.status !== 0 && dataForm.liveProdStoreId !== 0"
-          ></el-input>
+          <el-input size="small" v-model="dataForm.name" maxlength="14" show-word-limit
+            :disabled="dataForm.status !== 0 && dataForm.liveProdStoreId !== 0"></el-input>
         </el-form-item>
         <el-form-item label="价格形式" prop="priceType">
-          <el-radio-group
-            v-model="dataForm.priceType"
-            :disabled="dataForm.status !== 0 && dataForm.liveProdStoreId !== 0"
-          >
+          <el-radio-group v-model="dataForm.priceType"
+            :disabled="dataForm.status !== 0 && dataForm.liveProdStoreId !== 0">
             <el-radio :label="1">一口价</el-radio>
             <el-radio :label="2">价格区间</el-radio>
             <el-radio :label="3">显示折扣价</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item
-          v-if="dataForm.priceType === 1"
-          label="输入价格"
-          class="livePrice"
-        >
-          <el-input-number
-            :precision="2"
-            :min="0"
-            :max="100000000"
-            v-model="dataForm.price"
-            type="number"
-            size="small"
-            :disabled="dataForm.status !== 0 && dataForm.liveProdStoreId !== 0"
-            style="width: 25%"
-          ></el-input-number>
+        <el-form-item v-if="dataForm.priceType === 1" label="输入价格" class="livePrice">
+          <el-input-number :precision="2" :min="0" :max="100000000" v-model="dataForm.price" type="number" size="small"
+            :disabled="dataForm.status !== 0 && dataForm.liveProdStoreId !== 0" style="width: 25%"></el-input-number>
           <span class="tips">元</span>
         </el-form-item>
-        <el-form-item
-          v-if="dataForm.priceType === 2"
-          label="输入价格"
-          class="livePrice"
-        >
+        <el-form-item v-if="dataForm.priceType === 2" label="输入价格" class="livePrice">
           <span class="input-tips"></span>
-          <el-input-number
-            :precision="2"
-            :min="0"
-            :max="100000000"
-            v-model.number="dataForm.price"
-            style="width: 180px"
-            size="small"
-            :disabled="dataForm.status !== 0 && dataForm.liveProdStoreId !== 0"
-          ></el-input-number>
+          <el-input-number :precision="2" :min="0" :max="100000000" v-model.number="dataForm.price" style="width: 180px"
+            size="small" :disabled="dataForm.status !== 0 && dataForm.liveProdStoreId !== 0"></el-input-number>
           <span class="input-tips">-</span>
-          <el-input-number
-            :precision="2"
-            :min="0"
-            :max="100000000"
-            v-model.number="dataForm.price2"
-            style="width: 180px"
-            size="small"
-            :disabled="dataForm.status !== 0 && dataForm.liveProdStoreId !== 0"
-          ></el-input-number>
+          <el-input-number :precision="2" :min="0" :max="100000000" v-model.number="dataForm.price2" style="width: 180px"
+            size="small" :disabled="dataForm.status !== 0 && dataForm.liveProdStoreId !== 0"></el-input-number>
           <span class="tips">元</span>
         </el-form-item>
-        <el-form-item
-          v-if="dataForm.priceType === 3"
-          label="输入价格"
-          class="livePrice"
-        >
+        <el-form-item v-if="dataForm.priceType === 3" label="输入价格" class="livePrice">
           &nbsp;&nbsp;&nbsp;
           <span class="input-tips">市场价</span>
-          <el-input-number
-            v-model.number="dataForm.price"
-            style="width: 180px"
-            :precision="2"
-            :min="0"
-            :max="100000000"
-            size="small"
-            :disabled="dataForm.status !== 0 && dataForm.liveProdStoreId !== 0"
-          ></el-input-number
-          >
+          <el-input-number v-model.number="dataForm.price" style="width: 180px" :precision="2" :min="0" :max="100000000"
+            size="small" :disabled="dataForm.status !== 0 && dataForm.liveProdStoreId !== 0"></el-input-number>
           <span class="tips">元</span>
           &nbsp;&nbsp;&nbsp;
           <span class="input-tips">现价</span>
-          <el-input-number
-            :precision="2"
-            :min="0"
-            :max="100000000"
-            v-model.number="dataForm.price2"
-            style="width: 180px"
-            size="small"
-            :disabled="dataForm.status !== 0 && dataForm.liveProdStoreId !== 0"
-          ></el-input-number>
+          <el-input-number :precision="2" :min="0" :max="100000000" v-model.number="dataForm.price2" style="width: 180px"
+            size="small" :disabled="dataForm.status !== 0 && dataForm.liveProdStoreId !== 0"></el-input-number>
           <span class="tips">元</span>
         </el-form-item>
 
         <el-form-item label="商品路径" prop="url" class="liveUrl">
           <div v-if="dataForm.prodId != null">
-            <el-card
-              :body-style="{ padding: '0px' }"
-              style="height: 160px; width: 120px"
-            >
-              <prod-pic
-                  height="104px"
-                  width="100%"
-                  :pic="card.pic"
-                ></prod-pic>
+            <el-card :body-style="{ padding: '0px' }" style="height: 160px; width: 120px">
+              <prod-pic height="104px" width="100%" :pic="card.pic"></prod-pic>
               <div class="card-prod-bottom">
                 <span class="card-prod-name">{{ card.name }}</span>
                 <div
-                  :class="[dataForm.status !== 0 && dataForm.liveProdStoreId !== 0 ? 'disabled-btn':'','default-btn text-btn card-prod-name-button']"
-                  @click="deleteSelectProd"
-                  >删除</div
-                >
+                  :class="[dataForm.status !== 0 && dataForm.liveProdStoreId !== 0 ? 'disabled-btn' : '', 'default-btn text-btn card-prod-name-button']"
+                  @click="deleteSelectProd">删除</div>
               </div>
             </el-card>
           </div>
           <div v-if="dataForm.prodId == null">
-            <div
-              @click="addProd"
-              :class="[dataForm.status !== 0 && dataForm.liveProdStoreId !== 0 ? 'disabled-btn':'', 'default-btn']"
-              >选择商品</div
-            >
+            <div @click="addProd"
+              :class="[dataForm.status !== 0 && dataForm.liveProdStoreId !== 0 ? 'disabled-btn' : '', 'default-btn']">选择商品
+            </div>
           </div>
           <div v-if="dataForm.prodId != null">
             <div>选择商品路径，跳转到拼团/秒杀的商品详情页</div>
-            <el-radio-group
-              v-model="dataForm.prodType"
-              :disabled="
-                dataForm.status === 2 || dataForm.liveProdStoreId !== 0
-              "
-            >
+            <el-radio-group v-model="dataForm.prodType" :disabled="dataForm.status === 2 || dataForm.liveProdStoreId !== 0
+              ">
               <el-radio :label="0">普通商品</el-radio>
               <el-radio :label="1" :disabled="groupDisabled">拼团</el-radio>
               <el-radio :label="2" :disabled="sekilledDisabled">秒杀</el-radio>
@@ -180,30 +93,17 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <div
-          class="default-btn" @click="closeData">取消</div>
-        <div
-          class="default-btn primary-btn"
-          v-if="dataForm.liveProdStoreId === 0 || dataForm.status === 0"
-          @click="dataFormSubmit()"
-          >确定</div
-        >
-        <div
-          class="default-btn primary-btn"
-          v-if="dataForm.liveProdStoreId !== 0 && dataForm.status !== 0"
-          @click="onCloseInfo()"
-          >确定</div
-        >
+        <div class="default-btn" @click="closeData">取消</div>
+        <div class="default-btn primary-btn" v-if="dataForm.liveProdStoreId === 0 || dataForm.status === 0"
+          @click="dataFormSubmit()">确定</div>
+        <div class="default-btn primary-btn" v-if="dataForm.liveProdStoreId !== 0 && dataForm.status !== 0"
+          @click="onCloseInfo()">确定</div>
         <!-- <el-button type="primary" @click="test()">测试上传微信mediaId</el-button> -->
       </span>
     </el-dialog>
     <!-- 商品选择弹窗-->
-    <prods-select
-      v-if="prodsSelectVisible"
-      ref="prodsSelect"
-      :isSingle="true"
-      @refreshSelectProds="selectIndexProd"
-    ></prods-select>
+    <prods-select v-if="prodsSelectVisible" ref="prodsSelect" :isSingle="true"
+      @refreshSelectProds="selectIndexProd"></prods-select>
   </div>
 </template>
 
@@ -218,7 +118,7 @@ export default {
     ProdsSelect,
     ProdPic
   },
-  data () {
+  data() {
     var validate = (rule, value, callback) => {
       if (!/^[1-9]\d*$|^[1-9]\d*\.\d\d?$|^0\.\d\d?$/.test(value)) {
         callback(new Error('请输入大于0的整数或者保留两位小数的正数'))
@@ -286,7 +186,7 @@ export default {
         ],
         name: [
           { required: true, message: '商品名称不能为空', trigger: 'blur' },
-          {validator: valiname, trigger: 'blur'}
+          { validator: valiname, trigger: 'blur' }
         ],
         price: [
           { required: true, message: '价格不能为空', trigger: 'blur' },
@@ -303,7 +203,7 @@ export default {
     }
   },
   methods: {
-    init (liveProdStoreId, type) {
+    init(liveProdStoreId, type) {
       this.dataForm.status = null
       this.dataForm.price2 = 0
       this.dataForm.price = 0
@@ -347,7 +247,7 @@ export default {
       })
     },
     // 打开选择商品
-    addProd () {
+    addProd() {
       if (this.dataForm.status !== 0 && this.dataForm.liveProdStoreId !== 0) {
         return
       }
@@ -357,7 +257,7 @@ export default {
       })
     },
     // 获取剩余可新增得数量
-    getAddProdNum () {
+    getAddProdNum() {
       this.$http({
         url: this.$http.adornUrl('/live/liveProdStore/getUpdateProdNum'),
         method: 'get',
@@ -368,7 +268,7 @@ export default {
       })
     },
     // 添加指定商品
-    selectIndexProd (prods) {
+    selectIndexProd(prods) {
       this.card.realData.prods = [prods]
       if (prods) {
         this.dataForm.prodId = prods.prodId
@@ -376,7 +276,12 @@ export default {
         this.card.pic = prods.pic
         this.card.name = prods.prodName
         this.card.id = prods.prodId
-        this.dataForm.url = 'pages/prod/prod?prodId=' + this.dataForm.prodId
+        if (this.dataForm.prodId == 115) {
+          this.dataForm.url = '/package-activities/pages/red-envelope/red-envelope?prodId=' + this.dataForm.prodId
+        } else {
+          this.dataForm.url = 'pages/prod/prod?prodId=' + this.dataForm.prodId
+        }
+
         if (this.dataForm.prodType === 0 || this.dataForm.prodType === 4) {
           this.sekilledDisabled = true
           this.groupDisabled = true
@@ -393,7 +298,7 @@ export default {
     /**
      * 禁用商品类型单选
      */
-    disableProdTypeSelect (prodType) {
+    disableProdTypeSelect(prodType) {
       if (prodType === 0 || prodType === 4) {
         this.sekilledDisabled = true
         this.groupDisabled = true
@@ -403,7 +308,7 @@ export default {
         this.groupDisabled = true
       }
     },
-    deleteSelectProd () {
+    deleteSelectProd() {
       if (this.dataForm.status !== 0 && this.dataForm.liveProdStoreId !== 0) {
         return
       }
@@ -416,13 +321,13 @@ export default {
     /**
      * 点击 X 关闭对话框的回调
      */
-    handleDialogClose () {
+    handleDialogClose() {
       this.closeData()
     },
     /**
      * 关闭弹窗清空数据
      */
-    closeData () {
+    closeData() {
       this.visible = false
       // this.$refs[this.dataForm].resetFields()
       // this.$refs[this.card].resetFields()
@@ -433,13 +338,13 @@ export default {
       this.groupDisabled = false
       this.sekilledDisabled = false
     },
-    onCloseInfo () {
+    onCloseInfo() {
       console.log('关闭')
       this.visible = false
       this.$emit('refreshDataList')
     },
     // 表单提交
-    dataFormSubmit () {
+    dataFormSubmit() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           if (this.dataForm.name === null || this.dataForm.name === '') {
@@ -493,7 +398,7 @@ export default {
         }
       })
     },
-    test () {
+    test() {
       this.$nextTick(() => {
         if (this.dataForm.liveProdStoreId) {
           this.$http({
@@ -511,22 +416,25 @@ export default {
 }
 </script>
 <style scoped>
-.livePic >>> .el-form-item__label:before{
+.livePic>>>.el-form-item__label:before {
   content: '*';
   color: #F56C6C;
   margin-right: 4px;
 }
-.liveName >>> .el-form-item__label:before{
+
+.liveName>>>.el-form-item__label:before {
   content: '*';
   color: #F56C6C;
   margin-right: 4px;
 }
-.liveUrl >>> .el-form-item__label:before{
+
+.liveUrl>>>.el-form-item__label:before {
   content: '*';
   color: #F56C6C;
   margin-right: 4px;
 }
-.livePrice >>> .el-form-item__label:before{
+
+.livePrice>>>.el-form-item__label:before {
   content: '*';
   color: #F56C6C;
   margin-right: 4px;
