@@ -1134,6 +1134,7 @@ const en = {
     payPal: 'PayPal Pay',
     unPassed: 'Failed',
     sendCouponTips: 'Tip: When issuing coupons in bulk, users will not receive the coupons if the stock is insufficient or if the maximum number of coupons has been reached.',
+    sendVoucherTips: 'Tip: When issuing vouchers in bulk, users will not receive the vouchers if the stock is insufficient or if the maximum number of vouchers has been reached.',
     alertMessage1: 'Merchandise categories can be added up to 3 levels, the first and second categories only as a structural category exists, the store can only sign up for the third level of categories, not added to the third level of categories will not be displayed in the front of the mall. Modify or delete the product categories will affect the merchant\'s product display and sales profit, please operate carefully, try to use "modify" and avoid "delete"!',
     selectAll: 'Select all',
     hadLowerShelf: 'Pull off shelves',

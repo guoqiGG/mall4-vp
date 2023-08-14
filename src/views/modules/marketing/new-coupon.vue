@@ -184,7 +184,7 @@
         </el-radio-group>
       </el-form-item>
       <!-- 分类 -->
-      <el-form-item style="width: 100%"  size="small" v-if="dataForm.suitableProdType === 3">
+      <el-form-item style="width: 100%" size="small" v-if="dataForm.suitableProdType === 3">
         <el-select v-model="dataForm.goodsGroup" placeholder="选择指定分类">
           <el-option v-for="(item, index) in categoryList" :key="index" :label="item.categoryName"
             :value="item.categoryId">
@@ -591,12 +591,12 @@ export default {
             this.$message.error(this.$i18n.t('marketing.amounnCannotBe'))
             return false
           }
-          console.log(this.dataForm.suitableProdType, this.dataForm.couponProds)
+
           if ((this.dataForm.suitableProdType === 1 || this.dataForm.suitableProdType === 2) && this.dataForm.couponProds.length === 0) {
             this.$message.error(this.$i18n.t('marketing.pleaseSelectAProduct'))
             return false
           }
-          if(this.dataForm.suitableProdType===3&&!this.dataForm.goodsGroup){
+          if (this.dataForm.suitableProdType === 3 && !this.dataForm.goodsGroup) {
             this.$message.error('请选择指定分类')
             return false
           }
@@ -623,7 +623,7 @@ export default {
               'limitNum': this.dataForm.limitNum,
               'putonStatus': this.dataForm.putonStatus,
               'couponProds': this.dataForm.couponProds,
-              'goodsGroup': this.dataForm.goodsGroup,
+              'goodsGroup': this.dataForm.goodsGroup
             })
           }).then(({ data }) => {
             this.$message({
@@ -646,7 +646,24 @@ export default {
     back() {
       this.$router.push('/marketing-coupon/coupon')
     }
-  }
+  },
+  watch: {
+    'dataForm.suitableProdType': {
+      deep: true,
+      handler(newV, oldV) {
+        if (newV === 0) {
+          this.dataForm.couponProds = []
+          this.dataForm.goodsGroup = ''
+        }
+        if (newV === 1 || newV === 2) {
+          this.dataForm.goodsGroup = ''
+        }
+        if (newV === 3) {
+          this.dataForm.couponProds = []
+        }
+      }
+    }
+  },
 }
 </script>
 <style lang="scss" scoped>

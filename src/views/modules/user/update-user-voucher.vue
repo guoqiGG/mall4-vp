@@ -1,20 +1,145 @@
 <template>
   <div>
-    <el-dialog :title="$t('user.sendVouchers')" :visible.sync="visible" width="40%" class="select-coupon-dialog">
+    <el-dialog
+      title="选择礼品券"
+      :visible.sync="visible"
+      width="50%"
+      class="select-coupon-dialog"
+    >
       <el-form @submit.native.prevent :inline="true" :model="searchForm" class="demo-form-inline form">
-        <el-form-item label="当前数量:">
-          <el-input-number controls-position="right" v-model="couponName" :min="0" size="small" :placeholder="$t('user.couponTip1')" clearable></el-input-number>
-          <el-tooltip class="item" effect="light" placement="top">
-            <div slot="content">输入多少，用户就有多少张礼品券</div>
-            <span>
-           <i class="el-icon-question"></i>
-          </span>
-          </el-tooltip>
+        <el-form-item>
+          <el-input
+            v-model="couponName"
+            size="small"
+            :placeholder="$t('user.couponTip1')"
+            clearable
+          ></el-input>
+        </el-form-item>
+        <el-form-item>
+          <div
+            class="default-btn primary-btn"
+            @click="searchChange"
+          >{{$t("pictureManager.query")}}</div>
         </el-form-item>
       </el-form>
+      <div class="main-container">
+        <div class="prods-select-body table-con">
+          <el-table
+            ref="couponTable"
+            :data="dataList"
+            header-cell-class-name="table-header"
+            row-class-name="table-row-low"
+            v-loading="dataListLoading"
+            @selection-change="selectChangeHandle"
+            style="width: 100%;"
+          >
+            <el-table-column v-if="isSingle" width="50">
+              <template slot-scope="scope">
+                <div>
+                  <el-radio
+                    :label="scope.row.couponId"
+                    v-model="singleSelectCouponId"
+                    @change.native="getSelectProdRow(scope.row)"
+                  >&nbsp;</el-radio>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column
+              v-if="!isSingle"
+              type="selection"
+              width="50"
+            ></el-table-column>
+            <el-table-column
+              prop="name"
+              label="礼品券名称"
+              width="200"
+            >
+              <template slot-scope="scope">
+                <span class="table-cell-text"> {{scope.row.name}} </span>
+              </template>
+            </el-table-column>
+            <!-- <el-table-column
+              prop="subTitle"
+              :label="$t('user.couponDscription')"
+            >
+              <template slot-scope="scope">
+                <span class="table-cell-text"> {{scope.row.subTitle}} </span>
+              </template></el-table-column> -->
+            <!-- <el-table-column
+              prop="couponType"
+              :label="$t('coupon.couponType')"
+            ></el-table-column> -->
+            <el-table-column
+              prop="number"
+              :label="$t('user.stockNum')"
+            ></el-table-column>
+            <el-table-column
+              prop="collar"
+              :label="$t('user.couponUpperLimit')"
+            ></el-table-column>
+            <el-table-column
+              align="center"
+              :label="$t('user.perRecevies')"
+              width="160"
+            >
+              <template slot="header">
+                <span>{{$t('user.perRecevies')}}</span>
+                <el-popover
+                  placement="top"
+                  width="200"
+                  trigger="hover"
+                  :content="$t('user.couponTip2')"
+                >
+                  <i class="el-icon-question" slot="reference"></i>
+                </el-popover>
+              </template>
+              <template slot-scope="scope">
+                <el-input-number
+                  size="mini"
+                  v-model="scope.row.eachObtain"
+                  controls-position="right"
+                  @change="handleChange(scope.row,scope.$index)"
+                  :min="scope.row.number>0?1:0"
+                  :max=" scope.row.number>0?(scope.row.number >= scope.row.collar ? scope.row.collar:scope.row.number):0"
+                ></el-input-number>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+        <el-pagination
+          v-if="dataList.length"
+          @size-change="sizeChangeHandle"
+          @current-change="currentChangeHandle"
+          :current-page="page.pageIndex"
+          :page-sizes="[10, 20, 50, 100]"
+          :page-size="page.pageSize"
+          :total="page.total"
+          layout="total, sizes, prev, pager, next, jumper"
+        ></el-pagination>
+        <!-- <div v-if="tagList.length < 1">暂无数据</div> -->
+      </div>
+
+      <!-- 分页 -->
+      <!-- <el-pagination
+        v-if="dataList.length"
+        @size-change="sizeChangeHandle"
+        @current-change="currentChangeHandle"
+        :current-page="page.pageIndex"
+        :page-sizes="[10, 20, 50, 100]"
+        :page-size="page.pageSize"
+        :total="page.total"
+        layout="total, sizes, prev, pager, next, jumper"
+      ></el-pagination>-->
+      <!-- /分页 -->
+              <el-alert
+                :title="this.$i18n.t('publics.sendVoucherTips')"
+          type="warning"
+          show-icon
+          :closable="false">
+        </el-alert>
       <span slot="footer">
-        <div @click="visible = false" class="default-btn">{{ $t('remindPop.cancel') }}</div>
-        <div class="default-btn primary-btn" @click="submitProds()">{{ $t('remindPop.confirm') }}</div>
+        <div @click="visible = false" class="default-btn">{{$t('remindPop.cancel')}}</div>
+        <div class="default-btn primary-btn" @click="submitProds()">{{$t('remindPop.confirm')}}</div>
       </span>
     </el-dialog>
   </div>
@@ -25,7 +150,7 @@
 import { Debounce } from '@/utils/debounce'
 export default {
 
-  data() {
+  data () {
     return {
       visible: false,
       confirmLoad: false,
@@ -69,37 +194,36 @@ export default {
       type: Number
     }
   },
-  mounted() {
+  mounted () {
   },
   methods: {
-    init(ids) {
+    init (ids) {
       this.visible = true
       this.dataForm.userIds = ids
       this.getDataList()
     },
     // 每页数
-    sizeChangeHandle(val) {
+    sizeChangeHandle (val) {
       this.page.pageSize = val
       this.page.currentPage = 1
       this.getDataList(this.page)
     },
     // 当前页
-    currentChangeHandle(val) {
+    currentChangeHandle (val) {
       this.page.currentPage = val
       this.getDataList(this.page)
     },
     // 分页获取标签
-    getDataList(page) {
+    getDataList (page) {
       this.dataListLoading = true
       this.$http({
-        url: this.$http.adornUrl('/platform/coupon/list'),
+        url: this.$http.adornUrl('/platform/search/prod/get/list'),
         method: 'get',
         params: this.$http.adornParams(
           Object.assign(
             {
               current: page == null ? this.page.currentPage : page.currentPage,
               size: page == null ? this.page.pageSize : page.pageSize,
-              getWay: this.getWay
             },
             this.searchForm
           )
@@ -117,18 +241,18 @@ export default {
       })
     },
     // 搜索
-    searchChange() {
+    searchChange () {
       this.searchForm.couponName = this.couponName
       this.getDataList(this.page)
     },
     // 单选商品事件
-    getSelectProdRow(row) {
+    getSelectProdRow (row) {
       // console.log('aa')
       this.dataListSelections = [row]
     },
     // 多选
     // 多选点击事件
-    selectChangeHandle(selection) {
+    selectChangeHandle (selection) {
       this.dataList.forEach((tableItem) => {
         let selectedProdIndex = selection.findIndex((selectedCoupon) => {
           if (!selectedCoupon) {
@@ -146,31 +270,31 @@ export default {
       })
     },
     // 确定事件
-    submitProds() {
+    submitProds () {
       // 商品单选的情况
-      // if (this.isSingle) {
-      //   this.dataListSelections.length && this.$emit('refreshSelectCouponList', this.dataListSelections[0])
-      //   this.dataListSelections = []
-      //   this.visible = false
-      //   return
-      // }
-      // // 多选
-      // let coupons = []
-      // // console.log('this.dataListSelections', this.dataListSelections, this.dataListSelections.length < 1)
-      // if (this.dataListSelections.length < 1) {
-      //   // this.$emit('refreshSelectCouponList', [])
-      // } else {
-      //   this.dataListSelections.forEach(item => {
-      //     let couponIndex = coupons.findIndex((coupon) => coupon.couponId === item.couponId)
-      //     if (couponIndex === -1) {
-      //       coupons.push({ couponId: item.couponId, couponName: item.couponName, subTitle: item.subTitle, limitNum: item.limitNum, eachObtain: item.eachObtain })
-      //     }
-      //   })
-      //   // this.$emit('refreshSelectCouponList', coupons)
-      // }
-      // this.dataForm.coupons = coupons
-      // this.dataListSelections = []
-      // this.confirm()
+      if (this.isSingle) {
+        this.dataListSelections.length && this.$emit('refreshSelectCouponList', this.dataListSelections[0])
+        this.dataListSelections = []
+        this.visible = false
+        return
+      }
+      // 多选
+      let coupons = []
+      // console.log('this.dataListSelections', this.dataListSelections, this.dataListSelections.length < 1)
+      if (this.dataListSelections.length < 1) {
+        // this.$emit('refreshSelectCouponList', [])
+      } else {
+        this.dataListSelections.forEach(item => {
+          let couponIndex = coupons.findIndex((coupon) => coupon.couponId === item.couponId)
+          if (couponIndex === -1) {
+            coupons.push({ couponId: item.couponId, couponName: item.couponName, subTitle: item.subTitle, limitNum: item.limitNum, eachObtain: item.eachObtain })
+          }
+        })
+        // this.$emit('refreshSelectCouponList', coupons)
+      }
+      this.dataForm.coupons = coupons
+      this.dataListSelections = []
+      this.confirm()
     },
     confirm: Debounce(function () {
       if (!this.dataForm.userIds) {
@@ -209,7 +333,7 @@ export default {
       }).catch((e) => {
       })
     }, 1000),
-    handleChange(row, index) {
+    handleChange (row, index) {
       this.$set(this.dataList, index, this.dataList[index])
     }
   }
@@ -225,7 +349,6 @@ export default {
   border-radius: 4px;
   font-size: 14px;
 }
-
 .Classification {
   float: left;
   margin-left: 10px;
@@ -235,16 +358,13 @@ export default {
   border-radius: 4px;
   font-size: 14px;
 }
-
 .select-coupon-dialog {
   .el-form-item {
     margin-bottom: 0;
   }
-
   .el-input.el-input--small {
-
+    width: 200px;
   }
-
   .main-container {
     margin-bottom: 20px;
   }
