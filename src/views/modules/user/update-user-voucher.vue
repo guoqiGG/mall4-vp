@@ -1,145 +1,60 @@
 <template>
   <div>
-    <el-dialog
-      title="选择礼品券"
-      :visible.sync="visible"
-      width="50%"
-      class="select-coupon-dialog"
-    >
+    <el-dialog title="选择礼品券" :visible.sync="visible" width="50%" class="select-voucher-dialog">
       <el-form @submit.native.prevent :inline="true" :model="searchForm" class="demo-form-inline form">
         <el-form-item>
-          <el-input
-            v-model="couponName"
-            size="small"
-            :placeholder="$t('user.couponTip1')"
-            clearable
-          ></el-input>
+          <el-input v-model="name" size="small" placeholder="请输入礼品券名称搜索" clearable></el-input>
         </el-form-item>
         <el-form-item>
-          <div
-            class="default-btn primary-btn"
-            @click="searchChange"
-          >{{$t("pictureManager.query")}}</div>
+          <div class="default-btn primary-btn" @click="searchChange">{{ $t("pictureManager.query") }}</div>
         </el-form-item>
       </el-form>
       <div class="main-container">
         <div class="prods-select-body table-con">
-          <el-table
-            ref="couponTable"
-            :data="dataList"
-            header-cell-class-name="table-header"
-            row-class-name="table-row-low"
-            v-loading="dataListLoading"
-            @selection-change="selectChangeHandle"
-            style="width: 100%;"
-          >
+          <el-table ref="voucherTable" :data="dataList" header-cell-class-name="table-header"
+            row-class-name="table-row-low" v-loading="dataListLoading" @selection-change="selectChangeHandle"
+            style="width: 100%;">
             <el-table-column v-if="isSingle" width="50">
               <template slot-scope="scope">
                 <div>
-                  <el-radio
-                    :label="scope.row.couponId"
-                    v-model="singleSelectCouponId"
-                    @change.native="getSelectProdRow(scope.row)"
-                  >&nbsp;</el-radio>
+                  <el-radio :label="scope.row.id" v-model="singleSelectVoucherId"
+                    @change.native="getSelectProdRow(scope.row)">&nbsp;</el-radio>
                 </div>
               </template>
             </el-table-column>
-            <el-table-column
-              v-if="!isSingle"
-              type="selection"
-              width="50"
-            ></el-table-column>
-            <el-table-column
-              prop="name"
-              label="礼品券名称"
-              width="200"
-            >
+            <el-table-column v-if="!isSingle" type="selection" width="50"></el-table-column>
+            <el-table-column prop="name" label="礼品券名称" width="200">
               <template slot-scope="scope">
-                <span class="table-cell-text"> {{scope.row.name}} </span>
+                <span class="table-cell-text"> {{ scope.row.name }} </span>
               </template>
             </el-table-column>
-            <!-- <el-table-column
-              prop="subTitle"
-              :label="$t('user.couponDscription')"
-            >
-              <template slot-scope="scope">
-                <span class="table-cell-text"> {{scope.row.subTitle}} </span>
-              </template></el-table-column> -->
-            <!-- <el-table-column
-              prop="couponType"
-              :label="$t('coupon.couponType')"
-            ></el-table-column> -->
-            <el-table-column
-              prop="number"
-              :label="$t('user.stockNum')"
-            ></el-table-column>
-            <el-table-column
-              prop="collar"
-              :label="$t('user.couponUpperLimit')"
-            ></el-table-column>
-            <el-table-column
-              align="center"
-              :label="$t('user.perRecevies')"
-              width="160"
-            >
+            <el-table-column prop="number" label="库存数量"></el-table-column>
+            <el-table-column prop="collar" label="领券上限"></el-table-column>
+            <el-table-column align="center" label="每人发放" width="160">
               <template slot="header">
-                <span>{{$t('user.perRecevies')}}</span>
-                <el-popover
-                  placement="top"
-                  width="200"
-                  trigger="hover"
-                  :content="$t('user.couponTip2')"
-                >
+                <span>每人发放</span>
+                <el-popover placement="top" width="200" trigger="hover" content="不超过每人限领，不超过剩余库存">
                   <i class="el-icon-question" slot="reference"></i>
                 </el-popover>
               </template>
               <template slot-scope="scope">
-                <el-input-number
-                  size="mini"
-                  v-model="scope.row.eachObtain"
-                  controls-position="right"
-                  @change="handleChange(scope.row,scope.$index)"
-                  :min="scope.row.number>0?1:0"
-                  :max=" scope.row.number>0?(scope.row.number >= scope.row.collar ? scope.row.collar:scope.row.number):0"
-                ></el-input-number>
+                <el-input-number size="mini" v-model="scope.row.eachObtain" controls-position="right"
+                  @change="handleChange(scope.row, scope.$index)" :min="scope.row.number > 0 ? 1 : 0"
+                  :max="scope.row.number > 0 ? (scope.row.number >= scope.row.collar ? scope.row.collar : scope.row.number) : 0"></el-input-number>
               </template>
             </el-table-column>
           </el-table>
         </div>
-        <el-pagination
-          v-if="dataList.length"
-          @size-change="sizeChangeHandle"
-          @current-change="currentChangeHandle"
-          :current-page="page.pageIndex"
-          :page-sizes="[10, 20, 50, 100]"
-          :page-size="page.pageSize"
-          :total="page.total"
-          layout="total, sizes, prev, pager, next, jumper"
-        ></el-pagination>
+        <el-pagination v-if="dataList.length" @size-change="sizeChangeHandle" @current-change="currentChangeHandle"
+          :current-page="page.pageIndex" :page-sizes="[10, 20, 50, 100]" :page-size="page.pageSize" :total="page.total"
+          layout="total, sizes, prev, pager, next, jumper"></el-pagination>
         <!-- <div v-if="tagList.length < 1">暂无数据</div> -->
       </div>
-
-      <!-- 分页 -->
-      <!-- <el-pagination
-        v-if="dataList.length"
-        @size-change="sizeChangeHandle"
-        @current-change="currentChangeHandle"
-        :current-page="page.pageIndex"
-        :page-sizes="[10, 20, 50, 100]"
-        :page-size="page.pageSize"
-        :total="page.total"
-        layout="total, sizes, prev, pager, next, jumper"
-      ></el-pagination>-->
-      <!-- /分页 -->
-              <el-alert
-                :title="this.$i18n.t('publics.sendVoucherTips')"
-          type="warning"
-          show-icon
-          :closable="false">
-        </el-alert>
+      <el-alert :title="this.$i18n.t('publics.sendVoucherTips')" type="warning" show-icon :closable="false">
+      </el-alert>
       <span slot="footer">
-        <div @click="visible = false" class="default-btn">{{$t('remindPop.cancel')}}</div>
-        <div class="default-btn primary-btn" @click="submitProds()">{{$t('remindPop.confirm')}}</div>
+        <div @click="visible = false" class="default-btn">{{ $t('remindPop.cancel') }}</div>
+        <div class="default-btn primary-btn" @click="submitProds()">{{ $t('remindPop.confirm') }}</div>
       </span>
     </el-dialog>
   </div>
@@ -150,13 +65,13 @@
 import { Debounce } from '@/utils/debounce'
 export default {
 
-  data () {
+  data() {
     return {
       visible: false,
       confirmLoad: false,
       dataForm: {
         userIds: [],
-        coupons: []
+        gifts: []
       },
       dataList: [], // 标签
       dataRule: {
@@ -168,7 +83,7 @@ export default {
       },
       dataListLoading: false,
       searchForm: {},
-      couponName: null,
+      name: null,
       dataListSelections: []
     }
   },
@@ -179,42 +94,37 @@ export default {
       default: '',
       type: String
     },
-    // 获取方式 null:默认（客户领取+平台发放） 0=客户领取 1=平台发放
-    getWay: {
-      default: null,
-      type: Number
-    },
-    isSingle: {
+     isSingle: {
       default: false,
       type: Boolean
     },
     // 最大上传数量
-    limit: {
+    collar: {
       default: 9,
       type: Number
     }
   },
-  mounted () {
+  mounted() {
   },
   methods: {
-    init (ids) {
+    init(ids) {
       this.visible = true
       this.dataForm.userIds = ids
       this.getDataList()
     },
     // 每页数
-    sizeChangeHandle (val) {
+    sizeChangeHandle(val) {
       this.page.pageSize = val
       this.page.currentPage = 1
       this.getDataList(this.page)
     },
     // 当前页
-    currentChangeHandle (val) {
+    currentChangeHandle(val) {
       this.page.currentPage = val
       this.getDataList(this.page)
     },
-    // 分页获取标签
-    getDataList (page) {
+    // 分页获取礼品券列表
+    getDataList(page) {
       this.dataListLoading = true
       this.$http({
         url: this.$http.adornUrl('/platform/search/prod/get/list'),
@@ -231,9 +141,6 @@ export default {
       }).then(({ data }) => {
         this.dataList = data.records
         this.dataList.forEach(item => {
-          // 平台投放 / 用户领取
-          item.couponType = item.couponType === 1 ? this.$t('coupon.cashCoupon') : (item.couponType === 2 ? this.$t('coupon.discountVoucher') : (item.couponType === 3 ? this.$t('coupon.coinCertificate') : ''))
-          // item.eachObtain = 1
           this.$set(item, 'eachObtain', 1)
         })
         this.page.total = data.total
@@ -241,27 +148,28 @@ export default {
       })
     },
     // 搜索
-    searchChange () {
-      this.searchForm.couponName = this.couponName
+    searchChange() {
+      this.searchForm.name = this.name
       this.getDataList(this.page)
     },
     // 单选商品事件
-    getSelectProdRow (row) {
-      // console.log('aa')
+    getSelectProdRow(row) {
+      console.log('aa',row)
       this.dataListSelections = [row]
     },
     // 多选
     // 多选点击事件
-    selectChangeHandle (selection) {
+    selectChangeHandle(selection) {
+      console.log('bb',selection)
       this.dataList.forEach((tableItem) => {
-        let selectedProdIndex = selection.findIndex((selectedCoupon) => {
-          if (!selectedCoupon) {
+        let selectedProdIndex = selection.findIndex((selectedVoucher) => {
+          if (!selectedVoucher) {
             this.dataListSelections = []
             return false
           }
-          return selectedCoupon.couponId === tableItem.couponId
+          return selectedVoucher.id === tableItem.id
         })
-        let dataSelectedProdIndex = this.dataListSelections.findIndex((dataSelectedCoupon) => dataSelectedCoupon.couponId === tableItem.couponId)
+        let dataSelectedProdIndex = this.dataListSelections.findIndex((dataselectedVoucher) => dataselectedVoucher.id === tableItem.id)
         if (selectedProdIndex > -1 && dataSelectedProdIndex === -1) {
           this.dataListSelections.push(tableItem)
         } else if (selectedProdIndex === -1 && dataSelectedProdIndex > -1) {
@@ -270,29 +178,28 @@ export default {
       })
     },
     // 确定事件
-    submitProds () {
+    submitProds() {
       // 商品单选的情况
       if (this.isSingle) {
-        this.dataListSelections.length && this.$emit('refreshSelectCouponList', this.dataListSelections[0])
+        this.dataListSelections.length && this.$emit('refreshSelectVoucherList', this.dataListSelections[0])
         this.dataListSelections = []
         this.visible = false
         return
       }
       // 多选
-      let coupons = []
-      // console.log('this.dataListSelections', this.dataListSelections, this.dataListSelections.length < 1)
+      let vouchers = [] 
       if (this.dataListSelections.length < 1) {
-        // this.$emit('refreshSelectCouponList', [])
       } else {
         this.dataListSelections.forEach(item => {
-          let couponIndex = coupons.findIndex((coupon) => coupon.couponId === item.couponId)
-          if (couponIndex === -1) {
-            coupons.push({ couponId: item.couponId, couponName: item.couponName, subTitle: item.subTitle, limitNum: item.limitNum, eachObtain: item.eachObtain })
+          let voucherIndex = vouchers.findIndex((voucher) => voucher.giftId === item.id)
+          if (voucherIndex === -1) {
+            console.log('111',item.id)
+            vouchers.push({ giftId: item.id,  eachObtain: item.eachObtain })
           }
         })
-        // this.$emit('refreshSelectCouponList', coupons)
       }
-      this.dataForm.coupons = coupons
+      
+      this.dataForm.gifts = vouchers
       this.dataListSelections = []
       this.confirm()
     },
@@ -300,23 +207,24 @@ export default {
       if (!this.dataForm.userIds) {
         return
       }
-      if (!this.dataForm.coupons || !this.dataForm.coupons.length) {
-        return this.$message.error(this.$t('coupon.pleaseSelectCoupon'))
+      if (!this.dataForm.gifts || !this.dataForm.gifts.length) {
+        return this.$message.error('请选择礼品券')
       }
       this.confirmLoad = true
-      let coupons = []
-      this.dataForm.coupons.forEach(element => {
+      let vouchers = []
+      this.dataForm.gifts.forEach(element => {
+        console.log(222,element.id)
         let obj = {}
-        obj.couponId = element.couponId
-        obj.nums = element.eachObtain
-        coupons.push(obj)
+        obj.giftId = element.giftId
+        obj.eachObtain = element.eachObtain
+        vouchers.push(obj)
       })
-      this.dataForm.coupons = coupons
+      this.dataForm.gifts = vouchers
       let param = this.dataForm
       console.log(param)
       this.$http({
-        url: this.$http.adornUrl(`/platform/coupon/sendUserCoupon`),
-        method: 'put',
+        url: this.$http.adornUrl(`/platform/search/prod/user/gift/add`),
+        method: 'post',
         data: this.$http.adornData(param)
       }).then(({ data }) => {
         this.active = []
@@ -333,7 +241,7 @@ export default {
       }).catch((e) => {
       })
     }, 1000),
-    handleChange (row, index) {
+    handleChange(row, index) {
       this.$set(this.dataList, index, this.dataList[index])
     }
   }
@@ -349,6 +257,7 @@ export default {
   border-radius: 4px;
   font-size: 14px;
 }
+
 .Classification {
   float: left;
   margin-left: 10px;
@@ -358,13 +267,16 @@ export default {
   border-radius: 4px;
   font-size: 14px;
 }
-.select-coupon-dialog {
+
+.select-voucher-dialog {
   .el-form-item {
     margin-bottom: 0;
   }
+
   .el-input.el-input--small {
     width: 200px;
   }
+
   .main-container {
     margin-bottom: 20px;
   }

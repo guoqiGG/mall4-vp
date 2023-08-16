@@ -1,8 +1,8 @@
 <template>
   <div>
     <el-dialog :title="!dataForm.userId
-        ? this.$i18n.t('sysManagement.add')
-        : this.$i18n.t('user.details')
+      ? this.$i18n.t('sysManagement.add')
+      : this.$i18n.t('user.details')
       " :close-on-click-modal="false" :visible.sync="visible" @close="handleDialogClose" class="user-update-dialog"
       width="70%">
       <!-- 用户信息 -->
@@ -42,6 +42,11 @@
                     }}</span>
                   </el-form-item>
                 </el-col>
+                <el-col :span="8">
+                  <el-form-item label="会员分组:" size="mini" prop="status">
+                    {{ dataForm.userGroup }}
+                  </el-form-item>
+                </el-col>
                 <el-col :span="9">
                   <el-form-item :label="$t('user.registrationTime') + ':'" prop="userRegtime" size="mini">
                     <span>{{ dataForm.userRegtime }}</span>
@@ -61,6 +66,12 @@
                   <div v-if="isAuth('platform:coupon:sendUserVoucher')" @click="updateVoucher()"
                     class="default-btn primary-btn">
                     {{ $t("user.sendVouchers") }}
+                  </div>
+                </el-col>
+                <el-col :span="$t('language') == '语言' ? 4 : 5">
+                  <div v-if="isAuth('platform:user:updateUserGroup')" @click="updateUserGroup()"
+                    class="default-btn primary-btn">
+                    修改分组
                   </div>
                 </el-col>
                 <el-col :span="$t('language') == '语言' ? 5 : 7">
@@ -145,9 +156,26 @@
               <br />
             </div>
             <div>
-              <h4>{{ $t("user.vouchers") }}</h4>
+              <h4>
+                {{ $t("user.vouchers") }}
+                <el-popover placement="top" width="200" trigger="hover" content="不统计用户手动删除和超过30天的被系统删除过期礼品券的部分">
+                  <i class="el-icon-question" slot="reference"></i>
+                </el-popover>
+              </h4>
               <br />
-              <span>当前拥有：0&nbsp;&nbsp;{{ $t("marketing.piece") }}</span>
+              <div>
+                <span>{{ $t("user.notUsed") }}：{{
+                  voucherUserParam.beUsed
+                }}&nbsp;&nbsp;{{ $t("marketing.piece") }}</span>
+                <span style="margin-left: 60px">{{ $t("user.used") }}：{{
+                  voucherUserParam.used
+                }}&nbsp;&nbsp;{{ $t("marketing.piece") }}</span>
+                <br />
+                <span>{{ $t("user.invalid") }}：{{
+                  voucherUserParam.expired
+                }}&nbsp;&nbsp;{{ $t("marketing.piece") }}</span>
+              </div>
+              <br />
             </div>
           </el-main>
         </el-container>
@@ -213,6 +241,9 @@
     <!-- 送礼品券弹窗 -->
     <update-voucher v-if="updateVoucherVisible" ref="updateVoucher" :getWay="1"
       @refreshDataList="refreshChange"></update-voucher>
+      <!-- 修改分组 -->
+    <update-user-group v-if="updateUserGroupVisible" ref="updateUserGroup"
+      @refreshDataList="refreshChange"></update-user-group>
     <!-- 打标签弹窗 -->
     <update-tags v-if="updateTagsVisible" ref="updateTags" @refreshDataList="refreshChange"></update-tags>
     <!-- 修改用户基本信息 -->
@@ -223,6 +254,7 @@
 <script>
 import UpdateCoupon from './update-user-copon'
 import UpdateVoucher from './update-user-voucher'
+import updateUserGroup from './update-user-group'
 import UpdateTags from './update-user-tags'
 import TradeDetail from './trade-detail.vue'
 import ScoreDetail from './score-detail.vue'
@@ -234,6 +266,7 @@ export default {
   components: {
     UpdateCoupon,
     UpdateVoucher,
+    updateUserGroup,
     UpdateTags,
     TradeDetail,
     ScoreDetail,
@@ -250,6 +283,7 @@ export default {
       statusVisible: true,
       updateCouponVisible: false,
       updateVoucherVisible: false,
+      updateUserGroupVisible: false,
       updateUserInfoVisible: false,
       updateTagsVisible: false,
       dataForm: {
@@ -262,6 +296,11 @@ export default {
         couponUsableNums: 0,
         couponUsedNums: 0,
         couponExpiredNums: 0
+      },
+      voucherUserParam: {
+        beUsed: 0,
+        used: 0,
+        expired: 0
       },
       // 分销信息
       distributionUser: {
@@ -304,6 +343,7 @@ export default {
           this.couponUserParam = this.dataForm.couponUserParam
           this.userTag = this.dataForm.userTagParam
           this.getDistribution()
+          this.getUserHaveVouchers(this.dataForm.userId)
           this.initTradeDetail(this.dataForm.userId)
           this.initScoreDetail(this.dataForm.userId)
           this.initBalanceDetail(this.dataForm.userId)
@@ -317,6 +357,18 @@ export default {
     // 修改后刷新
     refreshChange() {
       this.init(this.dataForm.userId)
+    },
+    // 获取用户拥有礼品券数量
+    getUserHaveVouchers(userId) {
+      this.$http({
+        url: this.$http.adornUrl('/platform/search/prod/get/user/gift/list'),
+        method: 'get',
+        params: this.$http.adornParams(
+          Object.assign({ userId: userId }), false
+        )
+      }).then(({ data }) => {
+        this.voucherUserParam = data
+      })
     },
     // 移除标签
     handleClose(tag) {
@@ -387,6 +439,15 @@ export default {
         this.$refs.updateVoucher.init(ids)
       })
     },
+    // 修改分组
+    updateUserGroup(id) {
+      var ids = id ? [id] : [this.dataForm.userId]
+      this.updateUserGroupVisible = true
+      this.$nextTick(() => {
+        this.$refs.updateUserGroup.init(ids)
+      })
+    },
+
     // 修改用户信息
     updateUserInfo() {
       this.updateUserInfoVisible = true

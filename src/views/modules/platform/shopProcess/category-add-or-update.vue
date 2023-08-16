@@ -5,43 +5,23 @@
       <!-- 左边-全部分类列表 -->
       <div class="left-box">
         <div class="search-box">
-          <input
-            v-model="categoryName" class="search-input"
-            :placeholder="this.$i18n.t('publics.categoryInputTips')"
-            size="small"
-          >
+          <input v-model="categoryName" class="search-input" :placeholder="this.$i18n.t('publics.categoryInputTips')"
+            size="small">
         </div>
         <div class="categoryTree-box">
-          <el-tree
-            ref="categoryTree"
-            v-loading="loading"
-            :data="categorgTreeData"
-            node-key="categoryId"
-            :filter-node-method="filterNode"
-            :props="categoryListTreeProps"
-            class="filter-tree"
-            show-checkbox
-            highlight-current
-            :render-after-expand="false"
-            icon-class="el-icon-arrow-right"
-            :default-expanded-keys="signCategoryParentIds"
-            :default-checked-keys="signCategoryIds"
-            @check-change="handleCheckChange"
-          >
+          <el-tree ref="categoryTree" v-loading="loading" :data="categorgTreeData" node-key="categoryId"
+            :filter-node-method="filterNode" :props="categoryListTreeProps" class="filter-tree" show-checkbox
+            highlight-current :render-after-expand="false" icon-class="el-icon-arrow-right"
+            :default-expanded-keys="signCategoryParentIds" :default-checked-keys="signCategoryIds"
+            @check-change="handleCheckChange">
             <template slot-scope="{ node, data }">
               <el-tooltip
                 :content="data.grade === 2 ? data.categoryName + ' ' + data.deductionRate + '%' : data.categoryName"
-                placement="right"
-                effect="light"
-                :open-delay="500"
-                class="custom-tree-node"
-              >
-                  <span>
-                    <span
-                      v-html="$options.filters.filterKey(data, categoryName, node)"
-                    ></span>
-                    <span v-if="data.grade === 2">{{ ' ' + data.deductionRate + '%' }}</span>
-                  </span>
+                placement="right" effect="light" :open-delay="500" class="custom-tree-node">
+                <span>
+                  <span v-html="$options.filters.filterKey(data, categoryName, node)"></span>
+                  <span v-if="data.grade === 2">{{ ' ' + data.deductionRate + '%' }}</span>
+                </span>
               </el-tooltip>
             </template>
           </el-tree>
@@ -50,64 +30,32 @@
 
       <!-- 右边-选中类目表格 -->
       <div ref="tableBox" class="right-box table-box">
-        <el-table
-          :data="signCategories"
-          header-cell-class-name="table-header"
-          style="width: 100%"
-        >
-          <el-table-column
-            prop="categoryName"
-            :label="this.$i18n.t('shopProcess.categoryName')"
-          />
-          <el-table-column
-            prop="parentName"
-            :label="this.$i18n.t('shopProcess.parentCategoryName')"
-          />
-          <el-table-column
-            prop="platformRate"
-            :label="this.$i18n.t('shopProcess.categoryRate')"
-          >
+        <el-table :data="signCategories" header-cell-class-name="table-header" style="width: 100%">
+          <el-table-column prop="categoryName" :label="this.$i18n.t('shopProcess.categoryName')" />
+          <el-table-column prop="parentName" :label="this.$i18n.t('shopProcess.parentCategoryName')" />
+          <el-table-column prop="platformRate" :label="this.$i18n.t('shopProcess.categoryRate')">
             <template slot-scope="{ row }">
               <span v-if="row.platformRate || row.platformRate === 0">{{ row.platformRate }} %</span>
               <span v-else>--</span>
             </template>
           </el-table-column>
-          <el-table-column
-            prop="customizeRate"
-            :label="this.$i18n.t('shopProcess.customRate')"
-          >
+          <el-table-column prop="customizeRate" :label="this.$i18n.t('shopProcess.customRate')">
             <template slot-scope="scope">
               <div class="custom-rate">
-                <el-input
-                  v-model="scope.row.customizeRate"
-                  type="number"
-                  :min="0"
-                  :max="99.9999"
-                  :precision="4"
-                  placeholder="0~99.9999"
-                  size="small"
-                  style="width: 80%;"
-                  @blur="checkCustomizeRateInt(scope)"
-                />%
+                <el-input v-model="scope.row.customizeRate" type="number" :min="0" :max="99.9999" :precision="4"
+                  placeholder="0~99.9999" size="small" style="width: 80%;" @blur="checkCustomizeRateInt(scope)" />%
               </div>
             </template>
           </el-table-column>
-          <el-table-column
-            prop="qualifications"
-            :label="this.$i18n.t('shopProcess.categoryQualifications')"
-            width="200px"
-          >
+          <el-table-column prop="qualifications" :label="this.$i18n.t('shopProcess.categoryQualifications')"
+            width="200px">
             <template slot-scope="scope">
               <div class="business-qual">
                 <imgs-upload v-model="scope.row.qualifications" :limit="2" :prompt="false" />
               </div>
             </template>
           </el-table-column>
-          <el-table-column
-            prop="address"
-            :label="this.$i18n.t('remindPop.operation')"
-            align="center"
-          >
+          <el-table-column prop="address" :label="this.$i18n.t('remindPop.operation')" align="center">
             <template slot-scope="scope">
               <el-button type="text" @click="deleteSelectedCategory(scope)">{{ $t('remindPop.delete') }}</el-button>
             </template>
@@ -127,7 +75,7 @@ import imgsUpload from '@/components/imgs-upload'
 let vueApp = null
 export default {
   filters: {
-    filterKey (data, key, node) {
+    filterKey(data, key, node) {
       // 获取结点分类名称
       let categoryName = data.categoryName
       if (!vueApp.isInitialize) {
@@ -167,12 +115,12 @@ export default {
   props: {
     signCategoryList: {
       type: Array,
-      default () {
+      default() {
         return []
       }
     }
   },
-  data () {
+  data() {
     return {
       message: false,
       // 全部分类
@@ -202,21 +150,21 @@ export default {
     }
   },
 
-  beforeCreate () {
+  beforeCreate() {
     vueApp = this
   },
 
   watch: {
     // 已选分类列表
-    signCategories () {
+    signCategories() {
       this.$emit('getSignCategoryList', this.signCategories)
     },
-    categoryName (val) {
+    categoryName(val) {
       this.$refs.categoryTree.filter(val)
     }
   },
 
-  mounted () {
+  mounted() {
     this.signCategoryParentIdSet = new Set()
     this.getPlatformCategory()
     this.getIds(this.signCategories, 0)
@@ -226,7 +174,7 @@ export default {
     /**
      * 获取平台分类列表，并转换成树形结构
      */
-    getPlatformCategory () {
+    getPlatformCategory() {
       this.$http({
         url: this.$http.adornUrl('/prod/category/listCategory'),
         method: 'get',
@@ -236,18 +184,18 @@ export default {
       }).then(({ data }) => {
         // 过滤下线分类
         data = data.filter(el => el.status !== 0)
-
+        console.log('分类', data)
         this.loading = false
         this.patformCategories = data
         let categorgTreeData = treeDataTranslate(data, 'categoryId', 'parentId')
         // 过滤没有下级分类的类目
-        categorgTreeData = this.removeNotThirdCategoryItem(categorgTreeData)
-          // this.categorgTreeData = this.disabledParentCategory(categorgTreeData)
+        // categorgTreeData = this.removeNotThirdCategoryItem(categorgTreeData)
+        // this.categorgTreeData = this.disabledParentCategory(categorgTreeData)
         this.categorgTreeData = categorgTreeData
       })
     },
 
-    getIds (data, sts) {
+    getIds(data, sts) {
       this.signCategoryIds.splice(0, this.signCategoryIds.length)
       this.signCategoryParentIds.splice(0, this.signCategoryParentIds.length)
       data.forEach(el => {
@@ -267,7 +215,7 @@ export default {
     /**
      * 搜索结点，该方法只起标记作用，
      */
-    filterNode (value, data, node) {
+    filterNode(value, data, node) {
       this.isInitialize = true
       node.markIsExpanded = false
       return true
@@ -276,20 +224,20 @@ export default {
     /**
      * 把categoryListTree第三级分类外，其余全部禁用
      */
-    disabledParentCategory (treeData) {
-      for (let i = 0; i < treeData.length; i++) {
-        if (treeData[i].children) {
-          treeData[i].disabled = true
-          treeData[i].children = this.disabledParentCategory(treeData[i].children)
-        }
-      }
+    disabledParentCategory(treeData) {
+      // for (let i = 0; i < treeData.length; i++) {
+      //   if (treeData[i].children) {
+      //     treeData[i].disabled = true
+      //     treeData[i].children = this.disabledParentCategory(treeData[i].children)
+      //   }
+      // }
       return treeData
     },
 
     /**
      * 去除没有三级分类的类目
      */
-    removeNotThirdCategoryItem (treeData) {
+    removeNotThirdCategoryItem(treeData) {
       const firstCategory = treeData
       let length = firstCategory.length
       for (let i = 0, index = 0; i < length; i++) {
@@ -313,10 +261,11 @@ export default {
      * @param {Object} nodeObj 该节点所对应的对象
      * @param {Boolean} nodeStatus 节点本身是否被选中
      */
-    handleCheckChange (nodeObj, nodeStatus) {
-      if (nodeObj.grade !== 2) {
-        return
-      }
+    handleCheckChange(nodeObj, nodeStatus) {
+      console.log('节点信息', nodeObj)
+      // if (nodeObj.grade !== 2) {
+      //   return
+      // }
       if (nodeStatus) {
         if (this.signCategories.length === 200) {
           if (!this.message) {
@@ -375,7 +324,7 @@ export default {
     /**
      * 删除已选分类
      */
-    deleteSelectedCategory (scope) {
+    deleteSelectedCategory(scope) {
       const index = scope.$index
       this.signCategories.splice(index, 1)
       this.getIds(this.signCategories, 1)
@@ -384,7 +333,7 @@ export default {
     /**
      * 自定义扣率输入框判断
      */
-    checkCustomizeRateInt (scope) {
+    checkCustomizeRateInt(scope) {
       const { row, $index } = scope
       const customizeRate = parseFloat(row.customizeRate)
       if (customizeRate || customizeRate === 0) {
@@ -417,12 +366,14 @@ export default {
     align-items: flex-start;
     justify-content: flex-start;
     color: #606266;
+
     // 左边-全部分类列表
     .left-box {
       display: block;
       width: 20%;
       min-width: 200px;
       margin-right: 10px;
+
       .search-box {
         position: relative;
         // width: 262px;
@@ -432,6 +383,7 @@ export default {
         border: 1px solid #E8E9EC;
         box-sizing: border-box;
         margin-bottom: 10px;
+
         .search-input {
           width: 100%;
           height: 100%;
@@ -440,11 +392,13 @@ export default {
           outline: none;
           box-sizing: border-box;
         }
+
         input::-webkit-input-placeholder {
           font-size: 14px;
           color: #999;
         }
       }
+
       .categoryTree-box {
         height: 450px;
         font-size: 14px;
@@ -456,28 +410,34 @@ export default {
         padding: 10px 0;
 
         overflow: auto;
+
         /* 谷歌隐藏滚动条 */
         &::-webkit-scrollbar {
           display: none;
         }
+
         /* 隐藏滚动条，当IE下溢出，仍然可以滚动 */
         /* IE隐藏滚动条 */
         -ms-overflow-style: none;
         /* 火狐隐藏滚动条 */
         overflow: -moz-scrollbars-none;
 
-        & >>> .filter-tree {
+        &>>>.filter-tree {
           padding-right: 10px;
+
           .el-tree-node__expand-icon {
             position: absolute;
             right: 2%;
           }
+
           .el-checkbox {
             margin-left: 12px;
           }
+
           .el-tree-node__expand-icon.expanded {
             transform: rotate(-90deg);
           }
+
           .custom-tree-node {
             display: inline-block;
             max-width: 230px;
@@ -503,13 +463,14 @@ export default {
 
       // 上传图片样式
       .business-qual {
-        & >>> .mul-pic-upload .el-upload-list--picture-card .el-upload-list__item {
+        &>>>.mul-pic-upload .el-upload-list--picture-card .el-upload-list__item {
           width: 80px;
           height: 80px;
           line-height: 80px;
           margin-bottom: 0;
         }
-        & >>> .mul-pic-upload .el-upload--picture-card {
+
+        &>>>.mul-pic-upload .el-upload--picture-card {
           width: 80px;
           height: 80px;
           line-height: 80px;
@@ -517,21 +478,27 @@ export default {
       }
 
       // 表格
-      & >>> .el-table__body-wrapper {
+      &>>>.el-table__body-wrapper {
         max-height: 445px;
         overflow-y: scroll;
-        scrollbar-width: none; /* Firefox */
-        -ms-overflow-style: none; /* IE 10+ */
+        scrollbar-width: none;
+        /* Firefox */
+        -ms-overflow-style: none;
+        /* IE 10+ */
       }
-      & >>> .el-table__body-wrapper::-webkit-scrollbar {
-        display: none; /* Chrome Safari */
+
+      &>>>.el-table__body-wrapper::-webkit-scrollbar {
+        display: none;
+        /* Chrome Safari */
       }
-      & >>> .el-table__body {
+
+      &>>>.el-table__body {
         width: 100%;
       }
+
       // 自定义扣率
       .custom-rate {
-        & >>> .el-input {
+        &>>>.el-input {
           .el-input__inner {
             padding: 0 5px;
             padding-right: 0;
@@ -543,38 +510,44 @@ export default {
 }
 </style>
 <style lang="scss">
-
 .category-components {
   .filter-tree {
     // margin-top: 14px;
     // border: 1px solid #E9EAEC;
     box-sizing: border-box;
+
     // overflow-y: scroll;
     .el-tree-node__content {
       padding-right: 10px;
     }
+
     .el-tree-node__expand-icon {
       position: absolute;
       right: 2%;
     }
+
     .el-checkbox {
       margin-left: 12px;
     }
+
     .el-tree-node__expand-icon.expanded {
       transform: rotate(-90deg);
     }
+
     .custom-tree-node {
       display: inline-block;
       max-width: 185px;
       overflow: hidden;
-      text-overflow:ellipsis;
+      text-overflow: ellipsis;
       white-space: nowrap;
       font-size: 14px;
     }
+
     /* 谷歌隐藏滚动条 */
     &::-webkit-scrollbar {
       display: none;
     }
+
     /* 隐藏滚动条，当IE下溢出，仍然可以滚动 */
     /* IE隐藏滚动条 */
     -ms-overflow-style: none;

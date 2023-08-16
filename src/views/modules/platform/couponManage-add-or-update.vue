@@ -1,6 +1,6 @@
 <template>
   <el-dialog class="mod-coupon-add-or-update"
-    :title="dataForm.couponId ? $t('coupon.modifyCoupon') : $t('coupon.newCoupon')" :close-on-click-modal="false"
+    :title="dataForm.couponId ? $t('coupon.modifyCoupon')+111 : $t('coupon.newCoupon')+111" :close-on-click-modal="false"
     :before-close="beforeClose" :visible.sync="visible">
     <el-form @submit.native.prevent size="small" v-if="show" :model="dataForm" :rules="dataRule" ref="dataForm"
       @keyup.enter.native="dataFormSubmit()" :label-width="this.$i18n.t('language') === 'language' ? '170px' : '100px'">
@@ -312,10 +312,10 @@ export default {
           { required: true, message: this.$i18n.t('coupon.timeCannotBeEmpty'), trigger: 'blur' },
           { type: 'number', min: 1, message: this.$i18n.t('coupon.validDaysAlert'), trigger: 'blur' }
         ],
-        cashCondition: [
-          { required: true, message: this.$i18n.t('coupon.conditionBeEmpty'), trigger: 'blur' },
-          { validator: validate, trigger: 'blur' }
-        ],
+        // cashCondition: [
+        //   { required: true, message: this.$i18n.t('coupon.conditionBeEmpty'), trigger: 'blur' },
+        //   { validator: validate, trigger: 'blur' }
+        // ],
         validTimeType: [
           { required: true, message: this.$i18n.t('coupon.effectiveotBeEmpty'), trigger: 'blur' }
         ],
@@ -587,7 +587,7 @@ export default {
           this.dataForm.launchTime = this.dataForm.launchTime && this.launchTimeValue ? this.dataForm.launchTime + ' ' + this.launchTimeValue + ':00' : ''
           this.dataForm.startTime = this.dataForm.startTime && this.startTimeValue ? this.dataForm.startTime + ' ' + this.startTimeValue + ':00' : ''
           this.dataForm.endTime = this.dataForm.endTime && this.endTimeValue ? this.dataForm.endTime + ' ' + this.endTimeValue + ':00' : ''
-          if (this.dataForm.couponType === 1 && (parseFloat(this.dataForm.cashCondition) <= parseFloat(this.dataForm.reduceAmount))) {
+          if (this.dataForm.couponType === 1&& this.dataForm.cashCondition && (parseFloat(this.dataForm.cashCondition) < parseFloat(this.dataForm.reduceAmount))) {
             this.$message.error(this.$i18n.t('coupon.amounnCannotBe'))
             return false
           }

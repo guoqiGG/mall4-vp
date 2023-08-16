@@ -5,8 +5,8 @@
       <div class="text">
         {{
           dataForm.couponId
-          ? this.$i18n.t('marketing.modifyCoupon')
-          : this.$i18n.t('marketing.newCoupon')
+          ? this.$i18n.t('marketing.modifyCoupon')+11
+          : this.$i18n.t('marketing.newCoupon')+11
         }}
       </div>
     </div>
@@ -404,10 +404,10 @@ export default {
           { required: true, message: this.$i18n.t('formData.endTimeCannotBeEmpty'), trigger: 'blur' },
           { validator: validateTime, trigger: 'blur' }
         ],
-        cashCondition: [
-          { required: true, message: this.$i18n.t('marketing.conditionBeEmpty'), trigger: 'blur' },
-          { validator: validate, trigger: 'blur' }
-        ],
+        // cashCondition: [
+        //   { required: true, message: this.$i18n.t('marketing.conditionBeEmpty'), trigger: 'blur' },
+        //   { validator: validate, trigger: 'blur' }
+        // ],
         validTimeType: [
           { required: true, message: this.$i18n.t('marketing.effectiveotBeEmpty'), trigger: 'blur' }
         ],
@@ -587,7 +587,7 @@ export default {
           this.dataForm.launchTime = this.dataForm.launchTime && this.launchTimeValue ? this.dataForm.launchTime + ' ' + this.launchTimeValue + ':00' : ''
           this.dataForm.startTime = this.dataForm.startTime && this.startTimeValue ? this.dataForm.startTime + ' ' + this.startTimeValue + ':00' : ''
           this.dataForm.endTime = this.dataForm.endTime && this.endTimeValue ? this.dataForm.endTime + ' ' + this.endTimeValue + ':00' : ''
-          if (this.dataForm.couponType === 1 && (parseFloat(this.dataForm.cashCondition) <= parseFloat(this.dataForm.reduceAmount))) {
+          if (this.dataForm.couponType === 1 && this.dataForm.cashCondition && (parseFloat(this.dataForm.cashCondition) <= parseFloat(this.dataForm.reduceAmount))) {
             this.$message.error(this.$i18n.t('marketing.amounnCannotBe'))
             return false
           }

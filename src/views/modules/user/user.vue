@@ -44,10 +44,11 @@
 
     <div class="main-container">
       <div class="operation-bar">
+        <div v-if="isAuth('platform:user:updateUserGroup')" class="primary-btn default-btn" @click="updateUserGroup()"
+          :class="{ 'disabled-btn': dataListSelections.length <= 0 }">{{ $t('user.updateUserGroup') }}</div>
         <div v-if="isAuth('user:userLevel:updateGrowth')" class="primary-btn default-btn"
           :class="{ 'disabled-btn': dataListSelections.length <= 0 }" @click="updateGrowth()">{{ $t('user.updateGrowth')
-          }}
-        </div>
+          }}</div>
         <div class="primary-btn default-btn" @click="updateTags()"
           :class="{ 'disabled-btn': dataListSelections.length <= 0 }">{{ $t('user.tagging') }}</div>
         <div v-if="isAuth('user:userLevel:updateScore')" class="primary-btn default-btn" @click="updateScore()"
@@ -83,6 +84,7 @@
               <div>{{ scope.row.userMobile }}</div>
             </template>
           </el-table-column>
+          <el-table-column prop="userGroup" width="120" :label="$t('user.userGroup')" />
           <el-table-column prop="levelName" width="120" :label="$t('user.membershipLevel')" />
           <el-table-column prop="levelType" width="120" :label="$t('user.memberType')">
             <template slot-scope="scope">
@@ -151,14 +153,14 @@
     </div>
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="refreshChange"></add-or-update>
+    <update-user-group v-if="updateUserGroupVisible" ref="updateUserGroup" @refreshDataList="refreshChange"></update-user-group>
     <update-growth v-if="updateGrowthVisible" ref="updateGrowth" @refreshDataList="refreshChange"></update-growth>
     <update-score v-if="updateScoreVisible" ref="updateScore" @refreshDataList="refreshChange"></update-score>
     <update-tags v-if="updateTagsVisible" ref="updateTags" @refreshDataList="refreshChange"></update-tags>
     <update-balance v-if="updateBalanceVisible" ref="updateBalance" @refreshDataList="refreshChange"></update-balance>
     <update-coupon v-if="updateCouponVisible" ref="updateCoupon" :getWay="1"
       @refreshDataList="refreshChange"></update-coupon>
-    <update-voucher v-if="updateVoucherVisible" ref="updateVoucher" :getWay="1"
-      @refreshDataList="refreshChange"></update-voucher>
+    <update-voucher v-if="updateVoucherVisible" ref="updateVoucher" @refreshDataList="refreshChange"></update-voucher>
     <import-user v-if="importUserVisible" ref="importUser" @refreshDataList="refreshChange"></import-user>
   </div>
 </template>
@@ -166,6 +168,7 @@
 <script>
 import AddOrUpdate from './user-add-or-update'
 import UpdateGrowth from './update-user-growth'
+import updateUserGroup from './update-user-group'
 import UpdateScore from './update-user-score'
 import UpdateTags from './update-user-tags'
 import UpdateBalance from './update-user-balance'
@@ -208,6 +211,7 @@ export default {
       updateVoucherVisible: false,
       dataListSelections: [],
       addOrUpdateVisible: false,
+      updateUserGroupVisible: false,
       updateGrowthVisible: false,
       updateScoreVisible: false,
       updateTagsVisible: false,
@@ -262,6 +266,7 @@ export default {
   },
   components: {
     AddOrUpdate,
+    updateUserGroup,
     UpdateGrowth,
     UpdateScore,
     UpdateTags,
@@ -385,6 +390,20 @@ export default {
     selectionChange(val) {
       this.dataListSelections = val
     },
+    // 修改分组
+    updateUserGroup(id) {
+      if (this.dataListSelections.length <= 0) {
+        return
+      }
+      var ids = id ? [id] : this.dataListSelections.map(item => {
+        return item.userId
+      })
+      // console.log(ids)
+      this.updateUserGroupVisible = true
+      this.$nextTick(() => {
+        this.$refs.updateUserGroup.init(ids)
+      })
+    },
     // 修改成长值
     updateGrowth(id) {
       if (this.dataListSelections.length <= 0) {
@@ -399,7 +418,7 @@ export default {
         this.$refs.updateGrowth.init(ids)
       })
     },
-    // 修改成长值
+    // 修改积分
     updateScore(id) {
       if (this.dataListSelections.length <= 0) {
         return

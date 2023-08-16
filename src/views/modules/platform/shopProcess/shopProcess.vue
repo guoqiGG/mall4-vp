@@ -638,7 +638,7 @@
               <el-form @submit.native.prevent
                 ref="shopUserRegisterInfo"
                 :model="shopUserRegisterInfo"
-                :rules="shopUserRegisterRule"
+               
                 label-width="auto"
                 size="small"
               >
@@ -651,13 +651,13 @@
                 <el-form-item :label="this.$i18n.t('users.phoneNumber')" prop="mobile">
                   <div class="mobile-box">
                     <el-input v-model="shopUserRegisterInfo.mobile" class="mobile-int" maxlength="11" :placeholder="this.$i18n.t('shopProcess.mobileRule')">
-                      <div slot="append" class="mobile-btn" @click="getRegisterCode">{{ showGetCodeBtn ? $t('shop.getVerificationCode') : count + ' s' }}</div>
+                      <!-- <div slot="append" class="mobile-btn" @click="getRegisterCode">{{ showGetCodeBtn ? $t('shop.getVerificationCode') : count + ' s' }}</div> -->
                     </el-input>
                   </div>
                 </el-form-item>
-                <el-form-item :label="this.$i18n.t('home.verificationCode')" prop="validCode">
+                <!-- <el-form-item :label="this.$i18n.t('home.verificationCode')" prop="validCode">
                   <el-input v-model="shopUserRegisterInfo.validCode" :placeholder="this.$i18n.t('shop.pleaseEnteCode')" />
-                </el-form-item>
+                </el-form-item> -->
               </el-form>
             </div>
           </div>
@@ -1034,7 +1034,7 @@ export default {
         username: '',
         password: '',
         mobile: '',
-        validCode: ''
+        validCode: '1213446'
       },
       // 正在获取验证码
       waitingReceive: false,
@@ -1058,10 +1058,10 @@ export default {
           { required: true, message: this.$i18n.t('sys.mobilePhoneNoNull'), trigger: 'blur' },
           { validator: validateMobile, trigger: 'blur' }
         ],
-        validCode: [
-          { required: true, message: this.$i18n.t('home.capNoNull'), trigger: 'blur' },
-          { validator: validEmptyTab, trigger: 'blur' }
-        ]
+        // validCode: [
+        //   { required: true, message: this.$i18n.t('home.capNoNull'), trigger: 'blur' },
+        //   { validator: validEmptyTab, trigger: 'blur' }
+        // ]
       },
 
       // 定位
