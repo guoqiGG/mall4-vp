@@ -1,49 +1,26 @@
 <template>
-  <el-dialog
-    :title="!dataForm.id ? $t('sysManagement.add') : $t('sysManagement.modify')"
-    :close-on-click-modal="false"
-    :before-close="beforeClose"
-    :visible.sync="visible"
-  >
-    <el-form @submit.native.prevent
-      :model="dataForm"
-      :rules="dataRule"
-      ref="dataForm"
-      size="small"
-      @keyup.enter.native="dataFormSubmit()"
-      label-width="155px"
-    >
+  <el-dialog :title="!dataForm.id ? $t('sysManagement.add') : $t('sysManagement.modify')" :close-on-click-modal="false"
+    :before-close="beforeClose" :visible.sync="visible">
+    <el-form @submit.native.prevent :model="dataForm" :rules="dataRule" ref="dataForm" size="small"
+      @keyup.enter.native="dataFormSubmit()" label-width="155px">
       <el-form-item :label="$t('sysManagement.type')" prop="type">
-        <el-radio-group v-model="dataForm.type" @change="() => {dataForm.type === 0 ? dataForm.hidden = 0 : ''}">
-          <el-radio
-            v-for="(type, index) in dataForm.typeList"
-            :label="index"
-            :key="index"
-          >{{ type }}</el-radio>
+        <el-radio-group v-model="dataForm.type" @change="() => { dataForm.type === 0 ? dataForm.hidden = 0 : '' }">
+          <el-radio v-for="(type, index) in dataForm.typeList" :label="index" :key="index">{{ type }}</el-radio>
         </el-radio-group>
       </el-form-item>
       <!-- 语言选择框 -->
-      <el-form-item :label="this.$i18n.t('product.selectLanguage')" prop="selectLanguage" v-if="langItemList && langItemList.length > 1">
+      <el-form-item :label="this.$i18n.t('product.selectLanguage')" prop="selectLanguage"
+        v-if="langItemList && langItemList.length > 1">
         <el-select v-model="curLang" multiple :placeholder="$t('tip.select')" @change='selectLang' style="width: 500px;">
-          <el-option
-            v-for="item in langItemList"
-            :key="item.lang"
-            :label="item.name"
-            :value="item.lang">
+          <el-option v-for="item in langItemList" :key="item.lang" :label="item.name" :value="item.lang">
           </el-option>
         </el-select>
       </el-form-item>
       <!-- 名称 -->
-      <div v-for="(item,index) in menuLangList" :key="index">
+      <div v-for="(item, index) in menuLangList" :key="index">
         <el-form-item
-          :label="dataForm.typeList[dataForm.type] + (langItemList && langItemList.length > 1 ? '(' + item.langName + ')' : '')"
-        >
-          <el-input
-            maxlength="50"
-            size="small"
-            show-word-limit
-            v-model.trim="item.name"
-          ></el-input>
+          :label="dataForm.typeList[dataForm.type] + (langItemList && langItemList.length > 1 ? '(' + item.langName + ')' : '')">
+          <el-input maxlength="50" size="small" show-word-limit v-model.trim="item.name"></el-input>
         </el-form-item>
       </div>
       <!-- <el-form-item :label="dataForm.typeList[dataForm.type] + $t('publics.name')" prop="name">
@@ -65,70 +42,46 @@
         ></el-input>
       </el-form-item> -->
       <el-form-item :label="$t('sys.parentMenu')">
-        <el-cascader
-          expand-trigger="hover"
-          :options="menuList"
-          :props="menuListTreeProps"
-          change-on-select
-          :clearable="true"
-          size="small"
-          v-model="selectedMenu"
-          @change="handleSelectMenuChange"
-        ></el-cascader>
+        <el-cascader expand-trigger="hover" :options="menuList" :props="menuListTreeProps" change-on-select
+          :clearable="true" size="small" v-model="selectedMenu" @change="handleSelectMenuChange"></el-cascader>
       </el-form-item>
-      <el-form-item v-if="dataForm.type === 1" :label="$t('sysManagement.menuRouter')"  prop="url">
-        <el-input v-model="dataForm.url" :placeholder="$t('sysManagement.menuRouter')" maxlength="100" size="small" show-word-limit></el-input>
+      <el-form-item v-if="dataForm.type === 1" :label="$t('sysManagement.menuRouter')" prop="url">
+        <el-input v-model="dataForm.url" :placeholder="$t('sysManagement.menuRouter')" maxlength="100" size="small"
+          show-word-limit></el-input>
       </el-form-item>
-      <el-form-item :label="$t('sys.isHidden')"  prop="hidden">
-        <el-select size="small" v-model="dataForm.hidden" @change="() => {isRef = true}" :placeholder="$t('user.pleaseSelect')">
-          <el-option
-            v-for="item in isHidden"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
+      <el-form-item :label="$t('sys.isHidden')" prop="hidden">
+        <el-select size="small" v-model="dataForm.hidden" @change="() => { isRef = true }"
+          :placeholder="$t('user.pleaseSelect')">
+          <el-option v-for="item in isHidden" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
       </el-form-item>
       <el-form-item v-if="dataForm.type !== 0" :label="$t('sys.authorization')" prop="perms">
-        <el-input v-model="dataForm.perms" :placeholder="$t('sys.separated') + 'user:list,user:create'" maxlength="250" size="small" show-word-limit></el-input>
+        <el-input v-model="dataForm.perms" :placeholder="$t('sys.separated') + 'user:list,user:create'" maxlength="250"
+          size="small" show-word-limit></el-input>
       </el-form-item>
       <el-form-item v-if="dataForm.type !== 2" :label="$t('hotSearch.seq')" prop="orderNum">
-        <el-input-number v-model="dataForm.orderNum" controls-position="right" :min="0" :label="$t('hotSearch.seq')" maxlength="100" size="small" show-word-limit></el-input-number>
+        <el-input-number v-model="dataForm.orderNum" controls-position="right" :min="0" :label="$t('hotSearch.seq')"
+          maxlength="100" size="small" show-word-limit></el-input-number>
       </el-form-item>
       <el-form-item v-if="dataForm.type !== 2" :label="$t('sys.menuIcon')" prop="icon">
         <el-row>
           <el-col :span="22">
-            <el-popover
-              ref="iconListPopover"
-              placement="bottom-start"
-              trigger="click"
-              popper-class="mod-menu__icon-popover"
-            >
+            <el-popover ref="iconListPopover" placement="bottom-start" trigger="click"
+              popper-class="mod-menu__icon-popover">
               <div class="mod-menu__icon-list" style="height: 280px !important">
-                <el-button
-                  v-for="(item, index) in iconList"
-                  :key="index"
-                  @click="iconActiveHandle(item)"
-                  :class="{ 'is-active': item === dataForm.icon }"
-                >
-                  <icon-svg  style="stroke: #8A979E !important;color: #8A979E" :name="item"></icon-svg>
+                <el-button v-for="(item, index) in iconList" :key="index" @click="iconActiveHandle(item)"
+                  :class="{ 'is-active': item === dataForm.icon }">
+                  <icon-svg style="stroke: #8A979E !important;color: #8A979E" :name="item"></icon-svg>
                 </el-button>
               </div>
             </el-popover>
-            <el-input
-              v-model="dataForm.icon"
-              v-popover:iconListPopover
-              maxlength="30"
-              size="small"
-              show-word-limit
-              :placeholder="$t('sys.menuIconName')"
-              class="icon-list__input"
-              clearable
-            ></el-input>
+            <el-input v-model="dataForm.icon" v-popover:iconListPopover maxlength="30" size="small" show-word-limit
+              :placeholder="$t('sys.menuIconName')" class="icon-list__input" clearable></el-input>
           </el-col>
           <el-col :span="2" class="icon-list__tips">
             <el-tooltip placement="top" effect="light">
-              <div slot="content">{{$t('sys.content')}}</div>
+              <div slot="content">{{ $t('sys.content') }}</div>
               <i class="el-icon-warning"></i>
             </el-tooltip>
           </el-col>
@@ -136,8 +89,8 @@
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <div class="default-btn" @click="close()">{{$t('coupon.cancel')}}</div>
-      <div class="default-btn primary-btn" @click="dataFormSubmit()">{{$t('coupon.confirm')}}</div>
+      <div class="default-btn" @click="close()">{{ $t('coupon.cancel') }}</div>
+      <div class="default-btn primary-btn" @click="dataFormSubmit()">{{ $t('coupon.confirm') }}</div>
     </span>
   </el-dialog>
 </template>
@@ -146,7 +99,7 @@
 import { treeDataTranslate, idList } from '@/utils'
 import Icon from '@/icons'
 export default {
-  data () {
+  data() {
     var validateUrl = (rule, value, callback) => {
       if (this.dataForm.type === 1 && !/\S/.test(value)) {
         callback(new Error(this.$i18n.t('sys.menuUrlNoNull')))
@@ -209,7 +162,7 @@ export default {
       ],
       // 语言列表
       langItemList: [],
-      masterLangInfo: {name: '', lang: ''},
+      masterLangInfo: { name: '', lang: '' },
       // 当前所选语言
       curLang: [],
       menuLangList: []
@@ -218,16 +171,16 @@ export default {
   watch: {
     'dataForm.type': {
       deep: true,
-      handler (newV, oldV) {
+      handler(newV, oldV) {
         this.$refs['dataForm'].clearValidate()
       }
     }
   },
-  created () {
+  created() {
     this.iconList = Icon.getNameList()
   },
   methods: {
-    init (id) {
+    init(id) {
       this.getLangList()
       this.dataForm.id = id || 0
       this.isSubmit = false
@@ -273,7 +226,7 @@ export default {
     /**
      * 获取商品配置的语言列表
      */
-    getLangList () {
+    getLangList() {
       this.$http({
         url: this.$http.adornUrl('/sys/lang'),
         method: 'get',
@@ -307,7 +260,7 @@ export default {
         }
       })
     },
-    selectLang (value) {
+    selectLang(value) {
       console.log('当前值', value)
       this.curLang = value
       // 设置主语言不可删除
@@ -320,16 +273,20 @@ export default {
         if (!tempArr.find(f => f.lang == item)) {
           const fd = this.langItemList.find(it => it.lang === item)
           if (fd) {
-            tempArr.splice(index, 0, {langName: fd.name, lang: item, name: ''})
+            tempArr.splice(index, 0, { langName: fd.name, lang: item, name: '' })
           }
         }
       })
       this.menuLangList = tempArr
     },
-    handleSelectMenuChange (val) {
-      this.dataForm.parentId = val[val.length - 1]
+    handleSelectMenuChange(val) {
+      if (val.length > 0) {
+        this.dataForm.parentId = val[val.length - 1]
+      }else{
+        this.dataForm.parentId=0
+      }
     },
-    clear () {
+    clear() {
       this.dataForm = {
         id: 0,
         type: 1,
@@ -346,19 +303,19 @@ export default {
       }
     },
     // 图标选中
-    iconActiveHandle (iconName) {
+    iconActiveHandle(iconName) {
       this.dataForm.icon = iconName
     },
-    beforeClose (done) {
+    beforeClose(done) {
       this.clear()
       done()
     },
-    close () {
+    close() {
       this.clear()
       this.visible = false
     },
     // 表单提交
-    dataFormSubmit () {
+    dataFormSubmit() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           if (this.isSubmit) {
@@ -372,6 +329,7 @@ export default {
           }
 
           this.isSubmit = true
+          console.log(this.dataForm.parentId)
           this.$http({
             url: this.$http.adornUrl(`/sys/menu`),
             method: this.dataForm.id ? 'put' : 'post',
@@ -406,7 +364,7 @@ export default {
         }
       })
     },
-    errorMsg (message) {
+    errorMsg(message) {
       this.$message({
         message: message,
         type: 'error',
@@ -420,23 +378,28 @@ export default {
 
 <style lang="scss">
 .mod-menu {
+
   .menu-list__input,
   .icon-list__input {
-    > .el-input__inner {
+    >.el-input__inner {
       cursor: pointer;
     }
   }
+
   &__icon-popover {
     max-width: 420px;
   }
+
   &__icon-list {
     max-height: 280px;
     padding: 0;
     margin: -8px 0 0 -8px;
-    > .el-button {
+
+    >.el-button {
       padding: 8px;
       margin: 8px 0 0 8px;
-      > span {
+
+      >span {
         display: inline-block;
         vertical-align: middle;
         width: 18px;
@@ -445,6 +408,7 @@ export default {
       }
     }
   }
+
   .icon-list__tips {
     font-size: 18px;
     text-align: center;
