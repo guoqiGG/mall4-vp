@@ -5,8 +5,8 @@
       <div class="text">
         {{
           dataForm.couponId
-          ? this.$i18n.t('marketing.modifyCoupon')+11
-          : this.$i18n.t('marketing.newCoupon')+11
+          ? this.$i18n.t('marketing.modifyCoupon')
+          : this.$i18n.t('marketing.newCoupon')
         }}
       </div>
     </div>

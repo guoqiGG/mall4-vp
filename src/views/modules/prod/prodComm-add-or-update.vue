@@ -1,98 +1,63 @@
 <template>
-  <el-dialog :title="!dataForm.prodCommId ? '新增' : '修改'"
-             :close-on-click-modal="false"
-             :visible.sync="visible">
-    <el-form @submit.native.prevent :model="dataForm"
-             :rules="dataRule"
-             ref="dataForm"
-             @keyup.enter.native="dataFormSubmit()"
-             label-width="80px">
+  <el-dialog :title="!dataForm.prodCommId ? '新增' : '修改'" :close-on-click-modal="false" :visible.sync="visible">
+    <el-form @submit.native.prevent :model="dataForm" :rules="dataRule" ref="dataForm"
+      @keyup.enter.native="dataFormSubmit()" label-width="80px">
 
       <div v-if="!isEdit">
-        <el-form-item label="评论内容"
-                      prop="userName">
-          <el-input type="textarea"
-                    :readonly='true'
-                    v-model="dataForm.content"></el-input>
+        <el-form-item label="评论内容" prop="userName">
+          <el-input type="textarea" :readonly='true' v-model="dataForm.content"></el-input>
         </el-form-item>
 
-        <el-form-item label="评论图片"
-                      prop="userName">
-          <div v-if="dataForm.pics==null || dataForm.pics.length>0">
+        <el-form-item label="评论图片" prop="userName">
+          <div v-if="dataForm.pics == null || dataForm.pics.length > 0">
             无
           </div>
-          <img max-width="100%"
-               v-else
-               v-for="item in dataForm.pics"
-               :key="item"
-               :src="dialogImageUrl + item">
+          <img max-width="100%" v-else v-for="item in dataForm.pics" :key="item" :src="dialogImageUrl + item">
         </el-form-item>
 
-        <el-form-item label="记录时间"
-                      prop="userName">
-          <el-input v-model="dataForm.recTime"
-                    :readonly='true'></el-input>
+        <el-form-item label="记录时间" prop="userName">
+          <el-input v-model="dataForm.recTime" :readonly='true'></el-input>
         </el-form-item>
-        <el-form-item label="回复时间"
-                      prop="userName"
-                      :readonly='true'>
-          <el-input v-model="dataForm.replyTime"
-                    :readonly='true'></el-input>
+        <el-form-item label="回复时间" prop="userName" :readonly='true'>
+          <el-input v-model="dataForm.replyTime" :readonly='true'></el-input>
         </el-form-item>
-        <el-form-item label="IP来源"
-                      prop="userName">
-          <el-input v-model="dataForm.postip"
-                    :readonly='true'></el-input>
+        <el-form-item label="IP来源" prop="userName">
+          <el-input v-model="dataForm.postip" :readonly='true'></el-input>
         </el-form-item>
-        <el-form-item label="得分"
-                      prop="score">
-          <el-input v-model="dataForm.score"
-                    :readonly='true'></el-input>
+        <el-form-item label="得分" prop="score">
+          <el-input v-model="dataForm.score" :readonly='true'></el-input>
         </el-form-item>
 
-        <el-form-item label="是否匿名"
-                      size="mini"
-                      prop="isAnonymous">
-          <el-radio-group v-model="dataForm.isAnonymous"
-                          :disabled='true'>
+        <el-form-item label="是否匿名" size="mini" prop="isAnonymous">
+          <el-radio-group v-model="dataForm.isAnonymous" :disabled='true'>
             <el-radio :label="1">是</el-radio>
             <el-radio :label="0">不是</el-radio>
           </el-radio-group>
         </el-form-item>
       </div>
 
-      <el-form-item label="掌柜回复"
-                    type="textarea"
-                    prop="userName">
-        <el-input v-model="dataForm.replyContent"
-                  :readonly='!isEdit'></el-input>
+      <el-form-item label="掌柜回复" type="textarea" prop="userName">
+        <el-input v-model="dataForm.replyContent" :readonly='!isEdit'></el-input>
       </el-form-item>
 
-      <el-form-item label="审核"
-                    size="mini"
-                    prop="status"
-                    v-if="isEdit">
-        <el-radio-group v-model="dataForm.status"
-                        :readonly='true'>
+      <el-form-item label="审核" size="mini" prop="status" v-if="isEdit">
+        <el-radio-group v-model="dataForm.status" :readonly='true'>
           <el-radio :label="1">审核通过</el-radio>
           <el-radio :label="-1">不通过</el-radio>
           <el-radio :label="0">等待审核</el-radio>
         </el-radio-group>
       </el-form-item>
     </el-form>
-    <span slot="footer"
-          class="dialog-footer">
+    <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
-      <el-button type="primary"
-                 v-if="isEdit"
-                 @click="dataFormSubmit()">确定</el-button>
+      <el-button type="primary" v-if="isEdit" @click="dataFormSubmit()">确定</el-button>
     </span>
   </el-dialog>
 </template>
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       isEdit: false,
       visible: false,
@@ -119,7 +84,7 @@ export default {
     }
   },
   methods: {
-    init (prodCommId, isEdit) {
+    init(prodCommId, isEdit) {
       this.isEdit = isEdit
       this.dataForm.prodCommId = prodCommId || 0
       this.visible = true
@@ -137,7 +102,7 @@ export default {
       })
     },
     // 表单提交
-    dataFormSubmit () {
+    dataFormSubmit() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.$http({

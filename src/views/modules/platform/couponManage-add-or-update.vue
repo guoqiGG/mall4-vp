@@ -1,6 +1,6 @@
 <template>
   <el-dialog class="mod-coupon-add-or-update"
-    :title="dataForm.couponId ? $t('coupon.modifyCoupon')+111 : $t('coupon.newCoupon')+111" :close-on-click-modal="false"
+    :title="dataForm.couponId ? $t('coupon.modifyCoupon') : $t('coupon.newCoupon')" :close-on-click-modal="false"
     :before-close="beforeClose" :visible.sync="visible">
     <el-form @submit.native.prevent size="small" v-if="show" :model="dataForm" :rules="dataRule" ref="dataForm"
       @keyup.enter.native="dataFormSubmit()" :label-width="this.$i18n.t('language') === 'language' ? '170px' : '100px'">
