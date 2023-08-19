@@ -312,11 +312,11 @@ export default {
         // }
 
         this.dataForm.skuList.forEach((e) => {
-            if (e.giftList2) {
-              e.giftList = e.giftList2.toString()
-            } else {
-              e.giftList = ''
-            }
+          if (e.giftList2) {
+            e.giftList = e.giftList2.toString()
+          } else {
+            e.giftList = ''
+          }
         })
 
         // 校验sku列表
@@ -390,7 +390,7 @@ export default {
         }).then(({ data }) => {
           let data2 = data
           data2.skuList.forEach(e => {
-            e.giftList2 =e.giftList? e.giftList.split(',').map(Number):[]
+            e.giftList2 = e.giftList ? e.giftList.split(',').map(Number) : []
           })
           this.dataForm = data2
           // 获取语言列表
@@ -471,13 +471,13 @@ export default {
         //   this.errorMsg('请选择一个所属品牌')
         //   return
         // } if (e.giftList2) {
-          this.dataForm.skuList.forEach((e) => {
-            if (e.giftList2) {
-              e.giftList = e.giftList2.toString()
-            } else {
-              e.giftList = ''
-            }
-          })
+        this.dataForm.skuList.forEach((e) => {
+          if (e.giftList2) {
+            e.giftList = e.giftList2.toString()
+          } else {
+            e.giftList = ''
+          }
+        })
 
         // 校验sku列表
         this.checkSkuList()
@@ -590,6 +590,7 @@ export default {
     },
 
     checkSkuList() {
+      // console.log(this.dataForm.skuList)
       this.dataForm.skuList.forEach(item => {
         this.isCheck = false
         // if (!item.pic) {
@@ -607,22 +608,22 @@ export default {
           this.value = this.$i18n.t('product.emptyMarketValue')
           return false
         }
-        if (!item.skuScore) {
-          this.isCheck = true
-          this.value = this.$i18n.t('product.emptyScorePrice')
-          return false
-        }
+        // if (!item.skuScore) {
+        //   this.isCheck = true
+        //   this.value = this.$i18n.t('product.emptyScorePrice')
+        //   return false
+        // }
         if (item.stocks === null || item.stocks === undefined) {
           this.isCheck = true
           this.value = this.$i18n.t('product.emptyStocks')
           return false
         }
-        if (item.giftList2.length && !item.giftNumber) {
+        if (item?.giftList2?.length && !item.giftNumber) {
           this.isCheck = true
           this.value = '礼品券数量不能为空'
           return false
         }
-        if (!item.giftList2.length && item.giftNumber) {
+        if (!item?.giftList2?.length && item.giftNumber) {
           this.isCheck = true
           this.value = '请选择礼品券'
           return false

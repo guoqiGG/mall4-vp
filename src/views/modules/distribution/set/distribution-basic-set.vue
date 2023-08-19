@@ -18,7 +18,7 @@
             </el-radio-group>
           </el-form-item>
           <!-- 业绩归属 -->
-          <el-form-item :label="this.$i18n.t('distribution.performanceAttribution')+':'">
+          <!-- <el-form-item :label="this.$i18n.t('distribution.performanceAttribution')+':'">
             <el-radio-group v-model="dataForm.attribution">
               <el-radio :label="0">{{ $t('distribution.paTip1') }}
                 <el-tooltip class="item" effect="light" placement="right">
@@ -37,14 +37,14 @@
                 </el-tooltip>
               </el-radio>
             </el-radio-group>
-          </el-form-item>
+          </el-form-item> -->
           <!-- 申请条件-条件审核判定 -->
-          <el-form-item :label="this.$i18n.t('distribution.conditionalAuditJudgment')+':'">
+          <!-- <el-form-item :label="this.$i18n.t('distribution.conditionalAuditJudgment')+':'">
             <el-radio-group v-model="dataForm.autoCheck" @change="changeRadio(dataForm.autoCheck)">
               <el-radio :label="0">{{ $t('distribution.manualJudgment') }}</el-radio>
               <el-radio :label="1">{{ $t('distribution.systemJudgment') }}</el-radio>
             </el-radio-group>
-          </el-form-item>
+          </el-form-item> -->
           <!-- 申请条件 -->
           <el-form-item v-if="dataForm.autoCheck === 1" :label="this.$i18n.t('distribution.applicationConditions')+':'">
             <div class="condition-item marginBottom">
@@ -112,11 +112,11 @@
             </div>
           </el-form-item>
           <!-- 申请所需信息 -->
-          <el-form-item :label="this.$i18n.t('distribution.applyNeedInfo')+':'" >
+          <!-- <el-form-item :label="this.$i18n.t('distribution.applyNeedInfo')+':'" >
             <el-checkbox v-model="dataForm.realName">{{ $t('distribution.realName') }}</el-checkbox>
             <el-checkbox v-model="dataForm.identityCardNumber">{{ $t('distribution.idCardNo') }}</el-checkbox>
             <el-checkbox v-model="dataForm.identityCardPic">{{ $t('distribution.idCardPhoto') }}</el-checkbox>
-          </el-form-item>
+          </el-form-item> -->
 <!--          提现发放方式-->
           <el-form-item :label="this.$i18n.t('distribution.Withdrawal')+':'">
             &nbsp;
@@ -125,13 +125,13 @@
             </el-tooltip>
             &nbsp;
             <el-radio-group v-model="dataForm.withdrawal">
-            <el-radio :label="0">{{ $t('distribution.Issued1') }}</el-radio>
+            <el-radio :label="0" disabled>{{ $t('distribution.Issued1') }}</el-radio>
             <el-radio :label="1">{{ $t('distribution.Issued2') }}
               <el-tooltip class="item" effect="light" :content="$t('distribution.WithdrawalTip2')" placement="right" style="color: #155BD4;">
                 <i class="el-icon-question" />
               </el-tooltip>
             </el-radio>
-            <el-radio :label="2">{{ $t('distribution.Issued3') }}</el-radio>
+            <el-radio :label="2" disabled>{{ $t('distribution.Issued3') }}</el-radio>
             </el-radio-group>
           </el-form-item>
 
@@ -142,7 +142,7 @@
         <div class="title">{{ $t('distribution.withdrawalSettings') }}</div>
         <div class="form-item-content">
           <!-- 单笔提现 -->
-          <el-form-item :label="this.$i18n.t('withdraw.eachWithdrawal')+':'">
+          <!-- <el-form-item :label="this.$i18n.t('withdraw.eachWithdrawal')+':'">
             <el-input v-model.number="dataForm.amountMin" style="width: 180px"
             oninput="value=value.replace(/[^\d]/g,'')"
             maxlength="10">
@@ -156,7 +156,7 @@
               <template slot="append">{{ $t('distribution.dbcTip2') }}</template>
             </el-input>
             <span class="tips">{{  $t('withdraw.tip3') }}</span>
-          </el-form-item>
+          </el-form-item> -->
           <!-- 提现频次 -->
           <el-form-item :label="this.$i18n.t('withdraw.withdrawalFrequency')+':'">
             <el-select

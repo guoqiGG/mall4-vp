@@ -54,13 +54,13 @@
             <!-- 氢春豆价 -->
             <el-table-column prop="skuScore" :label="this.$i18n.t('product.scorePrice')">
               <template slot-scope="scope">
-                <input v-model.number="scope.row.skuScore" type="number" :precision="2" :max="100000000" :min="1"
+                <input v-model.number="scope.row.skuScore" type="number" :precision="2" :max="100000000" :min="0"
                   :step="1" :disabled="!scope.row.status" class="tag-input-width" @blur="
                     handleInputValue(
                       scope.row.skuScore,
                       scope.$index,
                       'skuScore',
-                      1,
+                      0,
                       100000000
                     )
                     " />
