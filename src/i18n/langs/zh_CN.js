@@ -2418,7 +2418,7 @@ const zhCn = {
     banned: '封禁中',
     cleared: '已清退',
     confirmSetWithdrawal: '确定进行[设为已提现]操作?',
-    setWithdrawal: '设为已提现',
+    setWithdrawal: '审核',
     amountTips: '请输入正确的金额，保留两位小数'
   },
   distribIncome: {

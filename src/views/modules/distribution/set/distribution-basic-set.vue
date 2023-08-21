@@ -135,6 +135,13 @@
             </el-radio-group>
           </el-form-item>
 
+          <el-form-item label="分销比例" props="distributionRatio">
+            <el-input-number v-model="dataForm.distributionRatio"  controls-position="right" :min="1" :max="100"></el-input-number>
+            <el-tooltip class="item" effect="light" content="百分比,请输入 0-100 的整数" placement="right" style="color: #155BD4;">
+              <i class="el-icon-question" />
+            </el-tooltip>
+          </el-form-item>
+
         </div>
       </div>
       <!-- 提现设置 -->
@@ -280,7 +287,8 @@ export default {
         amountMin: '',
         paymentExplain: null,
         number: null,
-        withdrawal: 2
+        withdrawal: 2,
+        distributionRatio:0.00, // 分销比例
       },
       rules: {
         expenseNumber: [
