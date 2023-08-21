@@ -208,7 +208,7 @@
               <el-row style="width: 100%">
                 <el-col :span="1" style="height:100%;">
                   <div style="display: flex;align-items:center;justify-content: center;height:100%;">
-                    <el-checkbox :label="order.orderId" :key="order.orderId"><br></el-checkbox>
+                    <el-checkbox :label="order.orderNumber" :key="order.orderNumber"><br></el-checkbox>
                   </div>
                 </el-col>
                 <el-col :span="9" style="height: 100%">
@@ -632,6 +632,15 @@ export default {
         data: this.$http.adornData({
           orderNumberList: this.orderNumberList
         })
+      }).then((data)=>{
+        this.$message.success({
+          message: '一键收货成功',
+          type: 'success',
+          duration: 1500,
+          onClose: () => {
+          }
+        })
+        this.getDataList(this.page, {}, 1)
       })
     },
     /**
@@ -696,11 +705,10 @@ export default {
           this.checkAll = false
           this.isIndeterminate = true
           this.orderNumberList = []
-          this.orderIdList = []
         }
         if (data.records) {
           data.records.forEach((e, i) => {
-            this.orderIdList[i] = e.orderId
+            this.orderIdList[i] = e.orderNumber
           });
         } else {
           this.orderIdList = []
