@@ -166,7 +166,7 @@
         </div>
 
         <!--批量设置-->
-        <div class="batch-settings-box">
+        <!-- <div class="batch-settings-box">
           <div class="set-txt">
             <span class="default-btn text-btn" @click="switchSet">{{
               $t("groups.batchSettings")
@@ -174,7 +174,6 @@
             <span class="weak-txt">{{ $t("prodSku.postProductTips14") }}</span>
           </div>
           <div v-if="isEdit" class="batch-settings-tb">
-            <!-- 头部 -->
             <ul class="batch-settings-Head">
               <li class="head-item" v-for="(item, i) in tableLeftTitles" :key="i">
                 {{ item.tagName }}
@@ -193,8 +192,6 @@
               </li>
               <li class="coding"></li>
               <li class="head-item"></li>
-
-              <!-- <li class="head-item">{{ $t('product.commodityCode') }}</li> -->
             </ul>
             <el-form @submit.native.prevent :inline="true" class="demo-form-inline">
               <div class="batch-settings-con">
@@ -299,7 +296,7 @@
 
             </el-form>
           </div>
-        </div>
+        </div> -->
       </div>
     </el-form-item>
   </div>

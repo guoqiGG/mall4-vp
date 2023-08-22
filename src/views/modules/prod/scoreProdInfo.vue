@@ -67,8 +67,8 @@
       <div class="title" v-if="postingSteps === 1">
         {{ this.$i18n.t('prodSku.specStock') }}
       </div>
-      <sku-tag v-show="postingSteps === 1" ref="skuTag" @change="skuTagChangeSkuHandler"
-        :skuList="dataForm.skuList"></sku-tag>
+      <!-- <sku-tag v-show="postingSteps === 1" ref="skuTag" @change="skuTagChangeSkuHandler"
+        :skuList="dataForm.skuList"></sku-tag> -->
       <sku-table v-show="postingSteps === 1" ref="skuTable" v-model="dataForm.skuList" :prodNameCn.sync="prodNameCn"
         :prodNameEn.sync="prodNameEn" :prodLangList='dataForm.prodLangList' :giftListArray="giftListArray"></sku-table>
 
