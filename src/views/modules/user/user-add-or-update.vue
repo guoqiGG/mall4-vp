@@ -171,9 +171,9 @@
                   voucherUserParam.used
                 }}&nbsp;&nbsp;{{ $t("marketing.piece") }}</span>
                 <br />
-                <span>{{ $t("user.invalid") }}：{{
+                <!-- <span>{{ $t("user.invalid") }}：{{
                   voucherUserParam.expired
-                }}&nbsp;&nbsp;{{ $t("marketing.piece") }}</span>
+                }}&nbsp;&nbsp;{{ $t("marketing.piece") }}</span> -->
               </div>
               <br />
             </div>
@@ -241,7 +241,7 @@
     <!-- 送礼品券弹窗 -->
     <update-voucher v-if="updateVoucherVisible" ref="updateVoucher" :getWay="1"
       @refreshDataList="refreshChange"></update-voucher>
-      <!-- 修改分组 -->
+    <!-- 修改分组 -->
     <update-user-group v-if="updateUserGroupVisible" ref="updateUserGroup"
       @refreshDataList="refreshChange"></update-user-group>
     <!-- 打标签弹窗 -->

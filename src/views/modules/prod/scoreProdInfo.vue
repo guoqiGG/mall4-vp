@@ -158,7 +158,7 @@ export default {
         deliveryMode: {},
         isCheck: false,
         value: false,
-        deliveryAmount: 0.01, // 统一运费的金额
+        deliveryAmount: 0, // 统一运费的金额
         deliveryTemplateId: null,
         prodLangList: []
       },
@@ -422,7 +422,7 @@ export default {
               })
             }
           })
-          this.$refs.skuTag.init(data.skuList)
+          // this.$refs.skuTag.init(data.skuList)
           this.$refs.skuTable.init(this.dataForm.skuList)
         })
       } else {

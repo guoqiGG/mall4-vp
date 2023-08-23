@@ -41,7 +41,7 @@
       :rules="[{ required: true, message: this.$i18n.t('transport.pleaseEnterTheAmount'), trigger: 'blur' }]"
     >
       <div class="freight">
-          <el-input type="number" :min="0.01" v-model="dataForm.deliveryAmount" @blur="handleInputValue(dataForm.deliveryAmount,'deliveryAmount',0.01,9999)" maxlength="10" :placeholder="this.$i18n.t('transport.pleaseEnterTheAmount')"></el-input>
+          <el-input type="number" :min="0.00" v-model="dataForm.deliveryAmount" @blur="handleInputValue(dataForm.deliveryAmount,'deliveryAmount',0.00,9999)" maxlength="10" :placeholder="this.$i18n.t('transport.pleaseEnterTheAmount')"></el-input>
       </div>
     </el-form-item>
     <add-or-update v-if="addOrUpdateVisible"

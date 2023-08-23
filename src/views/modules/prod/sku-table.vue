@@ -39,13 +39,13 @@
             <!-- 售价 -->
             <el-table-column prop="price" :label="this.$i18n.t('prodList.salesPrice')">
               <template slot-scope="scope">
-                <input v-model.number="scope.row.price" type="number" :precision="2" :max="100000000" :min="0.01"
+                <input v-model.number="scope.row.price" type="number" :precision="2" :max="100000000" :min="0"
                   :step="0.01" :disabled="!scope.row.status" class="tag-input-width" @blur="
                     handleInputValue(
                       scope.row.price,
                       scope.$index,
                       'price',
-                      0.01,
+                      0,
                       100000000
                     )
                     " />
@@ -382,9 +382,9 @@ export default {
     this.isEdit = false
     if (!this.lists.length) {
       this.lists.push({
-        oriPrice: 0.01,
+        oriPrice: 0.00,
         partyCode: '',
-        price: 0.01,
+        price: 0.00,
         prodName: '',
         status: 1,
         stocks: 0,
