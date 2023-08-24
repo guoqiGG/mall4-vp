@@ -559,7 +559,7 @@ export default {
 
       oldPar: {},
       checkAll: false,
-      isIndeterminate: true,
+      isIndeterminate: false,
       orderNumberList: [],
       orderIdList: []
     }
@@ -703,7 +703,7 @@ export default {
         this.orderIdList = []
         if (this.status !== 3) {
           this.checkAll = false
-          this.isIndeterminate = true
+          this.isIndeterminate = false
           this.orderNumberList = []
         }
         if (data.records) {
