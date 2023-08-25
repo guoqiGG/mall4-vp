@@ -14,7 +14,7 @@
       @keyup.enter.native="dataFormSubmit()" class="form-box" label-width="auto">
       <el-form-item :label="this.$i18n.t('marketing.couponName')" prop="couponName">
         <el-input v-model="dataForm.couponName" maxlength="20" show-word-limit size="small" class="coupon-input"
-          :placeholder="this.$i18n.t('marketing.couponName')" :disabled="dataForm.couponId !== 0"></el-input>
+          :placeholder="this.$i18n.t('marketing.couponName')" ></el-input>
       </el-form-item>
       <!-- <el-form-item
         :label="this.$i18n.t('marketing.couponSubtitle')"
@@ -82,7 +82,7 @@
       <el-form-item :label="this.$i18n.t('marketing.conditionsOfUse')" prop="cashCondition">
         <el-input size="small" class="coupon-input1" type="text" v-model="dataForm.cashCondition"
           :placeholder="this.$i18n.t('marketing.conditionsOfUse')" style="width:240px" @blur="toFloat('cashCondition')"
-          :disabled="dataForm.couponId !== 0">
+          >
           <template slot="prepend">{{ $t("marketing.full") }}</template>
           <template slot="append">{{ $t("platform.dollar") }}</template>
         </el-input>
@@ -91,7 +91,7 @@
         v-if="dataForm.couponType === 1">
         <el-input v-model="dataForm.reduceAmount" size="small" class="coupon-input1" @blur="toFloat('reduceAmount')"
           :placeholder="this.$i18n.t('marketing.reductionAmount')" type="number" :max="99999" :min="0.01" :step="0.01"
-          style="width:240px" :disabled="dataForm.couponId !== 0">
+          style="width:240px" >
           <template slot="append">{{ $t("platform.dollar") }}</template>
         </el-input>
       </el-form-item>
@@ -104,7 +104,7 @@
         </el-input>
       </el-form-item>
       <el-form-item :label="this.$i18n.t('coupon.effectiveType')" np size="mini" prop="validTimeType">
-        <el-radio-group v-model="dataForm.validTimeType" :disabled="dataForm.couponId !== 0">
+        <el-radio-group v-model="dataForm.validTimeType" >
           <el-radio :label="1">{{ $t("marketing.fixedTime") }}</el-radio>
           <el-radio :label="2">{{
             $t("marketing.effectiveAfterReceipt")
@@ -114,26 +114,26 @@
       <!-- 固定时间数据 START -->
       <div v-if="dataForm.validTimeType === 1">
         <el-form-item :label="this.$i18n.t('coupon.startTime')" prop="startTime" v-if="dataForm.validTimeType === 1">
-          <el-date-picker :disabled="dataForm.couponId !== 0" v-model="dataForm.startTime" value-format="yyyy-MM-dd"
+          <el-date-picker  v-model="dataForm.startTime" value-format="yyyy-MM-dd"
             type="date" size="small" style="width:140px"
             :placeholder="this.$i18n.t('marketing.chooseStartTime')"></el-date-picker>
           <el-time-select v-model="startTimeValue" :picker-options="{
             start: '00:00',
             step: '00:30',
             end: '23:30'
-          }" size="small" style="width:100px" :disabled="dataForm.couponId !== 0"
+          }" size="small" style="width:100px" 
             :placeholder="this.$i18n.t('coupon.startTime')">
           </el-time-select>
         </el-form-item>
         <el-form-item :label="this.$i18n.t('coupon.endTime')" prop="endTime" v-if="dataForm.validTimeType === 1">
           <el-date-picker size="small" v-model="dataForm.endTime" value-format="yyyy-MM-dd" type="date"
             style="width:140px" :placeholder="this.$i18n.t('marketing.chooseEndTime')"
-            :disabled="dataForm.putonStatus < 0"></el-date-picker>
+            ></el-date-picker>
           <el-time-select v-model="endTimeValue" :picker-options="{
             start: '00:00',
             step: '00:30',
             end: '23:30'
-          }" size="small" :disabled="dataForm.putonStatus < 0" style="width:100px"
+          }" size="small"  style="width:100px"
             :placeholder="this.$i18n.t('coupon.endTime')">
           </el-time-select>
         </el-form-item>
@@ -143,7 +143,7 @@
       <el-form-item :label="this.$i18n.t('marketing.afterReceivingTheCoupon')" prop="afterReceiveDays"
         v-if="dataForm.validTimeType === 2">
         <el-input v-model="dataForm.afterReceiveDays" type="number" size="small" class="coupon-input1"
-          oninput="if(value>3652)value=1" :max="3652" style="width:240px" :disabled="dataForm.couponId !== 0">
+          oninput="if(value>3652)value=1" :max="3652" style="width:240px" >
           <template slot="append">{{ $t("marketing.effectiveDays") }}</template>
         </el-input>
         <el-tooltip class="item" effect="dark" :content="$t('marketing.maxTimeTip')" placement="top">
@@ -152,7 +152,7 @@
       </el-form-item>
       <el-form-item :label="this.$i18n.t('marketing.validDate')" prop="validDays" v-if="dataForm.validTimeType === 2">
         <el-input v-model="dataForm.validDays" type="number" size="small" class="coupon-input1"
-          oninput="if(value>3652)value=1" :max="3652" style="width:240px" :disabled="dataForm.couponId !== 0">
+          oninput="if(value>3652)value=1" :max="3652" style="width:240px" >
           <template slot="append">{{ $t("formData.day") }}</template>
         </el-input>
         <el-tooltip class="item" effect="dark" :content="$t('marketing.maxTimeTip')" placement="top">
@@ -170,7 +170,7 @@
       <!-- 库存 -->
       <el-form-item :label="this.$i18n.t('marketing.inventory')" prop="stocks">
         <el-input v-model="dataForm.stocks" type="number" size="small" class="coupon-input1" @blur="toFloat('stocks')"
-          style="width:240px" :disabled="dataForm.couponId !== 0">
+          style="width:240px" >
           <template slot="append">{{ $t("marketing.piece") }}</template>
         </el-input>
       </el-form-item>
@@ -332,7 +332,7 @@ export default {
         couponName: '',
         subTitle: '',
         couponType: 1,
-        getWay: 0,
+        getWay: 1,
         reduceAmount: 0,
         couponDiscount: 0,
         cashCondition: 0,
@@ -345,7 +345,7 @@ export default {
         stocks: 1,
         suitableProdType: 0,
         limitNum: 1,
-        putonStatus: 0,
+        putonStatus: 1,
         couponProds: [],
         goodsGroup: ''
       },

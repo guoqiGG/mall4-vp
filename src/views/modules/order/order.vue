@@ -166,10 +166,10 @@
               <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll"
                 @change="handleCheckAllChange"></el-checkbox>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="5">
               <span class="item product">{{ $t("group.prodInfo") }}</span>
             </el-col>
-            <el-col :span="3" class="transaction-price">
+            <el-col :span="2" class="transaction-price">
               <span class="item">{{ $t("prodList.goodsPrice") }}/{{
                 $t("order.quantity")
               }}</span>
@@ -181,6 +181,9 @@
               <span class="item">{{ $t("order.paymentMethod") }}</span>
             </el-col>
             <el-col :span="3" class="column-title">
+              <span class="item">团长</span>
+            </el-col>
+            <el-col :span="2" class="column-title">
               <span class="item">{{ $t("order.buyerConsignee") }}</span>
             </el-col>
             <el-col :span="2" class="column-title">
@@ -211,7 +214,7 @@
                     <el-checkbox :label="order.orderNumber" :key="order.orderNumber"><br></el-checkbox>
                   </div>
                 </el-col>
-                <el-col :span="9" style="height: 100%">
+                <el-col :span="7" style="height: 100%">
                   <div class="item prod-item">
                     <div class="items name" v-for="orderItem in order.orderItems" :key="orderItem.orderItemId">
                       <!-- 商品信息 -->
@@ -351,7 +354,23 @@
                     </div>
                   </div>
                 </el-col>
-                <el-col :span="3" style="height: 100%">
+                   <!-- 团长信息 -->
+                   <el-col :span="3" style="height: 100%">
+                    <div class="item">
+                      <div  v-if="order.distributionUserResult">
+                        <span>{{ order.distributionUserResult.distributionName+'电话：'+ order.distributionUserResult.stationTel}}</span>
+                        <span style="margin-top: 5px;">{{'门店：'+ order.distributionUserResult.distributionStationName }}</span>
+                        <span style="margin-top: 5px;">
+                          地址：{{ order.distributionUserResult.province + order.distributionUserResult.city +
+                            order.distributionUserResult.area + order.distributionUserResult.addr }}
+                        </span>
+                      </div>
+                      <div  v-else>
+                        无
+                      </div>
+                    </div>
+                  </el-col>
+                <el-col :span="2" style="height: 100%">
                   <div class="item">
                     <div class="buyer-info">
                       <div class="buyer-name">
