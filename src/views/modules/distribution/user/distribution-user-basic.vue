@@ -21,6 +21,7 @@
           <el-form-item>
             <div class="default-btn primary-btn" @click="searchChange(true)">{{$t('crud.searchBtn')}}</div>
             <div class="default-btn" @click="resetSearchForm('searchForm')">{{$t('product.reset')}}</div>
+            <div class="default-btn" @click="getSoldExcel()">导出</div>
           </el-form-item>
         </div>
       </el-form>
@@ -236,6 +237,30 @@ export default {
     this.getDataList()
   },
   methods: {
+    getSoldExcel() {
+      this.$http({
+        url: this.$http.adornUrl('/platform/order/distribution/soldExcel'),
+        method: 'get',
+        params: this.$http.adornParams(),
+        responseType: 'blob' // 解决文件下载乱码问题
+      }).then(({ data }) => {
+        var blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8' })
+        const fileName = '团长信息整理'
+        const elink = document.createElement('a')
+        if ('download' in elink) { // 非IE下载
+          elink.download = fileName
+          elink.style.display = 'none'
+          elink.href = URL.createObjectURL(blob)
+          document.body.appendChild(elink)
+          elink.click()
+          URL.revokeObjectURL(elink.href) // 释放URL 对象
+          document.body.removeChild(elink)
+        } else { // IE10+下载
+          navigator.msSaveBlob(blob, fileName)
+        }
+      }).catch((e) => {
+      })
+    },
     // 新增 / 修改
     addOrUpdateHandle (data) {
       this.addOrUpdateVisible = true
