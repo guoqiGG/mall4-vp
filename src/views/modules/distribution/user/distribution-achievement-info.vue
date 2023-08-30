@@ -1,6 +1,6 @@
 <template>
   <div class="mod-user-info">
-    <el-dialog :title="'分销员信息'" :close-on-click-modal="false" :visible.sync="visible">
+    <el-dialog :title="'团长信息'" :close-on-click-modal="false" :visible.sync="visible">
       <el-form @submit.native.prevent
         :model="dataForm"
         :rules="dataRule"
@@ -12,7 +12,7 @@
           <el-input :readonly="true" v-model="dataForm.boundCustomers"></el-input>
         </el-form-item>
 
-        <el-form-item label="邀请分销员数数" prop="invitedVeeker">
+        <el-form-item label="邀请团长数数" prop="invitedVeeker">
           <el-input :readonly="true" v-model="dataForm.invitedVeeker"></el-input>
         </el-form-item>
 

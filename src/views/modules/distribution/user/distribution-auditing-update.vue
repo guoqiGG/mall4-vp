@@ -1,22 +1,13 @@
 <template>
   <div class="mod-auditing-add-or-update">
-    <el-dialog
-      :title="$t('distributionMsg.distributorAudit')"
-      :close-on-click-modal="false"
-      :visible.sync="visible"
-      width="540px"
-    >
-      <el-form @submit.native.prevent
-        :model="dataForm"
-        :rules="dataRule"
-        ref="dataForm"
-        @keyup.enter.native="dataFormSubmit()"
-        label-width="auto"
-      >
+    <el-dialog :title="$t('distributionMsg.distributorAudit')" :close-on-click-modal="false" :visible.sync="visible"
+      width="540px">
+      <el-form @submit.native.prevent :model="dataForm" :rules="dataRule" ref="dataForm"
+        @keyup.enter.native="dataFormSubmit()" label-width="auto">
         <el-form-item :label="$t('productComm.audit')" size="mini" prop="state">
           <el-radio-group v-model="dataForm.state" :disabled="!isEdit">
-            <el-radio :label="1">{{$t('productComm.pass')}}</el-radio>
-            <el-radio :label="-1">{{$t('distributionMsg.noPass')}}</el-radio>
+            <el-radio :label="1">{{ $t('productComm.pass') }}</el-radio>
+            <el-radio :label="-1">{{ $t('distributionMsg.noPass') }}</el-radio>
           </el-radio-group>
         </el-form-item>
 
@@ -30,43 +21,42 @@
         </el-form-item>
 
         <el-form-item :label="$t('publics.remark')" prop="remarks">
-          <el-input
-            type="textarea"
-            :placeholder="$t('publics.remark')"
-            v-model="dataForm.remarks"
-            size="small"
-            :readonly="!isEdit"
-          ></el-input>
+          <el-input type="textarea" :placeholder="$t('publics.remark')" v-model="dataForm.remarks" size="small"
+            :readonly="!isEdit"></el-input>
         </el-form-item>
         <el-form-item :label="$t('distribUserWallet.operator')" v-if="!isEdit" prop="sysUsername">
-          <div v-if="dataForm.modifier === 0">{{$t('distribUserWallet.system')}}</div>
+          <div v-if="dataForm.modifier === 0">{{ $t('distribUserWallet.system') }}</div>
           <el-input v-else v-model="dataForm.sysUsername" size="small" :readonly="!isEdit"></el-input>
         </el-form-item>
 
-        <el-form-item
-          :label="$t('distribUserWallet.operatorTime')"
-          v-if="!isEdit"
-          prop="updateTime"
-        >
+        <el-form-item :label="$t('distribUserWallet.operatorTime')" v-if="!isEdit" prop="updateTime">
           <el-input v-model="dataForm.updateTime" size="small" :readonly="!isEdit"></el-input>
         </el-form-item>
-        <el-form-item label="合伙人" prop="shopId" :required="dataForm.state == 1 ? true : false">
-          <el-select :rules="dataForm.state == 1 ? {type:'array', required: true, message: '请选择合伙人', trigger: 'change'} : ''" v-model="dataForm.shopId" size="small" :disabled="!isEdit" :readonly="!isEdit" :style="{ width: '100%' }" >
-            <el-option v-for="item in distributorOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+        <el-form-item label="合伙人" prop="shopId">
+          <el-select v-model="dataForm.shopId" size="small" :disabled="!isEdit" :readonly="!isEdit"
+            :style="{ width: '100%' }">
+            <el-option v-for="item in distributorOptions" :key="item.value" :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="团长等级" prop="distributionInfoId">
+          <el-select v-model="dataForm.distributionInfoId" size="small" :disabled="!isEdit" :readonly="!isEdit"
+            :style="{ width: '100%' }">
+            <el-option v-for="item in dataList" :key="item.id" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
 
         <el-form-item :label="$t('distributionMsg.viewUserAppalyInfo')">
-          <div class="default-btn" @click="info(dataForm)">{{$t('distributionMsg.clickView')}}</div>
+          <div class="default-btn" @click="info(dataForm)">{{ $t('distributionMsg.clickView') }}</div>
           <!-- <el-button @click="info(dataForm)">{{$t('distributionMsg.clickView')}}</el-button> -->
         </el-form-item>
       </el-form>
       <span slot="footer" v-if="isEdit" class="dialog-footer">
-        <div class="default-btn" @click="visible = false">{{$t('remindPop.cancel')}}</div>
-        <div class="default-btn primary-btn" @click="dataFormSubmit()">{{$t('remindPop.confirm')}}</div>
+        <div class="default-btn" @click="visible = false">{{ $t('remindPop.cancel') }}</div>
+        <div class="default-btn primary-btn" @click="dataFormSubmit()">{{ $t('remindPop.confirm') }}</div>
       </span>
       <span v-if="!isEdit" slot="footer" class="dialog-footer">
-        <div class="default-btn" @click="visible = false">{{$t('seckill.close')}}</div>
+        <div class="default-btn" @click="visible = false">{{ $t('seckill.close') }}</div>
       </span>
     </el-dialog>
 
@@ -78,7 +68,7 @@
 <script>
 import Info from './distribution-user-info'
 export default {
-  data () {
+  data() {
     return {
       isEdit: true,
       dataForm: {
@@ -87,7 +77,8 @@ export default {
         'reason': null,
         'remarks': null,
         'msg': null,
-        shopId: null
+        'shopId': null,
+        'distributionInfoId': null
       },
       addProdVisible: false,
       infoVisible: false,
@@ -110,19 +101,31 @@ export default {
           { max: 1000, message: this.$i18n.t('recruit.limitLangTip2').replace('255', '1000'), trigger: 'blur' }
         ]
       },
-      distributorOptions: []
+      distributorOptions: [],
+      dataList: []
     }
   },
   components: {
     Info
   },
-  mounted () {
+  watch: {
+    'dataForm.state': {
+      handler(newV, oldV) {
+        console.log(newV, oldV)
+        if (newV == -1) {
+          this.dataForm.shopId = null
+          this.dataForm.distributionInfoId = null
+        }
+      }
+    }
+  },
+  mounted() {
     if (this.distributorOptions.length === 0) {
       this.getDataList()
     }
   },
   methods: {
-    init (data, isEdit) {
+    init(data, isEdit) {
       this.isEdit = isEdit
       this.isSubmit = false
       if (isEdit) {
@@ -140,16 +143,32 @@ export default {
       this.getDistributionLevelList()
     },
     // 新增 / 修改
-    info (data) {
+    info(data) {
       this.infoVisible = true
       this.$nextTick(() => {
         this.$refs.info.init(data)
       })
     },
     // 表单提交
-    dataFormSubmit () {
+    dataFormSubmit() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          if (this.dataForm.state == 1 && !this.dataForm.shopId) {
+            this.$message({
+              message: '请选择合伙人',
+              type: 'error',
+              duration: 1500,
+            })
+            return
+          }
+          if (this.dataForm.state == 1 && !this.dataForm.distributionInfoId) {
+            this.$message({
+              message: '请选择团长等级',
+              type: 'error',
+              duration: 1500,
+            })
+            return
+          }
           let param = this.dataForm
           if (this.isSubmit) {
             return false
@@ -178,7 +197,7 @@ export default {
       })
     },
     // 分销人数据
-    getDataList () {
+    getDataList() {
       this.dataListLoading = true
       this.$http({
         url: this.$http.adornUrl('/shop/shopAuditing/page'),
@@ -195,7 +214,7 @@ export default {
       })
     },
     // 获取会员等级列表
-    getDistributionLevelList(){
+    getDistributionLevelList() {
       this.dataListLoading = true
       this.$http({
         url: this.$http.adornUrl('/platform/distributionConfig/user/info'),

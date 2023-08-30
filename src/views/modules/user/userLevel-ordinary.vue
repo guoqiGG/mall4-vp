@@ -17,7 +17,7 @@
         <el-tag class="operation-tag" type="warning" v-if="isUpdateData">{{$t('user.updateSoon')}}</el-tag>
       </div>
       <!-- <el-checkbox v-model="dataForm.levelSetConditionsSwitch.boundCustomers">绑定客户数</el-checkbox>
-      <el-checkbox v-model="dataForm.levelSetConditionsSwitch.invitedVeeker">邀请分销员数</el-checkbox>-->
+      <el-checkbox v-model="dataForm.levelSetConditionsSwitch.invitedVeeker">邀请团长数</el-checkbox>-->
       <div class="table-con">
         <el-table
           :data="dataForm.userLevels"

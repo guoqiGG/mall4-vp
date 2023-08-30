@@ -15,7 +15,7 @@
       :true-label='1'>默认奖励</el-checkbox>-->
       <!-- </el-form-item> -->
       <!-- <el-checkbox v-model="dataForm.levelSetConditionsSwitch.boundCustomers">绑定客户数</el-checkbox>
-      <el-checkbox v-model="dataForm.levelSetConditionsSwitch.invitedVeeker">邀请分销员数</el-checkbox>-->
+      <el-checkbox v-model="dataForm.levelSetConditionsSwitch.invitedVeeker">邀请团长数</el-checkbox>-->
       <br />
       <!-- <el-button @click="addRow"                    :rules="[{required: true, message: '注册氢春豆获取不能为空', trigger: 'blur'}]"
       style="margin-top:15px">添加等级</el-button>-->

@@ -39,7 +39,7 @@
           row-class-name="table-row-low"
           style="width: 100%"
         >
-          <!-- 分销员昵称 -->
+          <!-- 团长昵称 -->
           <el-table-column
             prop="nickName"
             label="昵称"
@@ -48,7 +48,7 @@
               <span class="table-cell-text line-clamp-one">{{scope.row.distributionUser.nickName}}</span>
             </template>
           </el-table-column>
-          <!-- 分销员手机号 -->
+          <!-- 团长手机号 -->
           <el-table-column
             prop="userMobile"
             label="团长手机号"

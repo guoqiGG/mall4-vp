@@ -87,7 +87,7 @@
             <el-button class="operation-btn" size="mini" @click="clear()">修改成长值</el-button>
             <el-button class="operation-btn" size="mini" @click="clear()">打标签</el-button>
             <el-button class="operation-btn" size="mini" @click="clear()">修改氢春豆</el-button>
-            <!-- <el-button class="operation-btn" size="mini" @click="clear()">修改分销员等级</el-button> -->
+            <!-- <el-button class="operation-btn" size="mini" @click="clear()">修改团长等级</el-button> -->
             <!-- <el-button class="operation-btn" size="mini" @click="clear()">送优惠券</el-button> -->
             <!-- <el-button class="operation-btn" size="mini" @click="clear()">修改关系链</el-button> -->
           </el-form-item>
@@ -168,7 +168,7 @@
           <el-table-column prop="sumBalance" label="累计余额" v-if="isVisible18"></el-table-column>
           <!-- 分销信息 -->
           <!-- <el-table-column prop="distributionLevel" label="分销等级"></el-table-column>
-          <el-table-column prop="distributorTime" label="成为分销员时间"></el-table-column>-->
+          <el-table-column prop="distributorTime" label="成为团长时间"></el-table-column>-->
           <el-table-column label="操作" fixed="right">
             <template slot-scope="scope">
               <el-button size="mini" @click="addOrUpdateHandle(scope.$index, scope.row)">详情</el-button>

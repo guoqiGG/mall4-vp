@@ -468,7 +468,7 @@ export default {
       // this.$refs['couponUserParam'].resetFields()
       Object.assign(this.couponUserParam, this.$options.data().couponUserParam)
     },
-    // 获取分销员信息
+    // 获取团长信息
     getDistribution() {
       this.$http({
         url: this.$http.adornUrl(`/distribution/distributionUser/getInfo/${this.dataForm.userId}`),

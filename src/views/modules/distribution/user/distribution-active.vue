@@ -3,8 +3,8 @@
     <div class="search-bar">
       <el-form @submit.native.prevent :inline="true" class="search-form" ref="searchForm" :model="searchForm" label-width="auto" size="small">
         <div class="input-row">
-          <el-form-item prop="userMobile" label="分销员手机号" class="search-form-item">
-            <el-input type="text" v-model="searchForm.userMobile" placeholder="分销员手机号"></el-input>
+          <el-form-item prop="userMobile" label="团长手机号" class="search-form-item">
+            <el-input type="text" v-model="searchForm.userMobile" placeholder="团长手机号"></el-input>
           </el-form-item>
         </div>
         <div class="default-btn primary-btn" @click="searchChange">{{$t('product.search')}}</div>
@@ -23,7 +23,7 @@
             fixed
             align="center"
             prop="nickName"
-            label="分销员昵称"
+            label="团长昵称"
             width="auto">
             <template slot-scope="scope">
               {{scope.row.distributionUser.nickName}}
@@ -33,7 +33,7 @@
             fixed
             align="center"
             prop="userMobile"
-            label="分销员手机号"
+            label="团长手机号"
             width="auto">
             <template slot-scope="scope">
               {{scope.row.distributionUser.userMobile}}

@@ -112,7 +112,7 @@
               {{scope.row.incomeAmount || '-'}}
             </template>
           </el-table-column>
-          <!-- 分销员 -->
+          <!-- 团长 -->
           <el-table-column
             prop="nickName"
             :label="$t('distributionProdLog.distributor')"

@@ -33,13 +33,13 @@
       <div class="table-con distribution-withdrawCash-table">
         <el-table ref="distributionWithdrawCashTable" :data="dataList" header-cell-class-name="table-header"
           row-class-name="table-row-low" style="width: 100%">
-          <!-- 分销员昵称 -->
+          <!-- 团长昵称 -->
           <el-table-column width="120" prop="nickName" :label="$t('distribUserWallet.distributorNickname')">
             <template slot-scope="scope">
               {{ scope.row.distributionUser ? scope.row.distributionUser.nickName : '' }}
             </template>
           </el-table-column>
-          <!-- 分销员手机号 -->
+          <!-- 团长手机号 -->
           <el-table-column width="120" prop="userMobile" :label="$t('distribUserWallet.mobileTelNumber')">
             <template slot-scope="scope">
               {{ scope.row.distributionUser ? scope.row.distributionUser.userMobile : '' }}

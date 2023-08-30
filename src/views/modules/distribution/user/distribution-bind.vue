@@ -58,17 +58,17 @@
           <!-- 团长等级 -->
           <el-table-column label="团长等级">
             <template slot-scope="scope">
-              {{ scope.row.distributionInfo ? scope.row.distributionInfo.name : '' }}
+              {{ scope.row.distributionInfo ? scope.row.distributionInfo.name : '无' }}
             </template>
 
           </el-table-column>
-          <!-- 分销员 -->
+          <!-- 团长 -->
           <el-table-column prop="parentNickName" :label="$t('distributionProdLog.distributor')">
             <template slot-scope="scope">
               <span v-if="scope.row.distributionUser">{{ scope.row.distributionUser.nickName }}</span>
             </template>
           </el-table-column>
-          <!--分销员号码-->
+          <!--团长号码-->
           <el-table-column prop="userMobile" :label="$t('distributionProdLog.userMobile')">
             <template slot-scope="scope">
               {{ scope.row.distributionUser.userMobile }}

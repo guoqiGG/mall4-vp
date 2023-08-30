@@ -34,7 +34,7 @@
           style="width: 100%"
           @sort-change="sortChange"
         >
-          <!-- 分销员昵称 -->
+          <!-- 团长昵称 -->
           <el-table-column
             width="200"
             prop="nickName"
@@ -44,7 +44,7 @@
               {{scope.row.nickName}}
             </template>
           </el-table-column>
-          <!-- 分销员手机号 -->
+          <!-- 团长手机号 -->
           <el-table-column
             width="150"
             prop="userMobile"

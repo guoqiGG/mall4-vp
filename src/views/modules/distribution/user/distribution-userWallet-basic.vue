@@ -26,7 +26,7 @@
           row-class-name="table-row-low"
           style="width: 100%"
         >
-          <!-- 分销员昵称 -->
+          <!-- 团长昵称 -->
           <el-table-column
             prop="nickName"
             :label="$t('distribUserWallet.distributorNickname')"
@@ -35,7 +35,7 @@
               {{scope.row.distributionUser ? scope.row.distributionUser.nickName : '' }}
             </template>
           </el-table-column>
-          <!-- 分销员手机号 -->
+          <!-- 团长手机号 -->
           <el-table-column
             prop="userMobile"
             :label="$t('distribUserWallet.mobileTelNumber')"

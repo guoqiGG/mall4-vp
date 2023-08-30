@@ -42,7 +42,7 @@
               {{scope.row.nickName}}
             </template>
           </el-table-column>
-          <!-- 分销员手机号 -->
+          <!-- 团长手机号 -->
           <el-table-column
             width="150"
             prop="userMobile"
