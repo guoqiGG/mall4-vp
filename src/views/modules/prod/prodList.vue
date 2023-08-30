@@ -120,7 +120,7 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="totalStocks" :label="$t('product.availableInventory')" width="auto">
+          <el-table-column prop="totalStocks" :label="$t('product.availableInventory')" width="140">
             <!-- <template slot-scope="scope">
               <div class="water-sold-con">
                 <span slot="reference">{{ scope.row.totalStocks }}</span>

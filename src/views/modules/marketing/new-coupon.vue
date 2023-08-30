@@ -105,9 +105,9 @@
       <el-form-item :label="this.$i18n.t('coupon.effectiveType')" np size="mini" prop="validTimeType">
         <el-radio-group v-model="dataForm.validTimeType">
           <el-radio :label="1">{{ $t("marketing.fixedTime") }}</el-radio>
-          <el-radio :label="2">{{
+          <!-- <el-radio :label="2">{{
             $t("marketing.effectiveAfterReceipt")
-          }}</el-radio>
+          }}</el-radio> -->
         </el-radio-group>
       </el-form-item>
       <!-- 固定时间数据 START -->
