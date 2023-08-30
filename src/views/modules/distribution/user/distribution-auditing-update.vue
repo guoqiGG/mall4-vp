@@ -137,6 +137,7 @@ export default {
         this.dataForm.state = null
       }
       this.visible = true
+      this.getDistributionLevelList()
     },
     // 新增 / 修改
     info (data) {
@@ -191,6 +192,18 @@ export default {
           value: shopId,
           label: shopName
         }))
+      })
+    },
+    // 获取会员等级列表
+    getDistributionLevelList(){
+      this.dataListLoading = true
+      this.$http({
+        url: this.$http.adornUrl('/platform/distributionConfig/user/info'),
+        method: 'get',
+        params: this.$http.adornParams()
+      }).then(({ data }) => {
+        this.dataList = data
+        this.dataListLoading = false
       })
     }
   }

@@ -9,14 +9,13 @@
         <el-table ref="prodListTable" :data="dataList" header-cell-class-name="table-header" row-class-name="table-row"
           style="width: 100%">
           <el-table-column align="center" prop="name" label="等级名称" width="100" />
-          <el-table-column align="center" prop="gradeRatio" label="团长提成比例" width="auto" />
+          <el-table-column align="center" prop="gradeRatio" label="团长提成比例(%)" width="auto" />
           <el-table-column fixed="right" align="center" :label="$t('publics.operating')" width="230">
             <template slot-scope="scope">
               <div class="text-btn-con">
                 <div class="default-btn text-btn" v-if="isAuth('platform:distributionLevel:update')" type="text"
                   @click="addOrUpdateHandle(scope.row.id)">修改</div>
-                <div class="default-btn text-btn"
-                  v-if="isAuth('platform:distributionLevel:delete')"
+                <div class="default-btn text-btn" v-if="isAuth('platform:distributionLevel:delete')"
                   @click="deleteHandle(scope.row.id)">删除</div>
               </div>
             </template>

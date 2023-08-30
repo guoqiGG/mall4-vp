@@ -120,8 +120,8 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('product.availableInventory')" width="auto">
-            <template slot-scope="scope">
+          <el-table-column prop="totalStocks" :label="$t('product.availableInventory')" width="auto">
+            <!-- <template slot-scope="scope">
               <div class="water-sold-con">
                 <span slot="reference">{{ scope.row.totalStocks }}</span>
                 <el-popover placement="bottom" trigger="click" style="width: 150px !important;"
@@ -143,7 +143,7 @@
                     slot="reference" class="el-icon-edit" />
                 </el-popover>
               </div>
-            </template>
+            </template> -->
           </el-table-column>
           <el-table-column prop="prodType" :label="$t('product.prodType')" width="120">
             <template slot-scope="scope">
