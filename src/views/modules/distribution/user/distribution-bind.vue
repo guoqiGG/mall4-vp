@@ -55,6 +55,13 @@
             </template>
 
           </el-table-column>
+          <!-- 团长等级 -->
+          <el-table-column label="团长等级">
+            <template slot-scope="scope">
+              {{ scope.row.distributionInfo ? scope.row.distributionInfo.name : '' }}
+            </template>
+
+          </el-table-column>
           <!-- 分销员 -->
           <el-table-column prop="parentNickName" :label="$t('distributionProdLog.distributor')">
             <template slot-scope="scope">
@@ -132,7 +139,7 @@
 <script>
 import { debounce } from 'lodash'
 export default {
-  data () {
+  data() {
     return {
       rules: {
         parentId: [
@@ -173,11 +180,11 @@ export default {
   },
   components: {
   },
-  created () {
+  created() {
     this.getDataList()
   },
   methods: {
-    sortChange (column) {
+    sortChange(column) {
       console.log(column)
       const { prop, order } = column
       const sortParam = {}
@@ -200,17 +207,17 @@ export default {
       this.getDataList(this.page)
     },
     // 刷新回调
-    refreshChange () {
+    refreshChange() {
       this.page.currentPage = 1
       this.getDataList(this.page)
     },
     // 点击查询
-    searchChange (newData = false) {
+    searchChange(newData = false) {
       this.page.currentPage = 1
       this.getDataList(this.page, newData)
     },
     // 获取数据列表
-    getDataList (page, newData = false) {
+    getDataList(page, newData = false) {
       this.dataListLoading = true
       if (newData || !this.theData) {
         this.theData = JSON.parse(JSON.stringify(this.searchForm))
@@ -240,26 +247,26 @@ export default {
      * 重置表单
      * @param {String} formName 表单名称
      */
-    resetSearchForm (formName) {
+    resetSearchForm(formName) {
       this.$refs[formName].resetFields()
       this.searchForm = {}
     },
 
-    handleSizeChange (val) {
+    handleSizeChange(val) {
       this.page.pageSize = val
       this.getDataList(this.page)
     },
-    handleCurrentChange (val) {
+    handleCurrentChange(val) {
       this.page.currentPage = val
       this.getDataList(this.page)
     },
     // 展示弹窗
-    showEditDialog (scope) {
+    showEditDialog(scope) {
       this.editDialogVisible = true
       this.editRecord = scope
     },
     // 关闭弹窗
-    closeEditDialog () {
+    closeEditDialog() {
       this.editDialogVisible = false
       this.editRecord = { user: {} }
       this.editForm = { parentId: undefined }
@@ -284,7 +291,7 @@ export default {
       })
     }, 300),
     // 提交修改
-    handleSubmitEdit () {
+    handleSubmitEdit() {
       this.$refs.editForm.validate(valid => {
         if (valid) {
           this.$http({

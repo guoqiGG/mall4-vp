@@ -1,17 +1,12 @@
 <template>
   <div class="mod-marketing-distribution-item base-set">
-    <el-form @submit.native.prevent
-      ref="dataForm"
-      size="small"
-      class="set-form"
-      :model="dataForm"
-    >
+    <el-form @submit.native.prevent ref="dataForm" size="small" class="set-form" :model="dataForm">
       <!-- 基本设置 -->
       <div class="form-item">
         <div class="title">{{ $t('distribution.basicDistributionSet') }}</div>
         <div class="form-item-content">
           <!-- 分销开关 -->
-          <el-form-item :label="this.$i18n.t('distribution.distributionSwitch')+':'">
+          <el-form-item :label="this.$i18n.t('distribution.distributionSwitch') + ':'">
             <el-radio-group v-model="dataForm.distributionSwitch">
               <el-radio :label="0">{{ $t('seckill.close') }}</el-radio>
               <el-radio :label="1">{{ $t('seckill.open') }}</el-radio>
@@ -46,66 +41,46 @@
             </el-radio-group>
           </el-form-item> -->
           <!-- 申请条件 -->
-          <el-form-item v-if="dataForm.autoCheck === 1" :label="this.$i18n.t('distribution.applicationConditions')+':'">
+          <el-form-item v-if="dataForm.autoCheck === 1" :label="this.$i18n.t('distribution.applicationConditions') + ':'">
             <div class="condition-item marginBottom">
               <el-checkbox v-model="isProd">{{ $t('distribution.purchaseDesignatedGoods') }}</el-checkbox>
               <el-button v-if="isProd" plain size="small" @click="prodsSelectHandle">{{ '选择商品' }}</el-button>
               <span class="tips">{{ $t('distribution.buyConditionTip2') }}</span>
               <el-row v-if="isProd">
-                <div
-                  v-for="(prod, index) in productVOList"
-                  :key="index"
-                  class="productStyle"
-                >
+                <div v-for="(prod, index) in productVOList" :key="index" class="productStyle">
                   <el-card :body-style="{ padding: '0px' }" style="height: 160px;width: 120px">
-                    <ImgShow :src="prod.pic" :imgStyle="{width:'100%',height:'104px'}" />
+                    <ImgShow :src="prod.pic" :imgStyle="{ width: '100%', height: '104px' }" />
                     <div class="card-prod-bottom">
                       <span class="card-prod-name">{{ prod.prodName }}</span>
-                      <el-button
-                        type="text"
-                        class="card-prod-name-button"
-                        @click="deleteProd(index)"
-                      >{{ $t('user.deleteBtn') }}</el-button>
+                      <el-button type="text" class="card-prod-name-button" @click="deleteProd(index)">{{
+                        $t('user.deleteBtn') }}</el-button>
                     </div>
                   </el-card>
                 </div>
               </el-row>
             </div>
 
-            <div class="condition-item input-group" :style="this.$i18n.t('language') === 'language' ?'marginLeft:150px':'marginLeft:72px'">
-              <el-checkbox v-model="isExpenseNumber" class="input-checked" @change="removeExpenseNumber">{{ $t('distribution.bcTip3') }}</el-checkbox>
+            <div class="condition-item input-group"
+              :style="this.$i18n.t('language') === 'language' ? 'marginLeft:150px' : 'marginLeft:72px'">
+              <el-checkbox v-model="isExpenseNumber" class="input-checked" @change="removeExpenseNumber">{{
+                $t('distribution.bcTip3') }}</el-checkbox>
               <el-form-item prop="expenseNumber">
-                <el-input
-                  v-model="dataForm.expenseNumber"
-                  type="number"
-                  min="1"
-                  :disabled="!isExpenseNumber"
-                  style="width:240px"
-                  @change="checkNumber"
-                >
+                <el-input v-model="dataForm.expenseNumber" type="number" min="1" :disabled="!isExpenseNumber"
+                  style="width:240px" @change="checkNumber">
                   <template slot="append">{{ $t('distribution.bcTip4') }}</template>
                 </el-input>
               </el-form-item>
               <span class="tips">{{ $t('distribution.bcTip5') }}</span>
             </div>
 
-            <div class="condition-item input-group" :style="this.$i18n.t('language') === 'language' ?'marginLeft:150px':'marginLeft:72px'">
-              <el-checkbox
-                v-model="isExpenseAmount"
-                class="input-checked"
-                @change="removeExpenseAmount"
-              >{{ $t('distribution.dbcTip1') }}</el-checkbox>
+            <div class="condition-item input-group"
+              :style="this.$i18n.t('language') === 'language' ? 'marginLeft:150px' : 'marginLeft:72px'">
+              <el-checkbox v-model="isExpenseAmount" class="input-checked" @change="removeExpenseAmount">{{
+                $t('distribution.dbcTip1') }}</el-checkbox>
               <el-form-item prop="expenseAmount">
-                <el-input
-                  v-model="dataForm.expenseAmount"
-                  type="number"
-                  min="0"
-                  style="width:240px"
-                  :disabled="!isExpenseAmount"
-                  oninput="value=value.replace(/[^0-9.]/g,'')"
-                  @change="checkAmount"
-                >
-                  <template slot="append">{{$t('distribution.dbcTip2') }}</template>
+                <el-input v-model="dataForm.expenseAmount" type="number" min="0" style="width:240px"
+                  :disabled="!isExpenseAmount" oninput="value=value.replace(/[^0-9.]/g,'')" @change="checkAmount">
+                  <template slot="append">{{ $t('distribution.dbcTip2') }}</template>
                 </el-input>
               </el-form-item>
               <span class="tips">{{ $t('distribution.dbcTip3') }}</span>
@@ -117,30 +92,32 @@
             <el-checkbox v-model="dataForm.identityCardNumber">{{ $t('distribution.idCardNo') }}</el-checkbox>
             <el-checkbox v-model="dataForm.identityCardPic">{{ $t('distribution.idCardPhoto') }}</el-checkbox>
           </el-form-item> -->
-<!--          提现发放方式-->
-          <el-form-item :label="this.$i18n.t('distribution.Withdrawal')+':'">
+          <!--          提现发放方式-->
+          <el-form-item :label="this.$i18n.t('distribution.Withdrawal') + ':'">
             &nbsp;
-            <el-tooltip class="item" effect="light" :content="$t('distribution.WithdrawalTip')" placement="right" style="color: #155BD4;">
+            <el-tooltip class="item" effect="light" :content="$t('distribution.WithdrawalTip')" placement="right"
+              style="color: #155BD4;">
               <i class="el-icon-question" />
             </el-tooltip>
             &nbsp;
             <el-radio-group v-model="dataForm.withdrawal">
-            <el-radio :label="0" disabled>{{ $t('distribution.Issued1') }}</el-radio>
-            <el-radio :label="1">{{ $t('distribution.Issued2') }}
-              <el-tooltip class="item" effect="light" :content="$t('distribution.WithdrawalTip2')" placement="right" style="color: #155BD4;">
-                <i class="el-icon-question" />
-              </el-tooltip>
-            </el-radio>
-            <el-radio :label="2" disabled>{{ $t('distribution.Issued3') }}</el-radio>
+              <el-radio :label="0" disabled>{{ $t('distribution.Issued1') }}</el-radio>
+              <el-radio :label="1">{{ $t('distribution.Issued2') }}
+                <el-tooltip class="item" effect="light" :content="$t('distribution.WithdrawalTip2')" placement="right"
+                  style="color: #155BD4;">
+                  <i class="el-icon-question" />
+                </el-tooltip>
+              </el-radio>
+              <el-radio :label="2" disabled>{{ $t('distribution.Issued3') }}</el-radio>
             </el-radio-group>
           </el-form-item>
 
-          <el-form-item label="分销比例" props="distributionRatio">
+          <!-- <el-form-item label="分销比例" props="distributionRatio">
             <el-input-number v-model="dataForm.distributionRatio"  controls-position="right" :min="0" :max="100"></el-input-number>
             <el-tooltip class="item" effect="light" content="百分比,请输入 0-100 的整数,输入 1 即 1%。" placement="right" style="color: #155BD4;">
               <i class="el-icon-question" />
             </el-tooltip>
-          </el-form-item>
+          </el-form-item> -->
 
         </div>
       </div>
@@ -165,55 +142,37 @@
             <span class="tips">{{  $t('withdraw.tip3') }}</span>
           </el-form-item> -->
           <!-- 提现频次 -->
-          <el-form-item :label="this.$i18n.t('withdraw.withdrawalFrequency')+':'">
-            <el-select
-              v-model="dataForm.frequency"
-              :placeholder="this.$i18n.t('user.pleaseSelect')"
-              style="display: inline-black"
-            >
+          <el-form-item :label="this.$i18n.t('withdraw.withdrawalFrequency') + ':'">
+            <el-select v-model="dataForm.frequency" :placeholder="this.$i18n.t('user.pleaseSelect')"
+              style="display: inline-black">
               <el-option :label="this.$i18n.t('withdraw.everyDay')" :value="1" />
               <el-option :label="this.$i18n.t('withdraw.weekly')" :value="7" />
               <el-option :label="this.$i18n.t('withdraw.monthly')" :value="30" />
               <el-option :label="this.$i18n.t('withdraw.unlimited')" :value="-1" />
             </el-select>
 
-            <el-input
-              v-if="dataForm.frequency !== -1"
-              v-model.number="dataForm.number"
-              style="width: 180px; display: inline-black"
-              oninput="value=value.replace(/[^\d]/g,'')"
-              maxlength="2"
-              @blur="numberInpBlur"
-            >
+            <el-input v-if="dataForm.frequency !== -1" v-model.number="dataForm.number"
+              style="width: 180px; display: inline-black" oninput="value=value.replace(/[^\d]/g,'')" maxlength="2"
+              @blur="numberInpBlur">
               <template slot="append">{{ $t('distribution.bcTip4') }}</template>
             </el-input>
           </el-form-item>
           <!-- 提现说明 -->
-          <el-form-item :label="this.$i18n.t('withdraw.withdrawalInstructions')+':'">
-            <el-input
-              v-model="dataForm.paymentExplain"
-              type="textarea"
-              style="width: 455px"
-              :rows="5"
-              maxlength="50"
-              show-word-limit
-            />
+          <el-form-item :label="this.$i18n.t('withdraw.withdrawalInstructions') + ':'">
+            <el-input v-model="dataForm.paymentExplain" type="textarea" style="width: 455px" :rows="5" maxlength="50"
+              show-word-limit />
             <br>
             <span class="tips">{{ $t('withdraw.tip4') }}</span>
           </el-form-item>
           <el-form-item label="">
-            <div class="default-btn primary-btn" @click="dataFormSubmit()">{{$t('distribution.save')}}</div>
+            <div class="default-btn primary-btn" @click="dataFormSubmit()">{{ $t('distribution.save') }}</div>
           </el-form-item>
         </div>
       </div>
     </el-form>
 
-    <prods-select
-      v-if="prodsSelectVisible"
-      ref="prodsSelect"
-      :activity-type="1"
-      @refreshSelectProds="selectDistributionProds"
-    />
+    <prods-select v-if="prodsSelectVisible" ref="prodsSelect" :activity-type="1"
+      @refreshSelectProds="selectDistributionProds" />
   </div>
 </template>
 
@@ -224,7 +183,7 @@ export default {
   components: {
     ProdsSelect
   },
-  data () {
+  data() {
     // 消费次数校验规则
     var isExpenseNumber = (rule, value, callback) => {
       if (!this.isexpense_number) {
@@ -288,7 +247,7 @@ export default {
         paymentExplain: null,
         number: null,
         withdrawal: 2,
-        distributionRatio:0.00, // 分销比例
+        distributionRatio: 0.00, // 分销比例
       },
       rules: {
         expenseNumber: [
@@ -301,16 +260,16 @@ export default {
     }
   },
   computed: {
-    language () {
+    language() {
       return this.$store.getters.language
     }
   },
-  created () {
+  created() {
     this.getData()
   },
   methods: {
     // 提现次数
-    numberInpBlur () {
+    numberInpBlur() {
       if (this.dataForm.number > 10) {
         this.dataForm.number = 10
       }
@@ -319,7 +278,7 @@ export default {
       }
     },
     // 获取数据
-    getData () {
+    getData() {
       this.$http({
         url: this.$http.adornUrl(`/platform/distributionConfig/info`),
         method: 'get',
@@ -331,7 +290,7 @@ export default {
       })
     },
     // 设置数据
-    setDate (data) {
+    setDate(data) {
       this.dataForm = data
       if (this.dataForm.productVOList == null) {
         this.dataForm.productVOList = []
@@ -351,7 +310,7 @@ export default {
       }
     },
     // 提交表单
-    dataFormSubmit () {
+    dataFormSubmit() {
       this.$refs['dataForm'].validate((valid) => {
         if (!valid) {
           return
@@ -457,7 +416,7 @@ export default {
     /**
      * 切换选项数据初始化
      */
-    changeRadio (autoCheck) {
+    changeRadio(autoCheck) {
       if (autoCheck === 0) {
         this.isProd = false
         this.dataForm.productVOList = []
@@ -469,14 +428,14 @@ export default {
       }
     },
     // 显示添加指定商品弹框
-    prodsSelectHandle () {
+    prodsSelectHandle() {
       this.prodsSelectVisible = true
       this.$nextTick(() => {
         this.$refs.prodsSelect.init(this.productVOList)
       })
     },
     // 商品选择回调
-    selectDistributionProds (prods) {
+    selectDistributionProds(prods) {
       if (prods) {
         console.log('prods: ', prods)
         this.productVOList = []
@@ -486,20 +445,20 @@ export default {
       }
     },
     // 删除指定商品
-    deleteProd (index) {
+    deleteProd(index) {
       console.log(this.productVOList)
       this.productVOList.splice(index, 1)
     },
     // 清除消费次数数据
-    removeExpenseAmount () {
+    removeExpenseAmount() {
       this.dataForm.expenseAmount = null
     },
     // 清除消费金额数据
-    removeExpenseNumber () {
+    removeExpenseNumber() {
       this.dataForm.expenseNumber = null
     },
     // 消费次数上限校验
-    checkNumber () {
+    checkNumber() {
       const inNumber = Math.round(parseInt(this.dataForm.expenseNumber))
       if (inNumber < 1) {
         this.dataForm.expenseNumber = 1
@@ -508,7 +467,7 @@ export default {
       }
     },
     // 消费金额校验
-    checkAmount (expenseAmount) {
+    checkAmount(expenseAmount) {
       if (!expenseAmount) {
         return
       }
@@ -520,7 +479,7 @@ export default {
       }
     },
     // 单笔最小金额检验
-    checkamountMin () {
+    checkamountMin() {
       if (this.dataForm.amountMin === '') {
         return
       }
@@ -532,7 +491,7 @@ export default {
       }
     },
     // 单笔最大金额检验
-    checkamountMax () {
+    checkamountMax() {
       if (this.dataForm.amountMax === '') {
         return
       }
@@ -551,37 +510,46 @@ export default {
   .input-group .el-form-item--small {
     display: inline-block;
   }
+
   .input-group .el-form-item--mini {
     display: inline-block;
   }
+
   .input-group {
     margin-left: 72px;
   }
-  .marginBottom{
+
+  .marginBottom {
     margin-bottom: 10px;
   }
+
   .el-form-item__content {
     margin-left: 0px !important;
   }
+
   .form-item-content {
     .lastItem {
       margin-top: 0px;
     }
   }
+
   .productStyle {
     margin: 5px 10px 0px 68px;
-    float:left
+    float: left
   }
+
   .productStyleEn {
-     margin: 5px 10px 0px 142px;
+    margin: 5px 10px 0px 142px;
   }
-  .performanceAttribution{
+
+  .performanceAttribution {
     color: #155BD4;
     margin-left: 6px;
     font-size: 15px;
   }
 }
-.performanceAttribution-content{
+
+.performanceAttribution-content {
   max-width: 300px;
 }
 </style>

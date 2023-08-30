@@ -170,7 +170,7 @@
               <span class="item">{{ $t("order.transaQuantity") }}</span>
             </el-col>
             <el-col :span="3" class="column-title">
-              <span class="item">{{ $t("order.paymentAmount") }}</span>
+              <span class="item">{{ $t("order.paymentAmount")+'/礼品券(张)' }}</span>
             </el-col>
             <el-col :span="3" class="column-title">
               <span class="item">{{ $t("order.paymentMethod") }}</span>
@@ -258,7 +258,7 @@
                         order.score && order.score > 0
                           ? "+ " + order.score + " " + $t("order.score")
                           : ""
-                      }}</span
+                      }}{{order.giftNumber?"+ "+order.giftNumber+' 礼品券':''}}</span
                     >
                     <span class="totalprice" v-if="order.freightAmount"
                       >（{{ $t("order.includingFreight") }}：{{

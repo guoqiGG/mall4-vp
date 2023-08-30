@@ -1,7 +1,8 @@
 <template>
   <div class="mod-prod prod-list-mod">
     <div class="search-bar">
-      <el-form @submit.native.prevent :inline="true" class="search-form" ref="searchForm" :model="searchForm" size="small">
+      <el-form @submit.native.prevent :inline="true" class="search-form" ref="searchForm" :model="searchForm"
+        size="small">
         <div class="input-row">
           <el-form-item prop="shopName" :label="$t('prodList.shopName') + ':'" class="search-form-item">
             <el-input type="text" v-model="searchForm.shopName" :placeholder="$t('prodList.shopName')"></el-input>
@@ -21,7 +22,7 @@
               <el-option :label="$t('product.virtualGoods')" :value="1"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item prop="isCompose" :label="$t('product.prodType')+ ':'">
+          <el-form-item prop="isCompose" :label="$t('product.prodType') + ':'">
             <el-select v-model="searchForm.prodType" :placeholder="$t('product.prodType')">
               <el-option :label="$t('product.ordProd')" :value="0"></el-option>
               <el-option :label="$t('product.groupProd')" :value="1"></el-option>
@@ -48,7 +49,8 @@
           </el-form-item>
           <el-form-item prop="category" :label="$t('product.category') + ':'" class="search-form-item">
             <el-select v-model="searchForm.categoryId" :placeholder="$t('product.category')">
-              <el-option v-for="(item,index) in categoryList" :key="index" :label="item.categoryName" :value="item.categoryId"></el-option>
+              <el-option v-for="(item, index) in categoryList" :key="index" :label="item.categoryName"
+                :value="item.categoryId"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item prop="isTop" :label="$t('product.isTop') + ':'" class="search-form-item">
@@ -58,45 +60,28 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <div class="default-btn primary-btn" @click="searchChange(true)">{{$t('product.search')}}</div>
-            <div class="default-btn" @click="resetSearchForm()">{{$t('product.reset')}}</div>
+            <div class="default-btn primary-btn" @click="searchChange(true)">{{ $t('product.search') }}</div>
+            <div class="default-btn" @click="resetSearchForm()">{{ $t('product.reset') }}</div>
           </el-form-item>
         </div>
       </el-form>
     </div>
     <div class="export-btn">
-      <el-button type="primary" size="small" v-if="isAuth('prod:prod:exportProd')" @click="exportFrom()">{{$t('order.export')}}</el-button>
+      <el-button type="primary" size="small" v-if="isAuth('prod:prod:exportProd')" @click="exportFrom()">{{
+        $t('order.export') }}</el-button>
     </div>
     <div class="main-container">
       <div ref="closepopover" class="table-con prod-table">
-        <el-table
-          ref="prodListTable"
-          :data="dataList"
-          header-cell-class-name="table-header"
-          row-class-name="table-row"
-          style="width: 100%"
-          @selection-change="selectionChange"
-          @sort-change="changeTableSort"
-          @cell-mouse-enter="enterTableRow"
-          @cell-mouse-leave="leaveTableRow">
-          <el-table-column
-            type="selection"
-            prop="prodId"
-            width="55" />
-          <el-table-column
-            fixed
-            prop="shopName"
-            :label="$t('prodList.shopName')"
-            width="auto">
+        <el-table ref="prodListTable" :data="dataList" header-cell-class-name="table-header" row-class-name="table-row"
+          style="width: 100%" @selection-change="selectionChange" @sort-change="changeTableSort"
+          @cell-mouse-enter="enterTableRow" @cell-mouse-leave="leaveTableRow">
+          <el-table-column type="selection" prop="prodId" width="55" />
+          <el-table-column fixed prop="shopName" :label="$t('prodList.shopName')" width="auto">
             <template slot-scope="scope">
               <span class="table-cell-text">{{ scope.row.shopName }}</span>
             </template>
           </el-table-column>
-          <el-table-column
-            fixed
-            prop="prodName"
-            :label="$t('group.prodInfo')"
-            width="320">
+          <el-table-column fixed prop="prodName" :label="$t('group.prodInfo')" width="320">
             <template slot-scope="scope">
               <div class="table-cell-con">
                 <div class="table-cell-image">
@@ -106,80 +91,76 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column
-            prop="oriPrice"
-            :label="$t('prodList.marketValue')"
-            width="100">
+          <el-table-column prop="oriPrice" :label="$t('prodList.marketValue')" width="100">
           </el-table-column>
-          <el-table-column
-            prop="price"
-            :label="$t('prodList.salesPrice')"
-            width="100">
+          <el-table-column prop="price" :label="$t('prodList.salesPrice')" width="100">
           </el-table-column>
-          <el-table-column
-            :label="$t('product.waterSoldNum')"
-            width="auto">
-             <template slot-scope="scope">
-               <div class="water-sold-con">
-                 <span slot="reference">{{ scope.row.waterSoldNum }}</span>
-                 <el-popover
-                   placement="bottom"
-                   trigger="click"
-                   style="width: 150px !important;"
-                   @show="showWaterSoldNum(scope.row.waterSoldNum)"
-                   @after-enter="getCurrentSpuId(scope.row.prodId, 'waterSoldNum')"
-                   @hide="initProdInf()"
-                 >
-                   <div class="popover-box">
-                     <div>
-                       <el-input-number
-                         :value="waterSoldNum"
-                         type="number"
-                         size="small"
-                         onkeypress="return( /[\d]/.test(String.fromCharCode(event.keyCode)))"
-                         @change="(currentValue, oldValue) => {changeWaterSoldNum(currentValue, oldValue)}"
-                         class="sales-volume"
-                         :min="0"
-                         :max="1000000000"
-                       />
-                     </div>
-                     <div class="popover-bottom">
-                       <el-button size="mini" @click="closePopover()">取消</el-button>
-                       <el-button size="mini" type="primary" @click="handleChange(scope.row.prodId)">保存</el-button>
-                     </div>
-                   </div>
-                   <i v-show="scope.row.prodId===currentMoveProdId || (scope.row.prodId===currentClickProdId && currentShowPopover==='waterSoldNum')" slot="reference" class="el-icon-edit" />
-                 </el-popover>
-               </div>
+          <el-table-column :label="$t('product.waterSoldNum')" width="auto">
+            <template slot-scope="scope">
+              <div class="water-sold-con">
+                <span slot="reference">{{ scope.row.waterSoldNum }}</span>
+                <el-popover placement="bottom" trigger="click" style="width: 150px !important;"
+                  @show="showWaterSoldNum(scope.row.waterSoldNum)"
+                  @after-enter="getCurrentSpuId(scope.row.prodId, 'waterSoldNum')" @hide="initProdInf()">
+                  <div class="popover-box">
+                    <div>
+                      <el-input-number :value="waterSoldNum" type="number" size="small"
+                        onkeypress="return( /[\d]/.test(String.fromCharCode(event.keyCode)))"
+                        @change="(currentValue, oldValue) => { changeWaterSoldNum(currentValue, oldValue) }"
+                        class="sales-volume" :min="0" :max="1000000000" />
+                    </div>
+                    <div class="popover-bottom">
+                      <el-button size="mini" @click="closePopover()">取消</el-button>
+                      <el-button size="mini" type="primary" @click="handleChange(scope.row.prodId)">保存</el-button>
+                    </div>
+                  </div>
+                  <i v-show="scope.row.prodId === currentMoveProdId || (scope.row.prodId === currentClickProdId && currentShowPopover === 'waterSoldNum')"
+                    slot="reference" class="el-icon-edit" />
+                </el-popover>
+              </div>
             </template>
           </el-table-column>
-           <el-table-column
-            prop="totalStocks"
-            :label="$t('product.availableInventory')"
-            width="120">
+          <el-table-column :label="$t('product.availableInventory')" width="auto">
+            <template slot-scope="scope">
+              <div class="water-sold-con">
+                <span slot="reference">{{ scope.row.totalStocks }}</span>
+                <el-popover placement="bottom" trigger="click" style="width: 150px !important;"
+                  @show="showTotalStocks(scope.row.totalStocks)"
+                  @after-enter="getCurrentSpuId(scope.row.prodId, 'totalStocks')" @hide="initProdInf()">
+                  <div class="popover-box">
+                    <div>
+                      <el-input-number :value="totalStocks" type="number" size="small"
+                        onkeypress="return( /[\d]/.test(String.fromCharCode(event.keyCode)))"
+                        @change="(currentValue, oldValue) => { changeTotalStocks(currentValue, oldValue) }"
+                        class="sales-volume" :min="0" :max="1000000000" />
+                    </div>
+                    <div class="popover-bottom">
+                      <el-button size="mini" @click="closePopover()">取消</el-button>
+                      <el-button size="mini" type="primary" @click="handleChange1(scope.row.prodId)">保存</el-button>
+                    </div>
+                  </div>
+                  <i v-show="scope.row.prodId === currentMoveProdId || (scope.row.prodId === currentClickProdId && currentShowPopover === 'waterSoldNum')"
+                    slot="reference" class="el-icon-edit" />
+                </el-popover>
+              </div>
+            </template>
           </el-table-column>
-          <el-table-column
-            prop="prodType"
-            :label="$t('product.prodType')"
-            width="120">
+          <el-table-column prop="prodType" :label="$t('product.prodType')" width="120">
             <template slot-scope="scope">
               <!-- 商品类型(0普通商品 1拼团 2秒杀 3氢春豆 5活动商品) -->
-              <div class="tag-text">{{[$t('product.ordProd'),$t('product.groupProd'),$t('product.limitedTimeProd'),$t('goods.points'),'', $t('product.activeProd')][scope.row.prodType]}}</div>
+              <div class="tag-text">
+                {{ [$t('product.ordProd'), $t('product.groupProd'), $t('product.limitedTimeProd'), $t('goods.points'), '',
+                $t('product.activeProd')][scope.row.prodType] }}</div>
             </template>
           </el-table-column>
-          <el-table-column
-            prop="mold"
-            :label="$t('product.prodMold')"
-            width="120">
+          <el-table-column prop="mold" :label="$t('product.prodMold')" width="120">
             <template slot-scope="scope">
               <!-- 商品类型(0普通商品 1拼团 2秒杀 3氢春豆 5活动商品) -->
-              <div class="tag-text">{{ scope.row.mold === 0 ? $t('product.physicalGoods') : $t('product.virtualGoods')}}</div>
+              <div class="tag-text">{{ scope.row.mold === 0 ? $t('product.physicalGoods') : $t('product.virtualGoods') }}
+              </div>
             </template>
           </el-table-column>
-          <el-table-column
-            prop="status"
-            :label="$t('product.status')"
-            width="auto">
+          <el-table-column prop="status" :label="$t('product.status')" width="auto">
             <!-- 0:商家下架 1:正常 2:平台下架 3:违规下架待平台审核 4:审核失败 6:待审核 -1表示删除 -->
             <template slot-scope="scope">
               <span v-if="scope.row.status === 1" class="tag-text">{{ $t("prodList.onShelf") }}</span>
@@ -191,27 +172,17 @@
               <span v-else class="tag-text">{{ $t("prodList.other") }}</span>
             </template>
           </el-table-column>
-          <el-table-column
-            prop="deliveryMode"
-            align="center"
-            :label="$t('product.delType')"
-            width="100">
+          <el-table-column prop="deliveryMode" align="center" :label="$t('product.delType')" width="100">
             <template slot-scope="scope">
-              <div v-if="scope.row.mold === 1">{{$t('order.noNeedRequired')}}</div>
+              <div v-if="scope.row.mold === 1">{{ $t('order.noNeedRequired') }}</div>
               <div v-else-if="scope.row.prodType === 5">-</div>
-              <div v-else>{{scope.row.deliveryMode | DeliveryMode}}</div>
+              <div v-else>{{ scope.row.deliveryMode | DeliveryMode }}</div>
             </template>
           </el-table-column>
-          <el-table-column
-            prop="isTop"
-            :label="$t('publics.isTop')"
-            width="auto">
+          <el-table-column prop="isTop" :label="$t('publics.isTop')" width="auto">
             <template slot-scope="scope">
-              <span v-if="scope.row.isTop === 0" class="tag-text">{{$t('publics.no')}}</span>
-              <span
-                v-else-if="scope.row.isTop === 1"
-                class="tag-text"
-              >{{$t('publics.yes')}}</span>
+              <span v-if="scope.row.isTop === 0" class="tag-text">{{ $t('publics.no') }}</span>
+              <span v-else-if="scope.row.isTop === 1" class="tag-text">{{ $t('publics.yes') }}</span>
             </template>
           </el-table-column>
           <!-- <el-table-column
@@ -221,65 +192,37 @@
             sortable="custom"
             >
           </el-table-column> -->
-          <el-table-column
-            fixed="right"
-            align="center"
-            :label="$t('publics.operating')"
-            width="280"
-            >
+          <el-table-column fixed="right" align="center" :label="$t('publics.operating')" width="340">
             <template slot-scope="scope">
               <div class="text-btn-con">
-                <div
-                  class="default-btn text-btn"
-                  v-if="isAuth('prod:prod:update')"
-                  @click="showProdInfo(scope.row.prodId)"
-                  >{{ $t("prodList.lookOver") }}</div>
-                <div
-                  class="default-btn text-btn"
+                <div class="default-btn text-btn" @click="copyUrl2(scope.row.prodId)">小程序商品链接</div>
+                <div class="default-btn text-btn" v-if="isAuth('prod:prod:update')"
+                  @click="showProdInfo(scope.row.prodId)">{{ $t("prodList.lookOver") }}</div>
+                <div class="default-btn text-btn"
                   v-if="isAuth('prod:prod:update') && scope.row.status > 1 && scope.row.status !== 6"
-                  @click="auditProdHandle(scope.row)"
-                  >{{ scope.row.status === 2 ? $t("prodList.offShelfManage") : $t("product.violationPendingReview") }}</div>
-                <div
-                  class="default-btn text-btn"
-                  v-if="scope.row.status === 6"
-                  @click="prodAuditHandle(scope.row)"
-                >{{ $t("product.pendingReview")}}</div>
-                <div
-                  class="default-btn text-btn"
-                  v-if="isAuth('prod:prod:update') && scope.row.status < 2"
+                  @click="auditProdHandle(scope.row)">{{ scope.row.status === 2 ? $t("prodList.offShelfManage") :
+                    $t("product.violationPendingReview") }}</div>
+                <div class="default-btn text-btn" v-if="scope.row.status === 6" @click="prodAuditHandle(scope.row)">{{
+                  $t("product.pendingReview") }}</div>
+                <div class="default-btn text-btn" v-if="isAuth('prod:prod:update') && scope.row.status < 2"
                   @click="offlineProdHandle(scope.row)">
                   {{ $t("product.violation") }}
-                  <el-tooltip
-                    class="item"
-                    effect="dark"
-                    placement="right"
-                    :content="$t('prodList.content')">
+                  <el-tooltip class="item" effect="dark" placement="right" :content="$t('prodList.content')">
                     <i class="el-icon-question"></i>
                   </el-tooltip>
                 </div>
-                <div
-                  class="default-btn text-btn"
-                  v-if="isAuth('prod:prod:delete')"
+                <div class="default-btn text-btn" v-if="isAuth('prod:prod:delete')"
                   @click="deleteHandle(scope.row.prodId)">{{ $t("remindPop.delete") }}</div>
-                <div
-                  class="default-btn text-btn"
-                  v-if="scope.row.status === 1"
-                  @click="toTopHandle(scope.row)"
-              >{{scope.row.isTop === 1 ? $t('liveRoom.cancelTopping'):$t('publics.isTop')}}</div>
+                <div class="default-btn text-btn" v-if="scope.row.status === 1" @click="toTopHandle(scope.row)">
+                  {{ scope.row.isTop === 1 ? $t('liveRoom.cancelTopping') : $t('publics.isTop') }}</div>
               </div>
             </template>
           </el-table-column>
         </el-table>
       </div>
-      <el-pagination
-        v-if="dataList.length"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="page.currentPage"
-        :page-sizes="[10, 20, 50, 100]"
-        :page-size="page.pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="page.total">
+      <el-pagination v-if="dataList.length" @size-change="handleSizeChange" @current-change="handleCurrentChange"
+        :current-page="page.currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="page.pageSize"
+        layout="total, sizes, prev, pager, next, jumper" :total="page.total">
       </el-pagination>
     </div>
     <!-- 商品审核弹窗 -->
@@ -288,31 +231,20 @@
     @refreshDataList="refreshChange"></ProdAudit>-->
 
     <!-- 商品审核弹窗 -->
-    <ProdOfflineAudit
-      v-if="ProdOfflineAuditVisible"
-      ref="ProdOfflineAudit"
-      selectUrl="/prod/prod/getOfflineHandleEventByProdId"
-      updateUrl="/prod/prod/prodOfflineAudit"
-      @refreshDataList="refreshChange"
-    ></ProdOfflineAudit>
-    <AuditProd
-      v-if="prodAuditVisible"
-      ref="AuditProd"
-      updateUrl="/prod/prod/auditProd"
-      @refreshDataList="refreshChange">
+    <ProdOfflineAudit v-if="ProdOfflineAuditVisible" ref="ProdOfflineAudit"
+      selectUrl="/prod/prod/getOfflineHandleEventByProdId" updateUrl="/prod/prod/prodOfflineAudit"
+      @refreshDataList="refreshChange"></ProdOfflineAudit>
+    <AuditProd v-if="prodAuditVisible" ref="AuditProd" updateUrl="/prod/prod/auditProd" @refreshDataList="refreshChange">
     </AuditProd>
     <!-- 商品详情弹窗 -->
-    <el-dialog
-      :title="this.$i18n.t('prodList.detailsTitle')"
-      :visible.sync="showProdInfoDialog"
-      width="70%"
-      class="prod-detail-dialog"
-    >
+    <el-dialog :title="this.$i18n.t('prodList.detailsTitle')" :visible.sync="showProdInfoDialog" width="70%"
+      class="prod-detail-dialog">
       <div class="prod-row">
         <span class="row-title">{{ $t("product.platformClassification") + ':' }}</span>
         <span class="row-txt">
-          <span v-for="(itemCategory, indexCategory) in prodInfoCategory" :key="indexCategory">{{itemCategory + (indexCategory < (prodInfoCategory.length - 1) ? ' > ' : '')}}</span>
-        </span>
+          <span v-for="(itemCategory, indexCategory) in prodInfoCategory" :key="indexCategory">{{ itemCategory +
+            (indexCategory < (prodInfoCategory.length - 1) ? ' > ' : '') }}</span>
+          </span>
       </div>
       <div class="prod-row">
         <span class="row-title">{{ $t("product.prodName") + ':' }}</span>
@@ -325,7 +257,7 @@
       <div class="prod-row">
         <span class="row-title inline-block">{{ $t("product.pic") + ':' }}</span>
         <div class="flex-box-img">
-          <span v-for="(item,index) in prodInfo.imgs" class="detail-prod">
+          <span v-for="(item, index) in prodInfo.imgs" class="detail-prod">
             <ImgShow :src="item" :classList="['prod-img']" />
           </span>
         </div>
@@ -343,72 +275,32 @@
         <div class="table-con table-box">
           <span class="row-title">{{ $t("prodList.specs") + ':' }}</span>
           <!-- 规格表格 -->
-          <el-table
-            :data="prodInfo.skuList"
-            header-cell-class-name="table-header"
-            row-class-name="table-row"
-            class="table"
-            style="width: 100%">
-            <el-table-column
-              fixed
-              prop="prodName"
-              width="240"
-              :label="this.$i18n.t('product.prodName')"
-            >
+          <el-table :data="prodInfo.skuList" header-cell-class-name="table-header" row-class-name="table-row"
+            class="table" style="width: 100%">
+            <el-table-column fixed prop="prodName" width="240" :label="this.$i18n.t('product.prodName')">
               <template slot-scope="scope">
                 <span class="table-cell-text">{{ scope.row.prodName }}</span>
               </template>
             </el-table-column>
-            <el-table-column
-              prop="properties"
-              :label="this.$i18n.t('prodList.attribute')"
-              width="240"
-            >
+            <el-table-column prop="properties" :label="this.$i18n.t('prodList.attribute')" width="240">
               <template slot-scope="scope">
                 <p class="table-cell-text" v-if="scope.row.properties">{{ scope.row.properties }}</p>
                 <p class="table-cell-text" v-else>{{ $t("prodList.noAttribute") }}</p>
               </template>
             </el-table-column>
-            <el-table-column
-              prop="pic"
-              :label="this.$i18n.t('product.pic')"
-            >
+            <el-table-column prop="pic" :label="this.$i18n.t('product.pic')">
               <template slot-scope="scope">
-                <img
-                  :src="resourcesUrl + scope.row.pic"
-                  class="tab-img"
-                  v-if="scope.row.pic"
-                  :key="scope.row.skuId"
-                />
-                <img
-                  :src="resourcesUrl + prodInfo.imgs[0]"
-                  class="tab-img"
-                  v-else
-                />
+                <img :src="resourcesUrl + scope.row.pic" class="tab-img" v-if="scope.row.pic" :key="scope.row.skuId" />
+                <img :src="resourcesUrl + prodInfo.imgs[0]" class="tab-img" v-else />
                 <p v-else class="weak">{{ $t("prodList.noPictures") }}</p>
               </template>
             </el-table-column>
 
-            <el-table-column
-              prop="price"
-              :label="this.$i18n.t('prodList.salesPrice')"
-            ></el-table-column>
-            <el-table-column
-              prop="oriPrice"
-              :label="this.$i18n.t('prodList.marketValue')"
-            ></el-table-column>
-            <el-table-column
-              prop="stocks"
-              :label="this.$i18n.t('product.totalStocks')"
-            ></el-table-column>
-            <el-table-column
-              prop="weight"
-              :label="this.$i18n.t('prodList.prodWeight')"
-            ></el-table-column>
-            <el-table-column
-              prop="volume"
-              :label="this.$i18n.t('prodList.prodVolume')"
-            ></el-table-column>
+            <el-table-column prop="price" :label="this.$i18n.t('prodList.salesPrice')"></el-table-column>
+            <el-table-column prop="oriPrice" :label="this.$i18n.t('prodList.marketValue')"></el-table-column>
+            <el-table-column prop="stocks" :label="this.$i18n.t('product.totalStocks')"></el-table-column>
+            <el-table-column prop="weight" :label="this.$i18n.t('prodList.prodWeight')"></el-table-column>
+            <el-table-column prop="volume" :label="this.$i18n.t('prodList.prodVolume')"></el-table-column>
           </el-table>
         </div>
       </div>
@@ -420,34 +312,22 @@
     </el-dialog>
 
     <!-- 违规下架弹窗 -->
-    <el-dialog
-      title="提示"
-      :visible.sync="offlineProdDialog"
-      width="500px"
-      left
-      class="offline-dialog"
-      :close-on-click-modal="false"
-      top="25vh">
+    <el-dialog title="提示" :visible.sync="offlineProdDialog" width="500px" left class="offline-dialog"
+      :close-on-click-modal="false" top="25vh">
       <div class="offline-title">
-        <span>{{$i18n.t('remindPop.determine') + $i18n.t('remindPop.prod') + ` [${offlineProdInfo.prodName}] ` + $i18n.t('remindPop.offshelf') + $i18n.t('remindPop.reason')}}</span>
+        <span>{{ $i18n.t('remindPop.determine') + $i18n.t('remindPop.prod') + ` [${offlineProdInfo.prodName}] ` +
+          $i18n.t('remindPop.offshelf') + $i18n.t('remindPop.reason') }}</span>
       </div>
-      <el-input
-        type="textarea"
-        :autosize="{ minRows: 3, maxRows: 6}"
-        maxlength="500"
-        v-model.trim="offlineReason"
-        :placeholder="this.$i18n.t('product.reasonRemoval')"
-        show-word-limit
-        :class="{'reasonEmpty':isReasonEmpty}"
-        @focus="isReasonEmpty = false"
-        @blur="isReasonEmpty = offlineReason===''">
+      <el-input type="textarea" :autosize="{ minRows: 3, maxRows: 6 }" maxlength="500" v-model.trim="offlineReason"
+        :placeholder="this.$i18n.t('product.reasonRemoval')" show-word-limit :class="{ 'reasonEmpty': isReasonEmpty }"
+        @focus="isReasonEmpty = false" @blur="isReasonEmpty = offlineReason === ''">
       </el-input>
       <div class="offline-reason-hint">
-        <span v-show="isReasonEmpty">{{$i18n.t('remindPop.emptyReason')}}</span>
+        <span v-show="isReasonEmpty">{{ $i18n.t('remindPop.emptyReason') }}</span>
       </div>
       <span slot="footer">
-        <el-button size="small" @click="offlineProdDialog = false">{{$i18n.t('remindPop.cancel')}}</el-button>
-        <el-button size="small" type="primary" @click="submitOfflineProd()">{{$i18n.t('remindPop.confirm')}}</el-button>
+        <el-button size="small" @click="offlineProdDialog = false">{{ $i18n.t('remindPop.cancel') }}</el-button>
+        <el-button size="small" type="primary" @click="submitOfflineProd()">{{ $i18n.t('remindPop.confirm') }}</el-button>
       </span>
     </el-dialog>
 
@@ -460,7 +340,7 @@ import AuditProd from '@/components/prod-audit'
 import i18n from '../../../i18n/i18n'
 import { Debounce } from '@/utils/debounce'
 export default {
-  data () {
+  data() {
     return {
       theData: null, // 保存上次点击查询的请求条件
       theParams: null, // 保存上次点击查询的请求条件
@@ -485,6 +365,7 @@ export default {
       currentClickProdId: '', // 点击项的spuId
       currentShowPopover: '', // 当前展示的弹窗
       waterSoldNum: '',
+      totalStocks: '',
       dataListLoading: false,
       resourcesUrl: process.env.VUE_APP_RESOURCES_URL,
       showProdInfoDialog: false,
@@ -517,7 +398,7 @@ export default {
     ProdOfflineAudit,
     AuditProd
   },
-  created () {
+  created() {
     if (this.$route.query.prodName) {
       this.prodNameRouter = this.$route.query.prodName
       this.prodName = this.$route.query.prodName
@@ -525,7 +406,7 @@ export default {
     this.prodId = this.$route.query.prodId ? this.$route.query.prodId : null
     this.getDataList()
   },
-  mounted () {
+  mounted() {
     // 获取平台分类
     this.getCategoryList()
   },
@@ -549,7 +430,7 @@ export default {
   },
   methods: {
     // 获取数据列表
-    getDataList (page, sort, newData = false) {
+    getDataList(page, sort, newData = false) {
       this.dataListLoading = true
       if (newData || !this.theData) {
         this.theParams = JSON.parse(JSON.stringify(this.searchForm))
@@ -575,7 +456,7 @@ export default {
         if (this.searchForm.deliveryMode === 5) {
           this.theParams.deliveryMode = null
           if (this.searchForm.mold === 0) {
-          // 实物商品
+            // 实物商品
             this.dataList = []
             return
           }
@@ -630,11 +511,11 @@ export default {
         }
       })
     },
-    changeTableSort (column) {
+    changeTableSort(column) {
       this.getDataList(this.page, column.order)
     },
     // 获取平台分类列表
-    getCategoryList () {
+    getCategoryList() {
       this.dataListLoading = true
       this.$http({
         url: this.$http.adornUrl('/prod/category/listCategoryByGrade'),
@@ -652,7 +533,7 @@ export default {
       })
     },
     // 获取商品详情
-    showProdInfo (id) {
+    showProdInfo(id) {
       this.showProdInfoDialog = true
       this.$http({
         url: this.$http.adornUrl(`/prod/prod/info/${id}`),
@@ -666,7 +547,7 @@ export default {
         })
         .catch()
     },
-    showProdCategory (id) {
+    showProdCategory(id) {
       this.$http({
         url: this.$http.adornUrl(`/prod/category/getCategoryAndParent`),
         params: {
@@ -680,14 +561,14 @@ export default {
         })
       }).catch()
     },
-    showWaterSoldNum (val) {
+    showWaterSoldNum(val) {
       this.waterSoldNum = val
     },
-    changeWaterSoldNum (currentValue, oldValue) {
+    changeWaterSoldNum(currentValue, oldValue) {
       this.waterSoldNum = currentValue
     },
     // 更改注水销量
-    handleChange (id) {
+    handleChange(id) {
       let waterSoldNum = Math.round(this.waterSoldNum)
       if (waterSoldNum > 1000000000) {
         waterSoldNum = 1000000000
@@ -719,8 +600,47 @@ export default {
         })
       })
     },
+
+    showTotalStocks(val) {
+      this.totalStocks = val
+    },
+    changeTotalStocks(currentValue, oldValue) {
+      this.totalStocks = currentValue
+    },
+    handleChange1(id) {
+      let totalStocks = Math.round(this.totalStocks)
+      if (totalStocks > 1000000000) {
+        totalStocks = 1000000000
+      }
+      if (!totalStocks && totalStocks !== 0) {
+        this.$message({
+          message: this.$i18n.t('tip.input') + '商品库存不能为空',
+          type: 'error',
+          duration: 1500
+        })
+        return
+      }
+      this.$http({
+        url: this.$http.adornUrl('/prod/prod/stock'),
+        method: 'put',
+        params: {
+          totalStocks: totalStocks,
+          prodId: id
+        }
+      }).then(() => {
+        this.$message({
+          message: this.$i18n.t('remindPop.success'),
+          type: 'success',
+          duration: 1500,
+          onClose: () => {
+            this.getDataList(this.page)
+            this.closePopover()
+          }
+        })
+      })
+    },
     // 删除
-    deleteHandle (id) {
+    deleteHandle(id) {
       this.$confirm(this.$i18n.t('remindPop.makeSure') + ' ' + `[${id ? this.$i18n.t('remindPop.delete') : this.$i18n.t('remindPop.batchDeletion')}]` + ' ' + this.$i18n.t('remindPop.operation') + '?', this.$i18n.t('remindPop.remind'), {
         confirmButtonText: this.$i18n.t('remindPop.confirm'),
         cancelButtonText: this.$i18n.t('remindPop.cancel'),
@@ -770,18 +690,18 @@ export default {
       })
     }, 1500),
     // 下架
-    offlineProdHandle (row) {
+    offlineProdHandle(row) {
       this.offlineProdInfo = row
       this.offlineReason = ''
       this.offlineProdDialog = true
       this.isReasonEmpty = false
     },
     // 条件查询
-    searchChange (newData = false) {
+    searchChange(newData = false) {
       this.page.currentPage = 1
       this.getDataList(this.page, false, newData)
     },
-    toTopHandle (row) {
+    toTopHandle(row) {
       var str = this.$i18n.t('publics.isTop')
       if (row.isTop === 1) {
         str = this.$i18n.t('liveRoom.cancelTopping')
@@ -808,50 +728,50 @@ export default {
       }).catch(() => { })
     },
     // 获取弹出弹窗项信息
-    getCurrentSpuId (spuId, currentShowPopover) {
+    getCurrentSpuId(spuId, currentShowPopover) {
       this.currentClickProdId = spuId
       this.currentShowPopover = currentShowPopover
     },
     // 清空选中项弹窗信息
-    clearShowPopoverInf () {
+    clearShowPopoverInf() {
       this.currentClickProdId = ''
       this.currentShowPopover = ''
     },
     // 关闭弹窗后,初始化数据
-    initProdInf () {
+    initProdInf() {
       // row.waterSoldNum = row.waterSoldNum
       this.clearShowPopoverInf()
     },
     // 关闭popover弹窗
-    closePopover () {
+    closePopover() {
       this.$refs.closepopover.click()
     },
     /**
      * 鼠标移入单元格
      */
-    cellMouseEnter (row) {
+    cellMouseEnter(row) {
       this.currentMoveProdId = row.prodId
     },
     /**
      * 鼠标移出单元格
      */
-    cellMouseLeave () {
+    cellMouseLeave() {
       this.currentMoveProdId = ''
     },
     // 移入表格行
-    enterTableRow (row) {
+    enterTableRow(row) {
       this.currentMoveProdId = row.prodId
     },
     // 移出表格行
-    leaveTableRow () {
+    leaveTableRow() {
       this.currentMoveProdId = ''
     },
     // 多选变化
-    selectionChange (val) {
+    selectionChange(val) {
       this.dataListSelections = val
     },
     // 导出
-    exportFrom () {
+    exportFrom() {
       let params = {
         prodIds: this.dataListSelections.map(x => x.prodId)
       }
@@ -866,12 +786,12 @@ export default {
         url: this.$http.adornUrl('/platform/search/prod/prodExport'),
         method: 'get',
         params: this.$http.adornParams(
-            Object.assign(
-              this.theData,
-              this.theParams,
-              params
-            )
-          ),
+          Object.assign(
+            this.theData,
+            this.theParams,
+            params
+          )
+        ),
         responseType: 'blob'
       }).then(({ data }) => {
         loading.close()
@@ -895,23 +815,23 @@ export default {
       })
     },
     // 违规下架的商品审核
-    auditProdHandle (row) {
+    auditProdHandle(row) {
       this.ProdOfflineAuditVisible = true
       this.$nextTick(() => {
         this.$refs.ProdOfflineAudit.init(row.prodId)
       })
     },
     // 待审核的商品审核
-    prodAuditHandle (row) {
+    prodAuditHandle(row) {
       this.prodAuditVisible = true
       this.$nextTick(() => {
         this.$refs.AuditProd.init(row.prodId)
       })
     },
     // 清空自定义数据
-    searchReset () {
+    searchReset() {
     },
-    sortChange (data) {
+    sortChange(data) {
       // 排序字段 0无 1加入时间 2累计客户 3累计邀请 4累计收益
       switch (data.prop) {
         case 'seq': this.sortParam = 1
@@ -929,14 +849,14 @@ export default {
       this.getDataList(this.page)
     },
     // 刷新商品
-    refreshChange () {
+    refreshChange() {
       this.getDataList(this.page)
     },
     /**
      * 重置表单
      * @param {String} formName 表单名称
      */
-    resetSearchForm () {
+    resetSearchForm() {
       this.searchForm = {
         shopName: '',
         keyword: '',
@@ -949,20 +869,44 @@ export default {
       this.isTop = null
     },
 
-    handleSizeChange (val) {
+    handleSizeChange(val) {
       this.page.pageSize = val
       this.getDataList()
     },
-    handleCurrentChange (val) {
+    handleCurrentChange(val) {
       this.page.currentPage = val
       this.getDataList()
     },
 
-/**
- * 当图片加载失败时，切换至默认图
- */
-    handlePicError (event) {
+    /**
+     * 当图片加载失败时，切换至默认图
+     */
+    handlePicError(event) {
       event.target.src = require('../../../assets/img/def.png')
+    },
+    copyUrl2(id) {
+      console.log(id)
+      const textarea = document.createElement('textarea')
+      textarea.value = 'package-prod/pages/prod/prod?prodId=' + id
+      document.body.appendChild(textarea)
+      textarea.select()
+      textarea.setSelectionRange(0, textarea.value.length)
+      const success = document.execCommand('copy')
+      document.body.removeChild(textarea)
+      if (success) {
+        this.$message({
+          message: '复制成功',
+          type: 'success',
+          duration: 1000
+        })
+      } else {
+        this.$message({
+          message: '复制失败',
+          type: 'error',
+          duration: 1000
+        })
+      }
+      console.log(success)
     }
   }
 }
@@ -997,20 +941,24 @@ export default {
         -webkit-line-clamp: 1;
       }
     }
+
     .row-title {
       display: inline-block;
       margin-right: 12px;
       min-width: 70px;
       line-height: 1.5em;
     }
+
     .prod-row {
       display: flex;
       align-items: flex-start;
       margin-bottom: 15px;
+
       .row-txt {
         word-break: break-word;
         line-height: 1.5em;
       }
+
       .prod-img {
         display: inline-block;
         width: auto;
@@ -1019,9 +967,11 @@ export default {
         max-height: 100px;
       }
     }
+
     .table-box {
       .table {
         margin-top: 10px;
+
         .tab-img {
           display: block;
           width: auto;
@@ -1029,99 +979,110 @@ export default {
           max-width: 60px;
           max-height: 60px;
         }
+
         .weak {
           color: #aaa;
         }
       }
     }
+
     .params-box {
       display: flex;
       flex-wrap: wrap;
     }
+
     .prod-params {
       margin-right: 20px;
     }
   }
+
   .detail-prod {
     display: inline-block;
     margin-right: 10px;
+
     img {
       width: 100px !important;
       height: 100px !important;
     }
   }
 }
+
 .flex-box-img {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: start;
-    -ms-flex-align: start;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    margin-bottom: 15px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
 }
+
 .inline-block {
   flex: none;
 }
+
 .popover-bottom {
   margin-top: 10px;
   text-align: right;
 }
+
 ::v-deep .export-load {
   top: -50% !important;
 }
 
- ::v-deep .el-table__fixed{
-    height: auto !important;
-    bottom: 16px !important;
-    &::before {
-      background-color: transparent !important;
-    }
+::v-deep .el-table__fixed {
+  height: auto !important;
+  bottom: 16px !important;
+
+  &::before {
+    background-color: transparent !important;
   }
- ::v-deep .el-table__fixed-right{
-    height: auto !important;
-    bottom: 16px !important;
-    &::before {
-      background-color: transparent !important;
-    }
+}
+
+::v-deep .el-table__fixed-right {
+  height: auto !important;
+  bottom: 16px !important;
+
+  &::before {
+    background-color: transparent !important;
   }
+}
 
-  // 违规下架
-  .offline-dialog{
+// 违规下架
+.offline-dialog {
 
-    .offline-title{
-      line-height: 24px;
-      margin-bottom: 16px;
-    }
-
-    & ::v-deep .el-dialog__header{
-      border: none;
-    }
-
-    & ::v-deep .el-dialog__footer{
-      border: none;
-    }
-
-    & ::v-deep .el-dialog__body{
-      padding: 20px;
-    }
-
-    .offline-reason-hint {
-      color: #f56c6c;
-      font-size: 12px;
-      min-height: 18px;
-      line-height: 18px;
-    }
-
-    & ::v-deep .el-textarea .el-input__count {
-      bottom: -18px !important;
-    }
+  .offline-title {
+    line-height: 24px;
+    margin-bottom: 16px;
   }
 
+  & ::v-deep .el-dialog__header {
+    border: none;
+  }
+
+  & ::v-deep .el-dialog__footer {
+    border: none;
+  }
+
+  & ::v-deep .el-dialog__body {
+    padding: 20px;
+  }
+
+  .offline-reason-hint {
+    color: #f56c6c;
+    font-size: 12px;
+    min-height: 18px;
+    line-height: 18px;
+  }
+
+  & ::v-deep .el-textarea .el-input__count {
+    bottom: -18px !important;
+  }
+}
 </style>
 <style scoped>
-.reasonEmpty /deep/ .el-textarea__inner{
-  border:#f56c6c 1px solid !important;
+.reasonEmpty /deep/ .el-textarea__inner {
+  border: #f56c6c 1px solid !important;
 }
 </style>

@@ -118,7 +118,7 @@
                 @blur="changeNeedGrowth()"
                 :disabled="dataForm.level === 1 && dataForm.levelType === 0"
               >
-                <template slot="append">{{ $t("user.growth") }}</template>
+                <!-- <template slot="append">{{ $t("user.growth") }}</template> -->
               </el-input>
             </el-form-item>
           </el-form>

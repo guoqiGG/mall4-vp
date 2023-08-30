@@ -10,13 +10,8 @@
         }}
       </div>
     </div>
-    <el-form @submit.native.prevent
-      :model="dataForm"
-      ref="dataForm"
-      @keyup.enter.native="dataFormSubmit()"
-      label-width="80px"
-      size="small"
-    >
+    <el-form @submit.native.prevent :model="dataForm" ref="dataForm" @keyup.enter.native="dataFormSubmit()"
+      label-width="80px" size="small">
       <div class="mod-order-orderInfo">
         <div class="content">
           <div class="order-number" style="display: none">
@@ -25,27 +20,11 @@
                 <span class="text">{{ dataForm.orderNumber }}</span>
               </el-form-item>
               <el-form-item>
-                <el-steps
-                  :active="stepsStatus"
-                  align-center
-                  :process-status="dataForm.status == 6 ? 'error' : 'wait'"
-                >
-                  <el-step
-                    :title="this.$i18n.t('order.submitOrder')"
-                    :description="dataForm.createTime"
-                  ></el-step>
-                  <el-step
-                    :title="this.$i18n.t('order.paid')"
-                    :description="dataForm.payTime"
-                  ></el-step>
-                  <el-step
-                    :title="this.$i18n.t('order.delivered')"
-                    :description="dataForm.dvyTime"
-                  ></el-step>
-                  <el-step
-                    :title="this.$i18n.t('order.receivedGoods')"
-                    :description="dataForm.finallyTime"
-                  ></el-step>
+                <el-steps :active="stepsStatus" align-center :process-status="dataForm.status == 6 ? 'error' : 'wait'">
+                  <el-step :title="this.$i18n.t('order.submitOrder')" :description="dataForm.createTime"></el-step>
+                  <el-step :title="this.$i18n.t('order.paid')" :description="dataForm.payTime"></el-step>
+                  <el-step :title="this.$i18n.t('order.delivered')" :description="dataForm.dvyTime"></el-step>
+                  <el-step :title="this.$i18n.t('order.receivedGoods')" :description="dataForm.finallyTime"></el-step>
                 </el-steps>
               </el-form-item>
             </div>
@@ -53,38 +32,15 @@
           <div class="order-state" style="display:none">
             <div class="state-cont">
               <div class="state-title">
-                <el-form-item
-                  :label="this.$i18n.t('order.orderStatus') + ':'"
-                >
+                <el-form-item :label="this.$i18n.t('order.orderStatus') + ':'">
                   <template slot-scope="scope">
-                    <div
-                      v-if="dataForm.status === 1"
-                      >{{ $t("order.pendingPayment") }}</div
-                    >
-                    <div
-                      v-if="dataForm.status === 2"
-                      >{{ $t("order.toBeShipped") }}</div
-                    >
-                    <div
-                      v-if="dataForm.status === 3"
-                      >{{ $t("order.pendingReceipt") }}</div
-                    >
-                    <div
-                      v-if="dataForm.status === 4"
-                      >{{ $t("order.toBeEvaluated") }}</div
-                    >
-                    <div
-                      v-if="dataForm.status === 5"
-                      >{{ $t("order.success") }}</div
-                    >
-                    <div
-                      v-if="dataForm.status === 6"
-                      >{{ $t("order.fail") }}</div
-                    >
-                    <div
-                      v-if="dataForm.status === 7"
-                      >{{ $t("group.waitGroup") }}</div
-                    >
+                    <div v-if="dataForm.status === 1">{{ $t("order.pendingPayment") }}</div>
+                    <div v-if="dataForm.status === 2">{{ $t("order.toBeShipped") }}</div>
+                    <div v-if="dataForm.status === 3">{{ $t("order.pendingReceipt") }}</div>
+                    <div v-if="dataForm.status === 4">{{ $t("order.toBeEvaluated") }}</div>
+                    <div v-if="dataForm.status === 5">{{ $t("order.success") }}</div>
+                    <div v-if="dataForm.status === 6">{{ $t("order.fail") }}</div>
+                    <div v-if="dataForm.status === 7">{{ $t("group.waitGroup") }}</div>
                   </template>
                 </el-form-item>
                 <el-form-item>
@@ -105,12 +61,8 @@
                     <img src="~@/assets/img/car.png" alt />
                     <span class="prompt">{{ $t("order.deliveryMsg") }}</span>
                     &nbsp;
-                    <div
-                      class="default-btn text-btn"
-                      v-if="dataForm.status < 3 || dataForm.status === 7"
-                      @click="changeUserAddrOrder(dataForm.userAddrOrder)"
-                      >{{ $t("order.reviseAddr") }}</div
-                    >
+                    <div class="default-btn text-btn" v-if="dataForm.status < 3 || dataForm.status === 7"
+                      @click="changeUserAddrOrder(dataForm.userAddrOrder)">{{ $t("order.reviseAddr") }}</div>
                   </div>
                   <div class="detail-cont">
                     <div class="detail01">
@@ -119,25 +71,17 @@
                         <!-- <span class="revise-addr" @click="changeAddr(dataForm.addrOrderId)">
                         <img src="~@/assets/img/revise.png" alt=""/>修改地址
                         </span>-->
-                        <el-form-item
-                          :label="this.$i18n.t('publics.addressee') + ':'"
-                        >
+                        <el-form-item :label="this.$i18n.t('publics.addressee') + ':'">
                           <span>{{ dataForm.userAddrOrder.receiver }}</span>
                         </el-form-item>
-                        <el-form-item
-                          :label="this.$i18n.t('publics.mobilePhone') + ':'"
-                        >
+                        <el-form-item :label="this.$i18n.t('publics.mobilePhone') + ':'">
                           <span>{{ dataForm.userAddrOrder.mobile }}</span>
                         </el-form-item>
-                        <el-form-item
-                          :label="this.$i18n.t('publics.deliveryAddr') + ':'"
-                        >
-                          <span
-                            >{{ dataForm.userAddrOrder.province
-                            }}{{ dataForm.userAddrOrder.city
-                            }}{{ dataForm.userAddrOrder.area
-                            }}{{ dataForm.userAddrOrder.addr }}</span
-                          >
+                        <el-form-item :label="this.$i18n.t('publics.deliveryAddr') + ':'">
+                          <span>{{ dataForm.userAddrOrder.province
+                          }}{{ dataForm.userAddrOrder.city
+}}{{ dataForm.userAddrOrder.area
+}}{{ dataForm.userAddrOrder.addr }}</span>
                         </el-form-item>
                       </div>
                     </div>
@@ -149,16 +93,8 @@
                 </div>
                 <div class="buyers">
                   <div class="detail-title">
-                    <img
-                      src="~@/assets/img/buyer.png"
-                      alt
-                      style="margin-right: 15px"
-                    />
-                    <el-form-item
-                      :label="this.$i18n.t('order.orderRemarks')"
-                      style="margin-top: 22px"
-                      label-width="80px"
-                    >
+                    <img src="~@/assets/img/buyer.png" alt style="margin-right: 15px" />
+                    <el-form-item :label="this.$i18n.t('order.orderRemarks')" style="margin-top: 22px" label-width="80px">
                       &nbsp;
                       <div class="default-btn text-btn" @click="changeRemarks()">{{
                         $t("order.reviseRemarks")
@@ -186,42 +122,25 @@
                 </div>
               </div>
               <div class="item-list">
-                <el-table :data="dataForm.orderItems" border
-                  header-cell-class-name="table-header"
-                  row-class-name="table-row"
-                >
+                <el-table :data="dataForm.orderItems" border header-cell-class-name="table-header"
+                  row-class-name="table-row">
                   <el-table-column prop :label="this.$i18n.t('home.goods')">
                     <template slot-scope="scope">
-                      <ImgShow :src="scope.row.pic" :imgStyle="{width:'100px',height:'100px'}" />
+                      <ImgShow :src="scope.row.pic" :imgStyle="{ width: '100px', height: '100px' }" />
                       <span>{{ scope.row.prodName }}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column
-                    prop="price"
-                    :label="this.$i18n.t('home.unitPrice')"
-                    width="180"
-                    align="center"
-                  >
+                  <el-table-column prop="price" :label="this.$i18n.t('home.unitPrice')" width="180" align="center">
                     <template slot-scope="scope">
                       <span>{{ scope.row.price }}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column
-                    prop="count"
-                    :label="this.$i18n.t('home.quantity')"
-                    width="180"
-                    align="center"
-                  >
+                  <el-table-column prop="count" :label="this.$i18n.t('home.quantity')" width="180" align="center">
                     <template slot-scope="scope">
                       <span>{{ scope.row.prodCount }}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column
-                    prop="totalPrice"
-                    :label="this.$i18n.t('home.totalPrice')"
-                    width="180"
-                    align="center"
-                  >
+                  <el-table-column prop="totalPrice" :label="this.$i18n.t('home.totalPrice')" width="180" align="center">
                     <template slot-scope="scope">
                       <span>{{ scope.row.productTotalAmount }}</span>
                     </template>
@@ -229,9 +148,7 @@
                 </el-table>
               </div>
               <div class="item-info">
-                <el-form-item
-                  :label="this.$i18n.t('home.prodTotalPrice') + ':'"
-                >
+                <el-form-item :label="this.$i18n.t('home.prodTotalPrice') + ':'">
                   <span class="text">￥{{ dataForm.total }}</span>
                 </el-form-item>
                 <!-- <el-form-item label="店铺优惠:">
@@ -243,19 +160,16 @@
                 <!-- <el-form-item label="发票费用:">
               <span class="text">￥15.00</span>
                 </el-form-item>-->
-                <el-form-item
-                  :label="this.$i18n.t('home.shippingFees') + ':'"
-                  v-if="dataForm.freightAmount"
-                >
+                <el-form-item :label="this.$i18n.t('home.shippingFees') + ':'" v-if="dataForm.freightAmount">
                   <span class="text">￥{{ dataForm.freightAmount }}</span>
                 </el-form-item>
                 <el-form-item :label="this.$i18n.t('home.amountDue') + ':'">
                   <span class="text">{{
-                  $t("order.monetaryUnit") +
-                  dataForm.actualTotal +
-                  " + " +
-                  dataForm.score +
-                  $t("order.score")}}</span>
+                    $t("order.monetaryUnit") +
+                    dataForm.actualTotal +
+                    " + " +
+                    dataForm.score +
+                    $t("order.score") }}</span>
                 </el-form-item>
               </div>
             </div>
@@ -331,48 +245,29 @@
             </div>
             <div class="state-steps">
               <el-form-item>
-                <el-steps
-                  :active="stepsStatus"
-                  align-center
-                  :process-status="dataForm.status == 6 ? 'error' : 'wait'"
-                >
-                  <el-step
-                    :title="this.$i18n.t('order.submitOrder')"
-                    :description="dataForm.createTime"
-                  ></el-step>
-                  <el-step
-                    :title="this.$i18n.t('order.paid')"
-                    :description="dataForm.payTime"
-                  ></el-step>
-                  <el-step
-                    :title="this.$i18n.t('order.delivered')"
-                    :description="dataForm.dvyTime"
-                  ></el-step>
-                  <el-step
-                    :title="this.$i18n.t('order.receivedGoods')"
-                    :description="dataForm.finallyTime"
-                  ></el-step>
+                <el-steps :active="stepsStatus" align-center :process-status="dataForm.status == 6 ? 'error' : 'wait'">
+                  <el-step :title="this.$i18n.t('order.submitOrder')" :description="dataForm.createTime"></el-step>
+                  <el-step :title="this.$i18n.t('order.paid')" :description="dataForm.payTime"></el-step>
+                  <el-step :title="this.$i18n.t('order.delivered')" :description="dataForm.dvyTime"></el-step>
+                  <el-step :title="this.$i18n.t('order.receivedGoods')" :description="dataForm.finallyTime"></el-step>
                 </el-steps>
               </el-form-item>
             </div>
           </div>
           <div class="packages">
             <div class="p-tab">
-              <div
-                :class="indexs === index ? 'item active' : 'item'"
-                @click="onClickListDelivery(deliveryExpresse, index)"
-                v-for="(
+              <div :class="indexs === index ? 'item active' : 'item'"
+                @click="onClickListDelivery(deliveryExpresse, index)" v-for="(
                   deliveryExpresse, index
-                ) in dataForm.deliveryExpresses"
-                :key="index"
-              >
+                ) in dataForm.deliveryExpresses" :key="index">
                 {{ $t("order.package") }}{{ index + 1 }}
               </div>
             </div>
             <div class="p-con" v-if="deliveryExpresse">
               <div class="deliver-msg">
                 <div class="d-item">
-                  <div class="text" :style="this.$i18n.t('language') === 'language' ? 'width:210px;' : 'width:80px;'">{{ $t("order.deliveryMethod") }}：</div>
+                  <div class="text" :style="this.$i18n.t('language') === 'language' ? 'width:210px;' : 'width:80px;'">{{
+                    $t("order.deliveryMethod") }}：</div>
                   <div class="res">
                     {{
                       [
@@ -394,17 +289,20 @@
                   </div>-->
                 </div>
                 <div class="d-item">
-                  <div class="text" :style="this.$i18n.t('language') === 'language' ? 'width:210px;' : 'width:80px;'">{{ $t("order.deliveryTime") }}：</div>
+                  <div class="text" :style="this.$i18n.t('language') === 'language' ? 'width:210px;' : 'width:80px;'">{{
+                    $t("order.deliveryTime") }}：</div>
                   <div class="res">{{ deliveryExpresse.createTime }}</div>
                 </div>
                 <div class="d-item" v-if="deliveryExpresse.deliveryType !== 3">
-                  <div class="text" :style="this.$i18n.t('language') === 'language' ? 'width:210px;' : 'width:80px;'">{{ $t("order.courierCompany") }}：</div>
+                  <div class="text" :style="this.$i18n.t('language') === 'language' ? 'width:210px;' : 'width:80px;'">{{
+                    $t("order.courierCompany") }}：</div>
                   <div class="res">
                     {{ deliveryExpresse.deliveryDto.companyName }}
                   </div>
                 </div>
                 <div class="d-item" v-if="deliveryExpresse.deliveryType !== 3">
-                  <div class="text" :style="this.$i18n.t('language') === 'language' ? 'width:210px;' : 'width:80px;'">{{ $t("order.trackingNumber") }}：</div>
+                  <div class="text" :style="this.$i18n.t('language') === 'language' ? 'width:210px;' : 'width:80px;'">{{
+                    $t("order.trackingNumber") }}：</div>
                   <div class="res">
                     {{ deliveryExpresse.deliveryDto.dvyFlowId }}
                   </div>
@@ -415,13 +313,9 @@
                     <div class="arrow next"></div>
                   </div>
                   <div class="goods-box">
-                    <div
-                      class="item"
-                      v-for="(
+                    <div class="item" v-for="(
                         orderItem, index
-                      ) in deliveryExpresse.orderItems"
-                      :key="index"
-                    >
+                      ) in deliveryExpresse.orderItems" :key="index">
                       <div class="img">
                         <img :src="orderItem.pic" alt />
                       </div>
@@ -435,90 +329,49 @@
               </div>
               <div class="logistics">
                 <div class="l-tit" v-if="deliveryExpresse && deliveryExpresse.deliveryDto">
-                  <span class="text"
-                    >{{ $t("order.logisticsStatus") }}：</span
-                  >
-                  <span
-                    class="l-state"
-                    v-if="deliveryExpresse.deliveryDto.state === 0"
-                    >{{ $t("order.noRecord") }}</span
-                  >
-                  <span
-                    class="l-state"
-                    v-if="deliveryExpresse.deliveryDto.state === 1"
-                    >{{ $t("order.collected") }}</span
-                  >
-                  <span
-                    class="l-state"
-                    v-if="deliveryExpresse.deliveryDto.state === 2"
-                    >{{ $t("order.delivering") }}</span
-                  >
-                  <span
-                    class="l-state"
-                    v-if="deliveryExpresse.deliveryDto.state === 3"
-                    >{{ $t("order.haveBeenReceived") }}</span
-                  >
-                  <span
-                    class="l-state"
-                    v-if="deliveryExpresse.deliveryDto.state === 201"
-                    >{{ $t("order.reachTheDestinationCity") }}</span
-                  >
-                  <span
-                    class="l-state"
-                    v-if="deliveryExpresse.deliveryDto.state === 4"
-                    >{{ $t("order.problemPiece") }}</span
-                  >
+                  <span class="text">{{ $t("order.logisticsStatus") }}：</span>
+                  <span class="l-state" v-if="deliveryExpresse.deliveryDto.state === 0">{{ $t("order.noRecord") }}</span>
+                  <span class="l-state" v-if="deliveryExpresse.deliveryDto.state === 1">{{ $t("order.collected") }}</span>
+                  <span class="l-state" v-if="deliveryExpresse.deliveryDto.state === 2">{{ $t("order.delivering")
+                  }}</span>
+                  <span class="l-state" v-if="deliveryExpresse.deliveryDto.state === 3">{{ $t("order.haveBeenReceived")
+                  }}</span>
+                  <span class="l-state" v-if="deliveryExpresse.deliveryDto.state === 201">{{
+                    $t("order.reachTheDestinationCity") }}</span>
+                  <span class="l-state" v-if="deliveryExpresse.deliveryDto.state === 4">{{ $t("order.problemPiece")
+                  }}</span>
                 </div>
-                <div class="logistics-box"
-                      v-if="deliveryExpresse && deliveryExpresse.deliveryDto">
-                  <div
-                    class="item"
-                    v-if="
-                      deliveryExpresse.deliveryDto.state === 0 &&
-                      dataForm.status == 5 &&
-                      dataForm.finallyTime !== null
-                    "
-                  >
+                <div class="logistics-box" v-if="deliveryExpresse && deliveryExpresse.deliveryDto">
+                  <div class="item" v-if="deliveryExpresse.deliveryDto.state === 0 &&
+                    dataForm.status == 5 &&
+                    dataForm.finallyTime !== null
+                    ">
                     <div class="time">{{ dataForm.finallyTime }}</div>
                     <div class="text">
                       {{ $t("order.receivedGoods") }}
                     </div>
                   </div>
-                  <div
-                    class="item"
-                    v-for="(trace, index) in deliveryExpresse.deliveryDto
-                      .traces"
-                    :key="index"
-                  >
+                  <div class="item" v-for="(trace, index) in deliveryExpresse.deliveryDto
+                    .traces" :key="index">
                     <div class="time">{{ trace.acceptTime }}</div>
                     <div class="text">{{ trace.acceptStation }}</div>
                   </div>
-                  <div
-                    class="item"
-                    v-if="
-                      deliveryExpresse.deliveryDto.traces &&
-                      deliveryExpresse.deliveryDto.traces.length < 1
-                    "
-                  >
+                  <div class="item" v-if="deliveryExpresse.deliveryDto.traces &&
+                    deliveryExpresse.deliveryDto.traces.length < 1
+                    ">
                     {{ $t("order.noLogisticsInformation") }}
                   </div>
-                  <div
-                    class="item"
-                    v-if="dataForm.status >= 3 && dataForm.dvyTime !== null"
-                  >
+                  <div class="item" v-if="dataForm.status >= 3 && dataForm.dvyTime !== null">
                     <div class="time">{{ dataForm.dvyTime }}</div>
                     <div class="text">
                       {{ $t("order.merchantHasShippedWa") }}
                     </div>
                   </div>
-                  <div
-                    class="item"
-                    v-if="dataForm.status >= 2 && dataForm.payTime !== null"
-                  >
+                  <div class="item" v-if="dataForm.status >= 2 && dataForm.payTime !== null">
                     <div class="time">{{ dataForm.payTime }}</div>
                     <div class="text">{{ $t("order.buyerHasPaidWa") }}</div>
                   </div>
-                  <div :class="['item', dataForm.status >= 1?'left-line':'']" v-if="dataForm.status >= 1">
+                  <div :class="['item', dataForm.status >= 1 ? 'left-line' : '']" v-if="dataForm.status >= 1">
                     <div class="time">{{ dataForm.createTime }}</div>
                     <div class="text">
                       {{ $t("order.buyerSubmittedAnOrder") }}
@@ -546,8 +399,8 @@
                 <div class="res">
                   {{ dataForm.userAddrOrder.province
                   }}{{ dataForm.userAddrOrder.area
-                  }}{{ dataForm.userAddrOrder.city
-                  }}{{ dataForm.userAddrOrder.addr }}
+}}{{ dataForm.userAddrOrder.city
+}}{{ dataForm.userAddrOrder.addr }}
                 </div>
                 <!-- <div class="res">北京市 北京市 朝阳区 元大都城垣遗址公园6号 辣婆婆(东元大都店)</div> -->
               </div>
@@ -607,10 +460,18 @@
                 <div class="text">{{ $t("order.actualAmount") }}：</div>
                 <div class="res">
                   {{ $t("order.monetaryUnit") +
-                  dataForm.actualTotal +
-                  " + " +
-                  dataForm.score +
-                  $t("order.score") }}
+                    dataForm.actualTotal +
+                    " + " +
+                    dataForm.score +
+                    $t("order.score") }}
+                </div>
+              </div>
+              <div class="item">
+                <div class="text">礼品券：</div>
+                <div class="res">
+                  <span v-for="item in dataForm.userGiftInfos">
+                    {{ item.giftName + ' : ' }}{{ item.number + ' 张' }}
+                  </span>
                 </div>
               </div>
               <div class="item">
@@ -655,64 +516,38 @@
               <div class="item">
                 <div class="text">{{ $t("order.buyerMessage") }}：</div>
                 <div class="res">{{ dataForm.remarks }}</div>
-                <div
-                  class="res"
-                  v-if="dataForm.remarks === null || dataForm.remarks === ''"
-                >
+                <div class="res" v-if="dataForm.remarks === null || dataForm.remarks === ''">
                   {{ $t("order.notYet") }}
                 </div>
               </div>
             </div>
           </div>
           <div class="goods-list">
-            <el-table :data="dataForm.orderItems" border
-              header-cell-class-name="table-header"
-              row-class-name="table-row"
-            >
+            <el-table :data="dataForm.orderItems" border header-cell-class-name="table-header" row-class-name="table-row">
               <el-table-column prop :label="this.$i18n.t('home.goods')">
                 <template slot-scope="scope">
                   <div class="df">
-                    <ImgShow :src="scope.row.pic" :imgStyle="{width:'60px',height:'60px'}" />
+                    <ImgShow :src="scope.row.pic" :imgStyle="{ width: '60px', height: '60px' }" />
                     <span class="name">{{ scope.row.prodName }}</span>
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column
-                prop="price"
-                :label="this.$i18n.t('order.unitPrice')"
-                width="180"
-                align="center"
-              >
+              <el-table-column prop="price" :label="this.$i18n.t('order.unitPrice')" width="180" align="center">
                 <template slot-scope="scope">
                   <span>{{ scope.row.price }}</span>
                 </template>
               </el-table-column>
-              <el-table-column
-                prop="count"
-                :label="this.$i18n.t('order.quantity')"
-                width="180"
-                align="center"
-              >
+              <el-table-column prop="count" :label="this.$i18n.t('order.quantity')" width="180" align="center">
                 <template slot-scope="scope">
                   <span>{{ scope.row.prodCount }}</span>
                 </template>
               </el-table-column>
-              <el-table-column
-                prop="count"
-                :label="this.$i18n.t('order.preferentialAmount')"
-                width="180"
-                align="center"
-              >
+              <el-table-column prop="count" :label="this.$i18n.t('order.preferentialAmount')" width="180" align="center">
                 <template slot-scope="scope">
                   <span>{{ scope.row.shareReduce }}</span>
                 </template>
               </el-table-column>
-              <el-table-column
-                prop="totalPrice"
-                :label="this.$i18n.t('order.totalPrice')"
-                width="180"
-                align="center"
-              >
+              <el-table-column prop="totalPrice" :label="this.$i18n.t('order.totalPrice')" width="180" align="center">
                 <template slot-scope="scope">
                   <span>{{ scope.row.productTotalAmount }}</span>
                 </template>
@@ -723,9 +558,9 @@
                 <div class="item">
                   <div class="text">{{ $t("order.prodTotalPrice") }}:</div>
                   <div class="number">{{
-                  $t("order.monetaryUnit") + dataForm.total +
-                  " + " + dataForm.score +
-                  $t("order.score")}}</div>
+                    $t("order.monetaryUnit") + dataForm.total +
+                    " + " + dataForm.score +
+                    $t("order.score") }}</div>
                 </div>
                 <div class="item" v-if="dataForm.reduceAmount">
                   <div class="text">{{ $t("marketing.discountedPrice") }}:</div>
@@ -738,11 +573,11 @@
                 <div class="item act-price">
                   <div class="text">{{ $t("order.amountDue") }}:</div>
                   <div class="number">{{
-                  $t("order.monetaryUnit") +
-                  dataForm.actualTotal +
-                  " + " +
-                  dataForm.score +
-                  $t("order.score") }}</div>
+                    $t("order.monetaryUnit") +
+                    dataForm.actualTotal +
+                    " + " +
+                    dataForm.score +
+                    $t("order.score") }}</div>
                 </div>
               </div>
             </div>
@@ -778,8 +613,8 @@
         </div>
       </div>
     </el-form>
-      <!-- 弹窗, 新增 / 修改 -->
-      <!-- <order-addr-update
+    <!-- 弹窗, 新增 / 修改 -->
+    <!-- <order-addr-update
         v-if="orderAddrUpdateVisible"
         ref="orderAddrUpdate"
         @refreshUserAddrOrder="getDataList"
@@ -796,7 +631,7 @@
 // import OrderAddrUpdate from '@/components/order-addr-update'
 // import OrderRemarkUpdate from '@/components/order-remark-update'
 export default {
-  data () {
+  data() {
     return {
       visible: false,
       dataForm: {
@@ -858,12 +693,12 @@ export default {
       }
     }
   },
-  created () {
+  created() {
     this.dataForm.orderNumber = this.$route.query.orderNumber || 0
     this.init()
   },
   methods: {
-    init () {
+    init() {
       this.visible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
@@ -885,7 +720,7 @@ export default {
         })
       }
     },
-    getDataList () {
+    getDataList() {
       this.$http({
         url: this.$http.adornUrl(`/platform/orderDelivery/orderInfo/${this.dataForm.orderNumber}`),
         method: 'get',
@@ -898,7 +733,7 @@ export default {
     /**
      * 物流事件
      */
-    onClickListDelivery (delivery, index) {
+    onClickListDelivery(delivery, index) {
       this.$http({
         url: this.$http.adornUrl(`/platform/orderDelivery/deliveryOrder/${delivery.orderDeliveryId}`),
         method: 'get'
@@ -909,17 +744,17 @@ export default {
       this.indexs = index
     },
     // 表单提交
-    dataFormSubmit () {
+    dataFormSubmit() {
     },
     // 修改地址
-    changeUserAddrOrder (userAddrOrder) {
+    changeUserAddrOrder(userAddrOrder) {
       this.orderAddrUpdateVisible = true
       this.$nextTick(() => {
         this.$refs.orderAddrUpdate.init(this.dataForm)
       })
     },
     // 修改备注
-    changeRemarks () {
+    changeRemarks() {
       this.orderRemarkUpdateVisible = true
       this.$nextTick(() => {
         this.$refs.orderRemarkUpdate.init(this.dataForm)
@@ -963,6 +798,7 @@ export default {
 .new-page-title {
   justify-content: flex-start;
 }
+
 .mod-order-orderInfo {
   height: 100%;
   width: 100%;
@@ -1321,6 +1157,7 @@ export default {
     max-width: 130px;
     white-space: nowrap;
   }
+
   .order-info .info-item .item .res {
     word-break: break-word;
   }
