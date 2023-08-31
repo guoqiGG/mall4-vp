@@ -1,106 +1,83 @@
 <template>
   <div class="mod-distribution-distributionUserWalletBill">
     <!-- 搜索栏 -->
-    <div class="search-bar">
-      <el-form @submit.native.prevent :inline="true" class="search-form" ref="searchForm" :model="searchForm" size="small">
+    <!-- <div class="search-bar">
+      <el-form @submit.native.prevent :inline="true" class="search-form" ref="searchForm" :model="searchForm"
+        size="small">
         <div class="input-row">
           <el-form-item :label="$t('distributionMsg.distriTelPhone') + ':'">
             <el-input type="text" v-model="searchForm.userMobile" :placeholder="$t('distributionMsg.distriTelPhone')"></el-input>
           </el-form-item>
           <el-form-item>
-            <div class="default-btn primary-btn" @click="searchChange(true)">{{$t('crud.searchBtn')}}</div>
-            <div class="default-btn" @click="resetSearchForm('searchForm')">{{$t('product.reset')}}</div>
+            <div class="default-btn primary-btn" @click="searchChange(true)">{{ $t('crud.searchBtn') }}</div>
+            <div class="default-btn" @click="resetSearchForm('searchForm')">{{ $t('product.reset') }}</div>
           </el-form-item>
         </div>
       </el-form>
-    </div>
+    </div> -->
 
     <div class="main-container">
       <!-- 表格 -->
       <div class="table-con distr-user-allet-bill-tbale">
-        <el-table
-          ref="distributionUserWalletBillTable"
-          :data="dataList"
-          header-cell-class-name="table-header"
-          row-class-name="table-row-low"
-          style="width: 100%"
-        >
-          <!-- 团长昵称 -->
-          <el-table-column
-            width="auto"
-            prop="nickName"
-            :label="$t('distribUserWallet.distributorNickname')"
-          >
+        <el-table ref="distributionUserWalletBillTable" :data="dataList" header-cell-class-name="table-header"
+          row-class-name="table-row-low" style="width: 100%">
+          <!-- 团长姓名 -->
+          <el-table-column width="auto" prop="distributionName" label="团长姓名">
             <template slot-scope="scope">
-              {{scope.row.distributionUser ? scope.row.distributionUser.nickName : '' }}
+              {{ scope.row.distributionName ? scope.row.distributionName : '' }}
             </template>
           </el-table-column>
           <!-- 团长手机号 -->
-          <el-table-column
-            width="auto"
-            prop="userMobile"
-            :label="$t('distribUserWallet.mobileTelNumber')"
-          >
+          <el-table-column width="auto" prop="distributionTel" :label="$t('distribUserWallet.mobileTelNumber')">
+            <template slot-scope="scope">
+              {{ scope.row.distributionTel ? scope.row.distributionTel : '' }}
+            </template>
+          </el-table-column>
+
+          <!-- 下单用户昵称 -->
+          <el-table-column width="auto" prop="nickName" label="下单用户昵称">
+            <template slot-scope="scope">
+              {{ scope.row.distributionUser ? scope.row.distributionUser.nickName : '' }}
+            </template>
+          </el-table-column>
+          <!-- 下单用户手机号 -->
+          <el-table-column width="auto" prop="userMobile" label="下单用户手机号">
             <template slot-scope="scope">
               {{ scope.row.distributionUser ? scope.row.distributionUser.userMobile : '' }}
             </template>
           </el-table-column>
           <!-- 待结算金额变更数额 -->
-          <el-table-column
-            width="auto"
-            prop="unsettledAmount"
-            :label="$t('distribIncome.pschange')"
-          >
+          <el-table-column width="auto" prop="unsettledAmount" :label="$t('distribIncome.pschange')">
             <template slot-scope="scope">
               {{ scope.row.unsettledAmount }}
             </template>
           </el-table-column>
           <!-- 可提现金额变更数额 -->
-          <el-table-column
-            width="auto"
-            prop="settledAmount"
-            :label="$t('distribIncome.wachange')"
-          >
+          <el-table-column width="auto" prop="settledAmount" :label="$t('distribIncome.wachange')">
             <template slot-scope="scope">
               {{ scope.row.settledAmount }}
             </template>
           </el-table-column>
           <!-- 已失效金额变更数额 -->
-          <el-table-column
-            width="auto"
-            prop="invalidAmount"
-            :label="$t('distribIncome.iachange')"
-          >
+          <el-table-column width="auto" prop="invalidAmount" :label="$t('distribIncome.iachange')">
             <template slot-scope="scope">
               {{ scope.row.invalidAmount }}
             </template>
           </el-table-column>
           <!-- 积累收益变更数额 -->
-          <el-table-column
-            width="auto"
-            prop="addupAmount"
-            :label="$t('distribIncome.aichange')"
-          >
+          <el-table-column width="auto" prop="addupAmount" :label="$t('distribIncome.aichange')">
             <template slot-scope="scope">
               {{ scope.row.addupAmount }}
             </template>
           </el-table-column>
           <!-- 备注 -->
-          <el-table-column
-            width="auto"
-            prop="remarks"
-            :label="$t('publics.remark')"
-          >
+          <el-table-column width="auto" prop="remarks" :label="$t('publics.remark')">
             <template slot-scope="scope">
               {{ scope.row.remarks }}
             </template>
           </el-table-column>
           <!-- 创建时间 -->
-          <el-table-column
-            width="auto"
-            prop="createTime"
-            :label="$t('sys.creationTime')"
-          >
+          <el-table-column width="auto" prop="createTime" :label="$t('sys.creationTime')">
             <template slot-scope="scope">
               {{ scope.row.createTime }}
             </template>
@@ -109,15 +86,9 @@
       </div>
 
       <!-- 分页 -->
-      <el-pagination
-        v-if="dataList.length"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="page.currentPage"
-        :page-sizes="[10, 20, 50, 100]"
-        :page-size="page.pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="page.total">
+      <el-pagination v-if="dataList.length" @size-change="handleSizeChange" @current-change="handleCurrentChange"
+        :current-page="page.currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="page.pageSize"
+        layout="total, sizes, prev, pager, next, jumper" :total="page.total">
       </el-pagination>
     </div>
 
@@ -126,7 +97,7 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       theData: null, // 保存上次点击查询的请求条件
 
@@ -141,13 +112,13 @@ export default {
       addOrUpdateVisible: false
     }
   },
-  created () {
+  created() {
     this.getDataList()
   },
-  mounted () {
+  mounted() {
   },
   methods: {
-    getDataList (page, newData = false) {
+    getDataList(page, newData = false) {
       this.dataListLoading = true
       if (newData || !this.theData) {
         this.theData = JSON.parse(JSON.stringify(this.searchForm))
@@ -166,7 +137,7 @@ export default {
       })
     },
     // 新增 / 修改
-    addOrUpdateHandle (id) {
+    addOrUpdateHandle(id) {
       this.addOrUpdateVisible = true
       this.$nextTick(() => {
         this.$refs.addOrUpdate.init(id)
@@ -197,11 +168,11 @@ export default {
     /**
      * 刷新回调
      */
-    refreshChange () {
+    refreshChange() {
       this.page.currentPage = 1
       this.getDataList(this.page)
     },
-    searchChange (newData = false) {
+    searchChange(newData = false) {
       // this.searchForm = params
       this.page.currentPage = 1
       this.getDataList(this.page, newData)
@@ -211,16 +182,16 @@ export default {
      * 重置表单
      * @param {String} formName 表单名称
      */
-    resetSearchForm (formName) {
+    resetSearchForm(formName) {
       this.$refs[formName].resetFields()
       this.searchForm = {}
     },
 
-    handleSizeChange (val) {
+    handleSizeChange(val) {
       this.page.pageSize = val
       this.getDataList(this.page)
     },
-    handleCurrentChange (val) {
+    handleCurrentChange(val) {
       this.page.currentPage = val
       this.getDataList(this.page)
     }
@@ -228,6 +199,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

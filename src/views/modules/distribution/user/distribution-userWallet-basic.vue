@@ -2,7 +2,7 @@
   <!-- 分销钱包-钱包管理 -->
   <div class="mod-distribution-distributionUserWallet">
     <!-- 搜索栏 -->
-    <div class="search-bar">
+    <!-- <div class="search-bar">
       <el-form @submit.native.prevent :inline="true" class="search-form" ref="searchForm" :model="searchForm" size="small">
         <div class="input-row">
           <el-form-item :label="$t('distributionMsg.distriTelPhone') + ':'">
@@ -14,7 +14,7 @@
           </el-form-item>
         </div>
       </el-form>
-    </div>
+    </div> -->
 
     <div class="main-container">
       <!-- 表格 -->

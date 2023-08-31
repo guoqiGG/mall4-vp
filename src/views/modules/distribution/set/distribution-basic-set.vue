@@ -126,7 +126,7 @@
         <div class="title">{{ $t('distribution.withdrawalSettings') }}</div>
         <div class="form-item-content">
           <!-- 单笔提现 -->
-          <!-- <el-form-item :label="this.$i18n.t('withdraw.eachWithdrawal')+':'">
+          <el-form-item :label="this.$i18n.t('withdraw.eachWithdrawal')+':'">
             <el-input v-model.number="dataForm.amountMin" style="width: 180px"
             oninput="value=value.replace(/[^\d]/g,'')"
             maxlength="10">
@@ -140,7 +140,7 @@
               <template slot="append">{{ $t('distribution.dbcTip2') }}</template>
             </el-input>
             <span class="tips">{{  $t('withdraw.tip3') }}</span>
-          </el-form-item> -->
+          </el-form-item>
           <!-- 提现频次 -->
           <el-form-item :label="this.$i18n.t('withdraw.withdrawalFrequency') + ':'">
             <el-select v-model="dataForm.frequency" :placeholder="this.$i18n.t('user.pleaseSelect')"
