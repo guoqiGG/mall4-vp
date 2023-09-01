@@ -125,6 +125,22 @@
           </el-form-item>
         </div>-->
       </el-form>
+      <el-form @submit.native.prevent :inline="true" :model="dataForm1" size="small">
+        <div class="input-row">
+          <!-- &nbsp;&nbsp;&nbsp; -->
+          <el-form-item label="商品名称：">
+            <template>
+              <el-select style="min-width: 230px;" v-model="dataForm1.prodId" clearable
+                placeholder="商品名称" size="small">
+                <el-option v-for="item in prodDataList" :key="item.prodId" :label="item.prodName" :value="item.prodId"></el-option>
+              </el-select>
+            </template>
+          </el-form-item>
+          <el-form-item>
+            <div class="default-btn" @click="getSoldExcelByProd()">按商品导出</div>
+          </el-form-item>
+        </div>
+      </el-form>
     </div>
     <div class="main-container main">
       <div class="content">
@@ -354,22 +370,24 @@
                     </div>
                   </div>
                 </el-col>
-                   <!-- 团长信息 -->
-                   <el-col :span="3" style="height: 100%">
-                    <div class="item">
-                      <div  v-if="order.distributionUserResult">
-                        <span>{{ order.distributionUserResult.distributionName+'电话：'+ order.distributionUserResult.stationTel}}</span>
-                        <span style="margin-top: 5px;">{{'门店：'+ order.distributionUserResult.distributionStationName }}</span>
-                        <span style="margin-top: 5px;">
-                          地址：{{ order.distributionUserResult.province + order.distributionUserResult.city +
-                            order.distributionUserResult.area + order.distributionUserResult.addr }}
-                        </span>
-                      </div>
-                      <div  v-else>
-                        无
-                      </div>
+                <!-- 团长信息 -->
+                <el-col :span="3" style="height: 100%">
+                  <div class="item">
+                    <div v-if="order.distributionUserResult">
+                      <span>{{ order.distributionUserResult.distributionName + '电话：' +
+                        order.distributionUserResult.stationTel }}</span>
+                      <span style="margin-top: 5px;">{{ '门店：' + order.distributionUserResult.distributionStationName
+                      }}</span>
+                      <span style="margin-top: 5px;">
+                        地址：{{ order.distributionUserResult.province + order.distributionUserResult.city +
+                          order.distributionUserResult.area + order.distributionUserResult.addr }}
+                      </span>
                     </div>
-                  </el-col>
+                    <div v-else>
+                      无
+                    </div>
+                  </div>
+                </el-col>
                 <el-col :span="2" style="height: 100%">
                   <div class="item">
                     <div class="buyer-info">
@@ -468,6 +486,9 @@ export default {
       resizeProportion: 1,
       sts: 0,
       dataForm: {},
+      dataForm1: {
+        prodId: null
+      },
       dateRange: [],
       status: null,
       options: [{
@@ -580,7 +601,8 @@ export default {
       checkAll: false,
       isIndeterminate: false,
       orderNumberList: [],
-      orderIdList: []
+      orderIdList: [],
+      prodDataList: []
     }
   },
   computed: {
@@ -603,6 +625,7 @@ export default {
 
     // 携带参数查询
     this.getDataList(this.page, this.$route.query)
+    this.getProdList()
   },
   activated() {
     // 携带参数查询
@@ -651,7 +674,7 @@ export default {
         data: this.$http.adornData({
           orderNumberList: this.orderNumberList
         })
-      }).then((data)=>{
+      }).then((data) => {
         this.$message.success({
           message: '一键收货成功',
           type: 'success',
@@ -871,6 +894,7 @@ export default {
       this.page.currentPage = 1
       this.getDataList(this.page, null, 0, newData)
     },
+    // 订单导出
     getSoldExcel() {
       if (!this.dateRange || this.dateRange.length < 2) {
         this.$message.error(this.$i18n.t('order.pleExpOrderFirst'))
@@ -927,6 +951,59 @@ export default {
         }).catch((e) => {
           loading.close()
         })
+      })
+    },
+    // 订单按商品导出
+    getSoldExcelByProd() {
+      if (!this.dataForm1.prodId) {
+        this.$message.error('请选择要导出的商品')
+        return
+      }
+      const loading = this.$loading({
+        lock: true,
+        target: '.mod-order-order',
+        customClass: 'export-load',
+        background: 'transparent',
+        text: this.$i18n.t('shop.exportIng')
+      })
+      this.$http({
+        url: this.$http.adornUrl('/platform/order/prod/soldExcel'),
+        method: 'get',
+        params: this.$http.adornParams({
+          'prodId': this.dataForm1.prodId,
+        }),
+        responseType: 'blob' // 解决文件下载乱码问题
+      }).then(({ data }) => {
+        loading.close()
+        var blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8' })
+        const fileName = '商品订单导出'
+        const elink = document.createElement('a')
+        if ('download' in elink) { // 非IE下载
+          elink.download = fileName
+          elink.style.display = 'none'
+          elink.href = URL.createObjectURL(blob)
+          document.body.appendChild(elink)
+          elink.click()
+          URL.revokeObjectURL(elink.href) // 释放URL 对象
+          document.body.removeChild(elink)
+        } else { // IE10+下载
+          navigator.msSaveBlob(blob, fileName)
+        }
+      }).catch((e) => {
+        loading.close()
+      })
+    },
+    // 获取商品列表接口
+    getProdList() {
+      this.$http({
+        url: this.$http.adornUrl('/platform/search/prod/page'),
+        method: 'get',
+        params: this.$http.adornParams({
+          current: 1,
+          size: 10000
+        })
+      }).then(({ data }) => {
+        this.prodDataList = data.records
       })
     }
   },
