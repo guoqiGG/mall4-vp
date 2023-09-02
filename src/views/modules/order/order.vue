@@ -130,9 +130,9 @@
           <!-- &nbsp;&nbsp;&nbsp; -->
           <el-form-item label="商品名称：">
             <template>
-              <el-select style="min-width: 230px;" v-model="dataForm1.prodId" clearable
-                placeholder="商品名称" size="small">
-                <el-option v-for="item in prodDataList" :key="item.prodId" :label="item.prodName" :value="item.prodId"></el-option>
+              <el-select style="min-width: 230px;" v-model="dataForm1.prodId" clearable placeholder="商品名称" size="small">
+                <el-option v-for="item in prodDataList" :key="item.prodId" :label="item.prodName"
+                  :value="item.prodId"></el-option>
               </el-select>
             </template>
           </el-form-item>
