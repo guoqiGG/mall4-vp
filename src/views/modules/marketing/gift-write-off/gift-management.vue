@@ -1,6 +1,5 @@
 <template>
     <div class="mod-marketing-coupon">
-
         <!-- 新版规范 -->
         <div class="coupon-mod">
             <!-- 表格主体 -->
@@ -73,7 +72,6 @@ export default {
                 method: 'get',
                 params: this.$http.adornParams()
             }).then(({ data }) => {
-                console.log(data)
                 this.dataList = data
                 this.dataListLoading = false
             }).catch(() => {
@@ -98,8 +96,8 @@ export default {
                     url: this.$http.adornUrl('/admin/user/update/resources'),
                     method: 'post',
                     data: this.$http.adornData({
-                        id:id,
-                        isDeleted:1
+                        id: id,
+                        isDeleted: 1
                     })
                 }).then(({ data }) => {
                     this.$message({

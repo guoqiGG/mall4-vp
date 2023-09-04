@@ -1,6 +1,5 @@
 <template>
   <div class="mod-marketing-coupon">
-
     <!-- 新版规范 -->
     <div class="coupon-mod">
       <!-- 搜索栏 -->
@@ -12,11 +11,11 @@
               <el-input v-model="searchForm.name" placeholder="礼品券名"></el-input>
             </el-form-item>
             <!-- 日期组件 -->
-            <el-form-item :label="$t('coupon.expire') + ':'">
+            <!-- <el-form-item :label="$t('coupon.expire') + ':'">
               <el-date-picker v-model="dateRange" type="datetimerange" :range-separator="$t('date.tip')"
                 value-format="yyyy-MM-dd HH:mm:ss" :start-placeholder="$t('date.start')"
                 :end-placeholder="$t('date.end')"></el-date-picker>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item>
               <div class="default-btn primary-btn" @click="searchChange(true)">{{ $t('shopFeature.searchBar.search') }}
               </div>
@@ -198,9 +197,7 @@ export default {
         this.theData = {
           current: page == null ? this.page.currentPage : page.currentPage,
           size: page == null ? this.page.pageSize : page.pageSize,
-          'name': this.dataForm.name,
-          'startTime': this.dateRange === null ? null : this.dateRange[0], // 开始时间
-          'endTime': this.dateRange === null ? null : this.dateRange[1] // 结束时间
+          'name': this.dataForm.name
         }
       } else {
         this.theData.current = page == null ? this.page.currentPage : page.currentPage
@@ -361,11 +358,7 @@ export default {
       })
     },
     clearSearch() {
-      this.dateRange = []
-      this.searchForm.shopName = null
-      this.searchForm.couponName = null
-      this.searchForm.overdueStatus = null
-      this.searchForm.putonStatus = null
+      this.searchForm.name = null
     },
     // 每页数量变更
     handleSizeChange(val) {
