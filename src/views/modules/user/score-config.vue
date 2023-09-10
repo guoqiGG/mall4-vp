@@ -1,14 +1,8 @@
 <template >
   <div class="distribution-氢春豆设置-set gray-box top-redius border-bottom-gray">
     <div class="title">{{ $t("user.pointSettings") }} <span class="tip">{{ $t("user.pointSettingsTip") }} </span></div>
-    <el-form @submit.native.prevent
-      label-width="180px"
-      class="set-form"
-      :rules="dataRule"
-      :model="dataForm"
-      ref="dataForm"
-      size="mini"
-    >
+    <el-form @submit.native.prevent label-width="180px" class="set-form" :rules="dataRule" :model="dataForm"
+      ref="dataForm" size="mini">
       <!-- <el-form-item label="奖励设置"> -->
       <!-- <el-checkbox v-model="dataForm.awardSwitch"
                      :false-label='0'
@@ -19,28 +13,16 @@
       <br />
       <!-- <el-button @click="addRow"                    :rules="[{required: true, message: '注册氢春豆获取不能为空', trigger: 'blur'}]"
       style="margin-top:15px">添加等级</el-button>-->
-      <el-form-item
-        :label="$t('user.pointsEarnOne')"
-        style="width: 440px"
-        prop="signInScoreOne"
-      >
+      <el-form-item :label="$t('user.pointsEarnOne')" style="width: 440px" prop="signInScoreOne">
         <!-- <el-input v-model="dataForm.signInScore"></el-input> -->
-        <el-input-number
-          v-model="signInScoreOne"
-          :placeholder="$t('order.score')"
-          controls-position="right"
-          size="small"
-          :precision="0"
-          :min="1"
-          :max="99999"
-        ></el-input-number>
+        <el-input-number v-model="signInScoreOne" :placeholder="$t('order.score')" controls-position="right" size="small"
+          :precision="0" :min="1" :max="99999"></el-input-number>
       </el-form-item>
-      <el-form-item
+      <!-- <el-form-item
         :label="$t('user.pointsEarnTwo')"
         style="width: 440px"
         prop="signInScoreTwo"
       >
-        <!-- <el-input v-model="dataForm.signInScore"></el-input> -->
         <el-input-number
           v-model="signInScoreTwo"
           controls-position="right"
@@ -56,7 +38,6 @@
         style="width: 440px"
         prop="signInScoreThree"
       >
-        <!-- <el-input v-model="dataForm.signInScore"></el-input> -->
         <el-input-number
           v-model="signInScoreThree"
           controls-position="right"
@@ -73,7 +54,6 @@
         style="width: 440px"
         prop="signInScoreFour"
       >
-        <!-- <el-input v-model="dataForm.signInScore"></el-input> -->
         <el-input-number
           v-model="signInScoreFour"
           controls-position="right"
@@ -90,7 +70,6 @@
         style="width: 440px"
         prop="signInScoreFive"
       >
-        <!-- <el-input v-model="dataForm.signInScore"></el-input> -->
         <el-input-number
           v-model="signInScoreFive"
           controls-position="right"
@@ -107,7 +86,6 @@
         style="width: 440px"
         prop="signInScoreSix"
       >
-        <!-- <el-input v-model="dataForm.signInScore"></el-input> -->
         <el-input-number
           v-model="signInScoreSix"
           controls-position="right"
@@ -124,7 +102,6 @@
         style="width: 440px"
         prop="signInScoreSeven"
       >
-        <!-- <el-input v-model="dataForm.signInScore"></el-input> -->
         <el-input-number
           v-model="signInScoreSeven"
           controls-position="right"
@@ -135,68 +112,27 @@
           :placeholder="$t('order.score')"
           type="number"
         ></el-input-number>
-      </el-form-item>
-      <el-form-item
-        :label="$t('user.pointsForRegistration')"
-        style="width: 440px"
-        prop="registerScore"
-      >
-        <el-input-number
-          v-model="dataForm.registerScore"
-          :placeholder="$t('order.score')"
-          :precision="0"
-          :min="0"
-          :max="99999"
-          controls-position="right"
-          size="small"
-          type="number"
-        ></el-input-number>
+      </el-form-item> -->
+      <el-form-item :label="$t('user.pointsForRegistration')" style="width: 440px" prop="registerScore">
+        <el-input-number v-model="dataForm.registerScore" :placeholder="$t('order.score')" :precision="0" :min="0"
+          :max="99999" controls-position="right" size="small" type="number"></el-input-number>
       </el-form-item>
       <!-- <div class="title">氢春豆使用设置</div> -->
       <!-- <br> -->
-      <el-form-item
-        :label="$t('user.pointsSwitch')"
-        style="width: 440px"
-        prop="shopScoreSwitch"
-      >
+      <el-form-item :label="$t('user.pointsSwitch')" style="width: 440px" prop="shopScoreSwitch">
         <el-switch v-model="dataForm.shopScoreSwitch"></el-switch>
       </el-form-item>
-      <el-form-item
-        v-if="dataForm.shopScoreSwitch"
-        :label="$t('user.perPurchase')"
-        style="width: 440px"
-        prop="shopGetScore"
-      >
-        <el-input
-          v-model="dataForm.shopGetScore"
-          size="small"
-          type="number"
-          oninput="value=value.replace(/[^\d]/g,'')"
-          style="width:350px"
-          @change="setShopGetScore"
-        >
-          <template slot="append"
-            >{{ $t("coupon.yuan") }}{{ $t("user.earnOnePoint") }}</template
-          >
+      <el-form-item v-if="dataForm.shopScoreSwitch" :label="$t('user.perPurchase')" style="width: 440px"
+        prop="shopGetScore">
+        <el-input v-model="dataForm.shopGetScore" size="small" type="number" oninput="value=value.replace(/[^\d]/g,'')"
+          style="width:350px" @change="setShopGetScore">
+          <template slot="append">{{ $t("coupon.yuan") }}{{ $t("user.earnOnePoint") }}</template>
         </el-input>
       </el-form-item>
-      <el-form-item
-        v-if="dataForm.shopScoreSwitch"
-        :label="$t('user.pointsPurchase')"
-        style="width: 440px"
-        :placeholder="$t('order.score')"
-        prop="shopUseScore"
-      >
-        <el-input
-          v-model="dataForm.shopUseScore"
-          size="small"
-          type="number"
-          :min="1"
-          :max="1000"
-          oninput="value=value.replace(/[^\d]/g,'')"
-          style="width:350px"
-          @change="setShopUseScore"
-        >
+      <el-form-item v-if="dataForm.shopScoreSwitch" :label="$t('user.pointsPurchase')" style="width: 440px"
+        :placeholder="$t('order.score')" prop="shopUseScore">
+        <el-input v-model="dataForm.shopUseScore" size="small" type="number" :min="1" :max="1000"
+          oninput="value=value.replace(/[^\d]/g,'')" style="width:350px" @change="setShopUseScore">
           <template slot="append">{{ $t("user.pointsDeducted") }}</template>
         </el-input>
       </el-form-item>
@@ -212,115 +148,54 @@
           <el-radio :label="1">{{ $t("user.categoryPercent") }}</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item
-        :label="$t('user.getPercentLimit')"
-        v-if="getDiscountRange === 0"
-      >
-        <el-input-number
-          v-model="dataForm.getDiscount"
-          controls-position="right"
-          :precision="1"
-          :min="0"
-          :step="0.1"
-          :max="100"
-          size="small"
-          :placeholder="$t('user.percent')"
-          type="number"
-        ></el-input-number>
-        <span class="tip">{{$t('user.userConsumptionAmount')+dataForm.getDiscount+$t('user.RedeemableForPoints')}}</span>
+      <el-form-item :label="$t('user.getPercentLimit')" v-if="getDiscountRange === 0">
+        <el-input-number v-model="dataForm.getDiscount" controls-position="right" :precision="1" :min="0" :step="0.1"
+          :max="100" size="small" :placeholder="$t('user.percent')" type="number"></el-input-number>
+        <span class="tip">{{ $t('user.userConsumptionAmount') + dataForm.getDiscount + $t('user.RedeemableForPoints') }}</span>
       </el-form-item>
-      <el-form-item
-        :label="$t('user.usePercentLimit')"
-        v-if="useDiscountRange === 0"
-      >
-        <el-input-number
-          v-model="dataForm.useDiscount"
-          controls-position="right"
-          :precision="1"
-          :min="0"
-          :step="0.1"
-          :max="100"
-          size="small"
-          :placeholder="$t('user.percent')"
-          type="number"
-        ></el-input-number>
-        <span class="tip">{{$t('user.userConsumptionAmount')+dataForm.useDiscount+$t('user.CanBeOffsetWithPoints')}}</span>
+      <el-form-item :label="$t('user.usePercentLimit')" v-if="useDiscountRange === 0">
+        <el-input-number v-model="dataForm.useDiscount" controls-position="right" :precision="1" :min="0" :step="0.1"
+          :max="100" size="small" :placeholder="$t('user.percent')" type="number"></el-input-number>
+        <span
+          class="tip">{{ $t('user.userConsumptionAmount') + dataForm.useDiscount + $t('user.CanBeOffsetWithPoints') }}</span>
       </el-form-item>
       <!-- <el-form-item label="比例上限(%):" style="width:1840px"> -->
-      <el-table
-        :data="dataForm.categoryConfigs"
-        class="elTable"
-        style="width: 752px"
-        v-if="useDiscountRange === 1 || getDiscountRange === 1"
-        border
-      >
+      <el-table :data="dataForm.categoryConfigs" class="elTable" style="width: 752px"
+        v-if="useDiscountRange === 1 || getDiscountRange === 1" border>
         <!-- width="700" -->
-        <el-table-column
-          prop="levelName"
-          header-align="center"
-          align="center"
-          width="250"
-          :label="$t('category.categoryName')"
-        >
+        <el-table-column prop="levelName" header-align="center" align="center" width="250"
+          :label="$t('category.categoryName')">
           <template slot-scope="scope">
             <span>{{ scope.row.categoryName }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column
-          prop="presScore"
-          :label="$t('user.getPercentLimit')"
-          align="center"
-          v-if="getDiscountRange === 1"
-          header-align="center"
-          width="250"
-        >
+        <el-table-column prop="presScore" :label="$t('user.getPercentLimit')" align="center" v-if="getDiscountRange === 1"
+          header-align="center" width="250">
           <template slot-scope="scope">
             <div class="table-template">
               <!-- <div class="table-input-box"> -->
-              <el-form-item
-                label-width="0px"
-                :prop="'categoryConfigs.' + scope.$index + '.getScoreLimit'"
-                align="center"
-              >
-                <el-input-number
-                  v-model="scope.row.getScoreLimit"
-                  size="medium"
-                  :max="100"
-                  :min="0"
-                  :precision="1"
-                ></el-input-number>
+              <el-form-item label-width="0px" :prop="'categoryConfigs.' + scope.$index + '.getScoreLimit'" align="center">
+                <el-input-number v-model="scope.row.getScoreLimit" size="medium" :max="100" :min="0"
+                  :precision="1"></el-input-number>
               </el-form-item>
-              <span class="tip">{{$t('user.userConsumptionAmount')+scope.row.getScoreLimit+$t('user.RedeemableForPoints')}}</span>
+              <span
+                class="tip">{{ $t('user.userConsumptionAmount') + scope.row.getScoreLimit + $t('user.RedeemableForPoints') }}</span>
               <!-- </div> -->
             </div>
           </template>
         </el-table-column>
-        <el-table-column
-          prop="presScore"
-          :label="$t('user.usePercentLimit')"
-          header-align="center"
-          align="center"
-          width="250"
-          v-if="useDiscountRange === 1"
-        >
+        <el-table-column prop="presScore" :label="$t('user.usePercentLimit')" header-align="center" align="center"
+          width="250" v-if="useDiscountRange === 1">
           <template slot-scope="scope">
             <div class="table-template">
               <!-- <div class="table-input-box"> -->
-              <el-form-item
-                label-width="0px"
-                :prop="'categoryConfigs.' + scope.$index + '.useScoreLimit'"
-                align="center"
-              >
-                <el-input-number
-                  v-model="scope.row.useScoreLimit"
-                  size="medium"
-                  :max="100"
-                  :min="0"
-                  :precision="1"
-                ></el-input-number>
+              <el-form-item label-width="0px" :prop="'categoryConfigs.' + scope.$index + '.useScoreLimit'" align="center">
+                <el-input-number v-model="scope.row.useScoreLimit" size="medium" :max="100" :min="0"
+                  :precision="1"></el-input-number>
               </el-form-item>
-               <span class="tip">{{$t('user.userConsumptionAmount')+scope.row.useScoreLimit+$t('user.CanBeOffsetWithPoints')}}</span>
+              <span
+                class="tip">{{ $t('user.userConsumptionAmount') + scope.row.useScoreLimit + $t('user.CanBeOffsetWithPoints') }}</span>
               <!-- </div> -->
             </div>
           </template>
@@ -340,7 +215,7 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       dataForm: {
         id: null,
@@ -400,11 +275,11 @@ export default {
       }
     }
   },
-  mounted () {
+  mounted() {
     this.init()
   },
   methods: {
-    init () {
+    init() {
       this.$nextTick(() => {
         this.$http({
           url: this.$http.adornUrl('/user/scoreConfig/info/' + 'SCORE_CONFIG'),
@@ -435,20 +310,20 @@ export default {
         })
       })
     },
-    setShopGetScore () {
+    setShopGetScore() {
       const num = Number(this.dataForm.shopGetScore).toFixed(2)
       this.dataForm.shopGetScore = num < 1 ? 1 : num
       if (num >= 100000000) {
         this.dataForm.shopGetScore = 100000000
       }
     },
-    setShopUseScore () {
+    setShopUseScore() {
       let num = Math.round(this.dataForm.shopUseScore)
       num = num < 1 ? 1 : num
       num = num > 1000 ? 1000 : num
       this.$set(this.dataForm, 'shopUseScore', num)
     },
-    comparaConfig () {
+    comparaConfig() {
       this.isConfig = false
       this.dataForm.categoryConfigs.forEach(item => {
         if (this.useDiscountRange === 1 && !item.useScoreLimit) {
@@ -464,7 +339,7 @@ export default {
       })
     },
     // 表单提交
-    dataFormSubmit () {
+    dataFormSubmit() {
       this.dataForm.signInScore = []
       this.dataForm.useDiscountRange = this.useDiscountRange
       this.dataForm.getDiscountRange = this.getDiscountRange
@@ -501,7 +376,7 @@ export default {
         }
       })
     },
-    errorMsg (message) {
+    errorMsg(message) {
       this.$message({
         message: message,
         type: 'error',
@@ -513,16 +388,17 @@ export default {
 </script>
 
 <style scoped>
-div >>>.is-success .el-input-number__decrease,
-div >>>.is-success .el-input-number__increase,
-div >>>.is-error .el-input-number__decrease,
-div >>>.is-error .el-input-number__increase {
+div>>>.is-success .el-input-number__decrease,
+div>>>.is-success .el-input-number__increase,
+div>>>.is-error .el-input-number__decrease,
+div>>>.is-error .el-input-number__increase {
   right: 1px !important;
 }
-.tip{
+
+.tip {
   margin-left: 10px;
   font-size: 12px;
-  color:#999;
+  color: #999;
   font-weight: normal;
 }
 </style>
