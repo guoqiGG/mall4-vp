@@ -15,12 +15,12 @@
                     <el-table :data="dataList" header-cell-class-name="table-header" row-class-name="table-row-low"
                         style="width: 100%">
                         <!-- <el-table-column fixed prop="id" label="ID" width="auto"></el-table-column> -->
-                        <el-table-column prop="name" label="名称" width="auto"></el-table-column>
                         <el-table-column prop="date" label="日期" width="auto">
                             <template slot-scope="scope">
                                 <span class="table-cell-text">{{ scope.row.date.split(' ')[0] }}</span>
                             </template>
                         </el-table-column>
+                        <el-table-column prop="name" label="名称" width="auto"></el-table-column>
                         <el-table-column prop="createTime" label="创建时间" width="auto"></el-table-column>
                         <el-table-column fixed="right" align="center" label="操作" width="180">
                             <template slot-scope="scope">

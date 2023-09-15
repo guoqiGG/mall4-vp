@@ -443,6 +443,7 @@
                       <div class="default-btn text-btn" @click="refundRoute(order.orderNumber)" v-if="order.refundStatus">
                         {{
                           $t("order.refundInformation") }}</div>
+                      <div class="default-btn text-btn" v-if="order.status == 5" @click="ProcessRefund(order)">退款</div>
                     </div>
                   </div>
                 </el-col>
@@ -644,6 +645,10 @@ export default {
     })
   },
   methods: {
+    // 处理退款
+    ProcessRefund(order) {
+      console.log(order)
+    },
     handleCheckAllChange(val) {
       console.log(val)
       this.orderNumberList = val ? this.orderIdList : []

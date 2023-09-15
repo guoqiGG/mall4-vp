@@ -13,7 +13,7 @@
               v-model="dateRange"
               type="datetimerange"
               :range-separator="$t('date.tip')"
-              value-format="yyyy-MM-dd HH:mm:ss"
+              value-format="yy-MM-dd HH:mm:ss"
               :start-placeholder="$t('date.start')"
               :end-placeholder="$t('date.end')"
             ></el-date-picker>
