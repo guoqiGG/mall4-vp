@@ -32,14 +32,14 @@
       </el-form>
     </div>
     <div class="main-container">
-      <div class="operation-bar">
+      <!-- <div class="operation-bar">
         <div
           class="default-btn primary-btn"
           v-if="isAuth('platform:notice:save')"
           @click="addOrUpdateHandle()">
           {{ $t('sysManagement.add') }}
         </div>
-      </div>
+      </div> -->
       <div class="table-con notice-table">
         <el-table
           ref="noticeListTable"
@@ -123,11 +123,11 @@
                   class="default-btn text-btn"
                   @click="addOrUpdateHandle(scope.row.id)"
                 >{{$t('user.editBtn')}}</div>
-                <div
+                <!-- <div
                   v-if="isAuth('platform:notice:delete')"
                   class="default-btn text-btn"
                   @click.stop="deleteHandle(scope.row.id)"
-                >{{$t('remindPop.delete')}}</div>
+                >{{$t('remindPop.delete')}}</div> -->
               </div>
             </template>
           </el-table-column>
