@@ -7,14 +7,13 @@
         <el-form @submit.native.prevent :inline="true" class="search-form" ref="test-form" :model="searchForm"
           size="small">
           <div class="input-row">
-            <el-form-item label="团长手机号:" class="search-form-item">
-              <el-input v-model="searchForm.distributionUserMobile" placeholder="团长手机号"></el-input>
+            <el-form-item label="名称:" class="search-form-item">
+              <el-input v-model="searchForm.name" placeholder="名称"></el-input>
             </el-form-item>
             <el-form-item>
               <div class="default-btn primary-btn" @click="searchChange(true)">{{ $t('shopFeature.searchBar.search') }}
               </div>
               <div class="default-btn" @click="clearSearch">{{ $t('product.reset') }}</div>
-              <div class="default-btn" @click="getSoldExcel()">{{ $t("order.export") }}</div>
             </el-form-item>
           </div>
         </el-form>
@@ -22,31 +21,45 @@
       <!-- 搜索栏end -->
       <!-- 表格主体 -->
       <div class="main-container">
+        <div class="operation-bar">
+          <div class="default-btn primary-btn" v-if="isAuth('platform:write-off-rules:save')"
+            @click="addOrUpdateHandle()">新增</div>
+        </div>
         <!-- 表格 -->
         <div class="table-con seckill-table">
           <el-table :data="dataList" header-cell-class-name="table-header" row-class-name="table-row-low"
             style="width: 100%">
             <el-table-column prop="name" label="名称"></el-table-column>
-            <el-table-column prop="userName" label="用户昵称"></el-table-column>
-            <el-table-column prop="realName" label="团长"></el-table-column>
-            <el-table-column prop="distributionUserMobile" label="团长手机号"></el-table-column>
-            <el-table-column prop="createTime" label="核销时间"></el-table-column>
+            <el-table-column prop="stockIds" label="批次号组"></el-table-column>
+            <el-table-column prop="number" label="数量"></el-table-column>
+            <el-table-column prop="createTime" label="创建时间"></el-table-column>
+            <el-table-column fixed="right" align="center" :label="$i18n.t('crud.menu')" min-width="100">
+              <template slot-scope="scope">
+                <div class="text-btn-con">
+                  <div class="default-btn text-btn" v-if="isAuth('platform:write-off-rules:update')"
+                    @click="addOrUpdateHandle(scope.row.id,scope.row.name,scope.row.stockIds,scope.row.number)">编辑</div>
+                </div>
+              </template>
+            </el-table-column>
           </el-table>
         </div>
       </div>
       <!-- 分页 -->
       <el-pagination v-if="dataList.length" @size-change="handleSizeChange" @current-change="handleCurrentChange"
-        :current-page="page.currentPage" :page-sizes="[2, 10, 20, 50, 100]" :page-size="page.pageSize"
+        :current-page="page.currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="page.pageSize"
         layout="total, sizes, prev, pager, next, jumper" :total="page.total">
       </el-pagination>
       <!-- 表格主体end -->
     </div>
 
+    <!-- 弹窗, 新增 / 修改 -->
+    <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="refreshChange"></add-or-update>
 
   </div>
 </template>
 
 <script>
+import AddOrUpdate from './write-off-rules-add-or-update'
 export default {
   data() {
     return {
@@ -54,6 +67,7 @@ export default {
       theParams: null, // 保存上次点击查询的请求条件
       dataList: [],
       dataListLoading: false,
+      addOrUpdateVisible: false,
       isSubmit: false,
       page: {
         total: 0, // 总页数
@@ -62,61 +76,17 @@ export default {
       },
       // 头部搜索表单
       searchForm: {
-        distributionUserMobile: ''
+        name: ''
       }
     }
+  },
+  components: {
+    AddOrUpdate
   },
   mounted() {
     this.getDataList()
   },
   methods: {
-    // 订单导出
-    getSoldExcel() {
-      // if (!this.searchForm.distributionUserMobile) {
-      //   this.$message.error(this.$i18n.t('请输入需要导出的团长手机号'))
-      //   return
-      // }
-      this.$confirm(this.$i18n.t('order.exportReport'), this.$i18n.t('remindPop.remind'), {
-        confirmButtonText: this.$i18n.t('remindPop.confirm'),
-        cancelButtonText: this.$i18n.t('remindPop.cancel'),
-        type: 'warning'
-      }).then(() => {
-        const loading = this.$loading({
-          lock: true,
-          target: '.mod-order-order',
-          customClass: 'export-load',
-          background: 'transparent',
-          text: '核销记录导出'
-        })
-        this.$http({
-          url: this.$http.adornUrl('/platform/order/distribution/card/write/soldExcel'),
-          method: 'get',
-          params: this.$http.adornParams({
-            'distributionUserMobile': this.searchForm.distributionUserMobile,
-
-          }),
-          responseType: 'blob' // 解决文件下载乱码问题
-        }).then(({ data }) => {
-          loading.close()
-          var blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8' })
-          const fileName = '核销记录导出'
-          const elink = document.createElement('a')
-          if ('download' in elink) { // 非IE下载
-            elink.download = fileName
-            elink.style.display = 'none'
-            elink.href = URL.createObjectURL(blob)
-            document.body.appendChild(elink)
-            elink.click()
-            URL.revokeObjectURL(elink.href) // 释放URL 对象
-            document.body.removeChild(elink)
-          } else { // IE10+下载
-            navigator.msSaveBlob(blob, fileName)
-          }
-        }).catch((e) => {
-          loading.close()
-        })
-      })
-    },
     // 获取数据列表
     getDataList(page, newData = false) {
       this.dataListLoading = true
@@ -125,15 +95,14 @@ export default {
         this.theData = {
           current: page == null ? this.page.currentPage : page.currentPage,
           size: page == null ? this.page.pageSize : page.pageSize,
-          distributionUserMobile: this.searchForm.distributionUserMobile
+          tel: this.searchForm.tel
         }
       } else {
         this.theData.current = page == null ? this.page.currentPage : page.currentPage
         this.theData.size = page == null ? this.page.pageSize : page.pageSize
       }
       this.$http({
-        // url: this.$http.adornUrl('/platform/shopCompany/get/wx/marketing/coupon/detail'),
-        url: this.$http.adornUrl('/platform/shopCompany/get/user/coupon/list'),
+        url: this.$http.adornUrl('/platform/shopCompany/get/synthesis/list'),
         method: 'get',
         params: this.$http.adornParams(
           Object.assign(this.theData, this.theParams), false
@@ -150,13 +119,26 @@ export default {
         }
       })
     },
+    // 新增 / 修改
+    addOrUpdateHandle(id,name,stockIds,number) {
+      let val={
+        id:id,
+        name:name,
+        stockIds:stockIds,
+        number:number,
+      }
+      this.addOrUpdateVisible = true
+      this.$nextTick(() => {
+        this.$refs.addOrUpdate.init(val)
+      })
+    },
     // 条件查询
     searchChange(newData = false) {
       this.page.currentPage = 1
       this.getDataList(this.page, newData)
     },
     clearSearch() {
-      this.searchForm.distributionUserMobile = ''
+      this.searchForm.name = ''
     },
     // 刷新回调用
     refreshChange() {

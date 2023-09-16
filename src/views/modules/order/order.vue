@@ -960,6 +960,7 @@ export default {
     },
     // 订单按商品导出
     getSoldExcelByProd() {
+
       if (!this.dataForm1.prodId) {
         this.$message.error('请选择要导出的商品')
         return
@@ -1010,12 +1011,34 @@ export default {
       }).then(({ data }) => {
         this.prodDataList = data.records
       })
+    },
+    // 生成退款订单编号接口
+    refuedApply() {
+      console.log('调用生成退款订单编号接口')
+      this.$http({
+        url: this.$http.adornUrl('/platform/shopCompany/apply'),
+        method: 'post',
+        data: this.$http.adornData({
+          orderNumber: '1702571051680141312', //订单退款
+          refundType: 2,//1:整单退款,2:单个物品退款
+          orderItemId: '1367',//订单项ID（单个物品退款时使用）	
+          goodsNum: 1, //退款数量（0或不传值则为全部数量）
+          applyType: 2, //申请类型(1:仅退款 2退款退货)
+          isReceiver: 1,//货物状态(1:已收到货 0:未收到货)
+          buyerReason: '拍错/多拍/不喜欢',//申请原因(下拉选择)
+          refundAmount: '0.19', // 退款金额
+          buyerMobile: '18437930709',
+          userId: '316a843b59f34f1280eafe5f214f2782'
+        })
+      })
     }
   },
   destroyed() {
     // 页面销毁时移除监听
     window.removeEventListener('scroll', this.handleScroll)
-  }
+  },
+
+
 }
 </script>
 <style lang="scss" scoped>
