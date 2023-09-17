@@ -30,6 +30,7 @@
             <el-table-column prop="userName" label="用户昵称"></el-table-column>
             <el-table-column prop="realName" label="团长"></el-table-column>
             <el-table-column prop="distributionUserMobile" label="团长手机号"></el-table-column>
+            <el-table-column prop="remark" label="备注"></el-table-column>
             <el-table-column prop="createTime" label="核销时间"></el-table-column>
           </el-table>
         </div>
