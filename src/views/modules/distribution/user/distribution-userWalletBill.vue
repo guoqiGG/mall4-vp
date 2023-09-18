@@ -22,28 +22,29 @@
         <el-table ref="distributionUserWalletBillTable" :data="dataList" header-cell-class-name="table-header"
           row-class-name="table-row-low" style="width: 100%">
           <!-- 团长姓名 -->
-          <el-table-column width="auto" prop="distributionName" label="团长姓名">
+          <el-table-column width="auto" label="团长姓名">
             <template slot-scope="scope">
-              {{ scope.row.distributionName ? scope.row.distributionName : '' }}
+              {{ scope.row.distributionUser ? scope.row.distributionUser.nickName : '' }}
             </template>
           </el-table-column>
           <!-- 团长手机号 -->
-          <el-table-column width="auto" prop="distributionTel" :label="$t('distribUserWallet.mobileTelNumber')">
+          <el-table-column width="auto" :label="$t('distribUserWallet.mobileTelNumber')">
             <template slot-scope="scope">
-              {{ scope.row.distributionTel ? scope.row.distributionTel : '' }}
+              {{ scope.row.distributionUser ? scope.row.distributionUser.userMobile : '' }}
             </template>
           </el-table-column>
 
           <!-- 下单用户昵称 -->
           <el-table-column width="auto" prop="nickName" label="下单用户昵称">
             <template slot-scope="scope">
-              {{ scope.row.distributionUser ? scope.row.distributionUser.nickName : '' }}
+              {{ scope.row.nickName }}
+
             </template>
           </el-table-column>
           <!-- 下单用户手机号 -->
           <el-table-column width="auto" prop="userMobile" label="下单用户手机号">
             <template slot-scope="scope">
-              {{ scope.row.distributionUser ? scope.row.distributionUser.userMobile : '' }}
+              {{ scope.row.userMobile }}
             </template>
           </el-table-column>
           <!-- 待结算金额变更数额 -->

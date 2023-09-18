@@ -153,6 +153,9 @@ http.interceptors.response.use(
 http.adornUrl = (actionName) => {
   return process.env.VUE_APP_BASE_API + actionName;
 };
+http.adornUrl2 = (actionName) => {
+  return process.env.VUE_APP_BASE_API2 + actionName;
+};
 
 /**
  * im请求地址处理

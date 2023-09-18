@@ -10,72 +10,67 @@
         }}
       </div>
     </div>
-      <el-form @submit.native.prevent
-        :model="dataForm"
-        ref="dataForm"
-        @keyup.enter.native="dataFormSubmit()"
-        label-width="80px"
-        size="small"
-      >
-        <div class="mod-order-orderInfo">
-          <div class="content">
-            <div class="order-number">
-              <div class="number">
-                <span class="text">{{ $t("order.number") }}：</span>
-                {{ dataForm.orderNumber }}
-              </div>
-              <div class="time">
-                <span class="text">{{ $t("order.createTime") }}：</span>
-                {{ dataForm.createTime }}
-              </div>
-              <div class="type">
+    <el-form @submit.native.prevent :model="dataForm" ref="dataForm" @keyup.enter.native="dataFormSubmit()"
+      label-width="80px" size="small">
+      <div class="mod-order-orderInfo">
+        <div class="content">
+          <div class="order-number">
+            <div class="number">
+              <span class="text">{{ $t("order.number") }}：</span>
+              {{ dataForm.orderNumber }}
+            </div>
+            <div class="time">
+              <span class="text">{{ $t("order.createTime") }}：</span>
+              {{ dataForm.createTime }}
+            </div>
+            <div class="type">
+              {{
+                [
+                  $t("order.normalOrder"),
+                  $t("order.groupPurchaseOrder"),
+                  $t("order.spikeOrder"),
+                ][dataForm.orderType]
+              }}
+            </div>
+          </div>
+          <div class="order-state">
+            <div class="state-box">
+              <div class="state">
                 {{
                   [
-                    $t("order.normalOrder"),
-                    $t("order.groupPurchaseOrder"),
-                    $t("order.spikeOrder"),
-                  ][dataForm.orderType]
+                    $t("order.waitToPay"),
+                    $t("order.waitDel"),
+                    $t("order.waitingFeGoods"),
+                    $t("order.waitingtion"),
+                    $t("order.commoditful"),
+                    $t("order.commodityFailed"),
+                    $t("order.commodited"),
+                  ][dataForm.status - 1]
                 }}
               </div>
-            </div>
-            <div class="order-state">
-              <div class="state-box">
-                <div class="state">
-                  {{
-                    [
-                      $t("order.waitToPay"),
-                      $t("order.waitDel"),
-                      $t("order.waitingFeGoods"),
-                      $t("order.waitingtion"),
-                      $t("order.commoditful"),
-                      $t("order.commodityFailed"),
-                      $t("order.commodited"),
-                    ][dataForm.status - 1]
-                  }}
+              <div class="state-des">
+                <div v-if="dataForm.status === 1">
+                  {{ $t("order.buyerDidNTime") }}
                 </div>
-                <div class="state-des">
-                  <div v-if="dataForm.status === 1">
-                    {{ $t("order.buyerDidNTime") }}
-                  </div>
-                  <div v-if="dataForm.status === 2">
-                    {{ $t("order.buyPleF") }}
-                  </div>
-                  <div v-if="dataForm.status === 3 && dataForm.dvyType !== 2">
-                    {{ $t("order.shelF") }}
-                  </div>
-                  <div v-if="dataForm.status === 3 && dataForm.dvyType === 2">
-                    {{ $t("order.buyA") }}
-                  </div>
-                  <!-- <div v-if="dataForm.status === 4">订单已完成，等待买家发表评价。</div> -->
-                  <div v-if="dataForm.status === 5">{{ $t("order.buyB") }}</div>
-                  <div v-if="dataForm.status === 6">
-                    {{ $t("order.orderCanc") }}
-                  </div>
-                  <div v-if="dataForm.status === 7">
-                    {{ $t("order.outTimeCanOrd") }}
-                  </div>
+                <div v-if="dataForm.status === 2">
+                  {{ $t("order.buyPleF") }}
                 </div>
-                <!-- <div class="actions">
+                <div v-if="dataForm.status === 3 && dataForm.dvyType !== 2">
+                  {{ $t("order.shelF") }}
+                </div>
+                <div v-if="dataForm.status === 3 && dataForm.dvyType === 2">
+                  {{ $t("order.buyA") }}
+                </div>
+                <!-- <div v-if="dataForm.status === 4">订单已完成，等待买家发表评价。</div> -->
+                <div v-if="dataForm.status === 5">{{ $t("order.buyB") }}</div>
+                <div v-if="dataForm.status === 6">
+                  {{ $t("order.orderCanc") }}
+                </div>
+                <div v-if="dataForm.status === 7">
+                  {{ $t("order.outTimeCanOrd") }}
+                </div>
+              </div>
+              <!-- <div class="actions">
                   <div class="item" v-if="dataForm.status === 1">
                     <div class="el-button--text">修改价格</div>
                   </div>
@@ -90,549 +85,452 @@
                     <div class="el-button--text">延长收货</div>
                   </div>
                 </div>-->
-              </div>
-              <div class="state-steps">
-                <el-form-item>
-                  <el-steps
-                    :active="stepsStatus"
-                    align-center
-                    :process-status="dataForm.status == 6 ? 'error' : 'wait'"
-                  >
-                    <el-step
-                      :title="this.$i18n.t('order.submitOrder')"
-                      :description="dataForm.createTime"
-                    ></el-step>
-                    <el-step
-                      :title="this.$i18n.t('order.paid')"
-                      :description="dataForm.payTime"
-                    ></el-step>
-                    <el-step
-                      :title="
-                        dataForm.dvyType === 2
-                          ? this.$i18n.t('order.buyerHasMentioned')
-                          : this.$i18n.t('order.delivered')
-                      "
-                      :description="dataForm.dvyTime"
-                    ></el-step>
-                    <el-step
-                      :title="this.$i18n.t('order.receivedGoods')"
-                      :description="dataForm.finallyTime"
-                    ></el-step>
-                  </el-steps>
-                </el-form-item>
+            </div>
+            <div class="state-steps">
+              <el-form-item>
+                <el-steps :active="stepsStatus" align-center :process-status="dataForm.status == 6 ? 'error' : 'wait'">
+                  <el-step :title="this.$i18n.t('order.submitOrder')" :description="dataForm.createTime"></el-step>
+                  <el-step :title="this.$i18n.t('order.paid')" :description="dataForm.payTime"></el-step>
+                  <el-step :title="dataForm.dvyType === 2
+                    ? this.$i18n.t('order.buyerHasMentioned')
+                    : this.$i18n.t('order.delivered')
+                    " :description="dataForm.dvyTime"></el-step>
+                  <el-step :title="this.$i18n.t('order.receivedGoods')" :description="dataForm.finallyTime"></el-step>
+                </el-steps>
+              </el-form-item>
+            </div>
+          </div>
+          <div class="packages">
+            <div class="p-tab">
+              <div :class="indexs === index ? 'item active' : 'item'"
+                @click="onClickListDelivery(deliveryExpresse, index)" v-for="(
+                    deliveryExpresse, index
+                  ) in dataForm.deliveryExpresses" :key="index">
+                {{ $t("order.package") }}{{ index + 1 }}
               </div>
             </div>
-            <div class="packages">
-              <div class="p-tab">
-                <div
-                  :class="indexs === index ? 'item active' : 'item'"
-                  @click="onClickListDelivery(deliveryExpresse, index)"
-                  v-for="(
-                    deliveryExpresse, index
-                  ) in dataForm.deliveryExpresses"
-                  :key="index"
-                >
-                  {{ $t("order.package") }}{{ index + 1 }}
-                </div>
-              </div>
-              <div class="p-con" v-if="deliveryExpresse">
-                <div class="deliver-msg">
-                  <div class="d-item">
-                    <div class="text" :style="this.$i18n.t('language') === 'language' ? 'width:210px;' : 'width:80px;'">{{ $t("order.delType") }}：</div>
-                    <div class="res">
-                      {{
-                        [
-                          this.$i18n.t("order.distribution"),
-                          this.$i18n.t("order.selfMention"),
-                          this.$i18n.t("order.noNeedRequired"),
-                          this.$i18n.t("order.sameCityDelivery")
-                        ][deliveryExpresse.deliveryType - 1] || [
-                          this.$i18n.t("order.distribution"),
-                          this.$i18n.t("order.selfMention"),
-                          this.$i18n.t("order.noNeedRequired"),
-                          this.$i18n.t("order.sameCityDelivery")
-                        ][dataForm.dvyType - 1]
-                      }}
-                    </div>
-                    <!-- <div class="item">
+            <div class="p-con" v-if="deliveryExpresse">
+              <div class="deliver-msg">
+                <div class="d-item">
+                  <div class="text" :style="this.$i18n.t('language') === 'language' ? 'width:210px;' : 'width:80px;'">{{
+                    $t("order.delType") }}：</div>
+                  <div class="res">
+                    {{
+                      [
+                        this.$i18n.t("order.distribution"),
+                        this.$i18n.t("order.selfMention"),
+                        this.$i18n.t("order.noNeedRequired"),
+                        this.$i18n.t("order.sameCityDelivery")
+                      ][deliveryExpresse.deliveryType - 1] || [
+                        this.$i18n.t("order.distribution"),
+                        this.$i18n.t("order.selfMention"),
+                        this.$i18n.t("order.noNeedRequired"),
+                        this.$i18n.t("order.sameCityDelivery")
+                      ][dataForm.dvyType - 1]
+                    }}
+                  </div>
+                  <!-- <div class="item">
                       <div class="text">配送方式：</div>
                       <div class="res" v-if="dataForm.dvyType == 1">快递</div>
                       <div class="res" v-if="dataForm.dvyType == 2">自提</div>
                       <div class="res" v-if="dataForm.dvyType == 3">无需快递</div>
                     </div>-->
+                </div>
+                <div class="d-item">
+                  <div class="text" :style="this.$i18n.t('language') === 'language' ? 'width:210px;' : 'width:80px;'">{{
+                    $t("order.deliveryTime") }}：</div>
+                  <div class="res">{{ deliveryExpresse.createTime }}</div>
+                </div>
+                <div class="d-item" v-if="deliveryExpresse.deliveryType !== 3 && deliveryExpresse.deliveryType !== 4">
+                  <div class="text">{{ $t("order.courierCompany") }}：</div>
+                  <div class="res">
+                    {{ deliveryExpresse.deliveryDto.companyName }}
                   </div>
-                  <div class="d-item">
-                    <div class="text" :style="this.$i18n.t('language') === 'language' ? 'width:210px;' : 'width:80px;'">{{ $t("order.deliveryTime") }}：</div>
-                    <div class="res">{{ deliveryExpresse.createTime }}</div>
+                </div>
+                <div class="d-item" v-if="deliveryExpresse.deliveryType !== 3 && deliveryExpresse.deliveryType !== 4">
+                  <div class="text">{{ $t("order.trackingNumber") }}：</div>
+                  <div class="res">
+                    {{ deliveryExpresse.deliveryDto.dvyFlowId }}
                   </div>
-                  <div class="d-item" v-if="deliveryExpresse.deliveryType !== 3&&deliveryExpresse.deliveryType !== 4">
-                    <div class="text">{{ $t("order.courierCompany") }}：</div>
-                    <div class="res">
-                      {{ deliveryExpresse.deliveryDto.companyName }}
-                    </div>
+                </div>
+                <div class="d-goods over">
+                  <div class="arrow-box">
+                    <div class="arrow prev" @click="prevItem" :class="{
+                      disable:
+                        deliveryExpresse.orderItems.length - 4 <= 0 ||
+                        this.offsetCount < 1,
+                    }"></div>
+                    <div class="arrow next" @click="nextItem" :class="{
+                      disable:
+                        deliveryExpresse.orderItems.length - 4 <= 0 ||
+                        this.offsetCount >=
+                        deliveryExpresse.orderItems.length - 4,
+                    }"></div>
                   </div>
-                  <div class="d-item" v-if="deliveryExpresse.deliveryType !== 3&&deliveryExpresse.deliveryType !== 4">
-                    <div class="text">{{ $t("order.trackingNumber") }}：</div>
-                    <div class="res">
-                      {{ deliveryExpresse.deliveryDto.dvyFlowId }}
-                    </div>
-                  </div>
-                  <div class="d-goods over">
-                    <div class="arrow-box">
-                      <div class="arrow prev"
-                      @click="prevItem"
-                      :class="{
-                        disable:
-                          deliveryExpresse.orderItems.length - 4 <= 0 ||
-                          this.offsetCount < 1,
-                      }"></div>
-                      <div class="arrow next"
-                        @click="nextItem"
-                        :class="{
-                          disable:
-                            deliveryExpresse.orderItems.length - 4 <= 0 ||
-                            this.offsetCount >=
-                              deliveryExpresse.orderItems.length - 4,
-                        }"
-                      ></div>
-                    </div>
-                    <div class="item-goods">
-                      <div class="goods-box" ref="carouser">
-                        <div
-                          class="item"
-                          v-for="(
+                  <div class="item-goods">
+                    <div class="goods-box" ref="carouser">
+                      <div class="item" v-for="(
                             orderItem, index
-                          ) in deliveryExpresse.orderItems"
-                          :key="index"
-                        >
-                          <div class="img">
-                            <prod-pic
-                              :pic="orderItem.pic"
-                              :height="60"
-                              :width="60"
-                            ></prod-pic>
-                          </div>
-                          <div class="name">{{ orderItem.prodName }}</div>
-                          <div class="number">
-                            {{ $t("order.quantity") }}：{{ orderItem.prodCount }}
-                          </div>
+                          ) in deliveryExpresse.orderItems" :key="index">
+                        <div class="img">
+                          <prod-pic :pic="orderItem.pic" :height="60" :width="60"></prod-pic>
+                        </div>
+                        <div class="name">{{ orderItem.prodName }}</div>
+                        <div class="number">
+                          {{ $t("order.quantity") }}：{{ orderItem.prodCount }}
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="logistics">
-                  <div class="l-tit" v-if="deliveryExpresse && deliveryExpresse.deliveryDto">
-                    <span class="text"
-                      >{{ $t("order.logisticsStatus") }}：</span
-                    >
-                    <span
-                      class="l-state"
-                      v-if="deliveryExpresse.deliveryDto.state === 0"
-                      >{{ $t("order.noRecord") }}</span
-                    >
-                    <span
-                      class="l-state"
-                      v-if="deliveryExpresse.deliveryDto.state === 1"
-                      >{{ $t("order.collected") }}</span
-                    >
-                    <span
-                      class="l-state"
-                      v-if="deliveryExpresse.deliveryDto.state === 2"
-                      >{{ $t("order.delivering") }}</span
-                    >
-                    <span
-                      class="l-state"
-                      v-if="deliveryExpresse.deliveryDto.state === 3"
-                      >{{ $t("order.haveBeenReceived") }}</span
-                    >
-                    <span
-                      class="l-state"
-                      v-if="deliveryExpresse.deliveryDto.state === 201"
-                      >{{ $t("order.reachTheDestinationCity") }}</span
-                    >
-                    <span
-                      class="l-state"
-                      v-if="deliveryExpresse.deliveryDto.state === 4"
-                      >{{ $t("order.problemPiece") }}</span
-                    >
+              </div>
+              <div class="logistics">
+                <div class="l-tit" v-if="deliveryExpresse && deliveryExpresse.deliveryDto">
+                  <span class="text">{{ $t("order.logisticsStatus") }}：</span>
+                  <span class="l-state" v-if="deliveryExpresse.deliveryDto.state === 0">{{ $t("order.noRecord") }}</span>
+                  <span class="l-state" v-if="deliveryExpresse.deliveryDto.state === 1">{{ $t("order.collected") }}</span>
+                  <span class="l-state" v-if="deliveryExpresse.deliveryDto.state === 2">{{ $t("order.delivering")
+                  }}</span>
+                  <span class="l-state" v-if="deliveryExpresse.deliveryDto.state === 3">{{ $t("order.haveBeenReceived")
+                  }}</span>
+                  <span class="l-state" v-if="deliveryExpresse.deliveryDto.state === 201">{{
+                    $t("order.reachTheDestinationCity") }}</span>
+                  <span class="l-state" v-if="deliveryExpresse.deliveryDto.state === 4">{{ $t("order.problemPiece")
+                  }}</span>
+                </div>
+                <div class="logistics-box" v-if="deliveryExpresse && deliveryExpresse.deliveryDto">
+                  <div class="item" v-if="deliveryExpresse.deliveryDto.state === 0 &&
+                    dataForm.status == 5 &&
+                    dataForm.finallyTime !== null
+                    ">
+                    <div class="time">{{ dataForm.finallyTime }}</div>
+                    <div class="text">
+                      {{ $t("order.receivedGoods") }}
+                    </div>
                   </div>
-                  <div
-                    class="logistics-box"
-                    v-if="deliveryExpresse && deliveryExpresse.deliveryDto"
-                  >
-                    <div
-                      class="item"
-                      v-if="
-                        deliveryExpresse.deliveryDto.state === 0 &&
-                        dataForm.status == 5 &&
-                        dataForm.finallyTime !== null
-                      "
-                    >
-                      <div class="time">{{ dataForm.finallyTime }}</div>
-                      <div class="text">
-                        {{ $t("order.receivedGoods") }}
-                      </div>
+                  <div class="item" v-for="(trace, index) in deliveryExpresse.deliveryDto
+                    .traces" :key="index">
+                    <div class="time">{{ trace.acceptTime }}</div>
+                    <div class="text">{{ trace.acceptStation }}</div>
+                  </div>
+                  <div class="item" v-if="deliveryExpresse.deliveryDto.traces &&
+                    deliveryExpresse.deliveryDto.traces.length < 1
+                    ">
+                    {{ $t("order.noLogisticsInformation") }}
+                  </div>
+                  <div class="item" v-if="dataForm.status >= 3 && dataForm.dvyTime !== null">
+                    <div class="time">{{ dataForm.dvyTime }}</div>
+                    <div class="text">
+                      {{ $t("order.merchantHasShippedWa") }}
                     </div>
-                    <div
-                      class="item"
-                      v-for="(trace, index) in deliveryExpresse.deliveryDto
-                        .traces"
-                      :key="index"
-                    >
-                      <div class="time">{{ trace.acceptTime }}</div>
-                      <div class="text">{{ trace.acceptStation }}</div>
-                    </div>
-                    <div
-                      class="item"
-                      v-if="
-                        deliveryExpresse.deliveryDto.traces &&
-                        deliveryExpresse.deliveryDto.traces.length < 1
-                      "
-                    >
-                      {{ $t("order.noLogisticsInformation") }}
-                    </div>
-                    <div
-                      class="item"
-                      v-if="dataForm.status >= 3 && dataForm.dvyTime !== null"
-                    >
-                      <div class="time">{{ dataForm.dvyTime }}</div>
-                      <div class="text">
-                        {{ $t("order.merchantHasShippedWa") }}
-                      </div>
-                    </div>
-                    <div
-                      class="item"
-                      v-if="dataForm.status >= 2 && dataForm.payTime !== null"
-                    >
-                      <div class="time">{{ dataForm.payTime }}</div>
-                      <div class="text">{{ $t("order.buyerHasPaidWa") }}</div>
-                    </div>
-                    <div :class="['item', dataForm.status >= 1?'left-line':'']" v-if="dataForm.status >= 1">
-                      <div class="time">{{ dataForm.createTime }}</div>
-                      <div class="text">
-                        {{ $t("order.buyerSubmittedAnOrder") }}
-                      </div>
+                  </div>
+                  <div class="item" v-if="dataForm.status >= 2 && dataForm.payTime !== null">
+                    <div class="time">{{ dataForm.payTime }}</div>
+                    <div class="text">{{ $t("order.buyerHasPaidWa") }}</div>
+                  </div>
+                  <div :class="['item', dataForm.status >= 1 ? 'left-line' : '']" v-if="dataForm.status >= 1">
+                    <div class="time">{{ dataForm.createTime }}</div>
+                    <div class="text">
+                      {{ $t("order.buyerSubmittedAnOrder") }}
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div :class="['order-info',$t('language') === 'language'?'flex-wrap':'']">
-              <div :class="['info-item',$t('language') === 'language'?'small-width':'']" v-if="dataForm.userAddrOrder && dataForm.userAddrOrder !== null">
-                <div class="item-tit">
-                  {{ $t("order.recipientInformation") }}
-                </div>
-                <div class="item">
-                  <div class="text">
-                    {{
-                      dataForm.dvyType === 2
-                        ? $t("order.deliveryPerson")
-                        : $t("publics.addressee")
-                    }}：
-                  </div>
-                  <div class="res">{{ dataForm.userAddrOrder.receiver }}</div>
-                </div>
-                <div class="item">
-                  <div class="text">{{ $t("publics.mobilePhone") }}：</div>
-                  <div class="res">{{ dataForm.userAddrOrder.mobile }}</div>
-                </div>
-                <div class="item" v-if="dataForm.dvyType !== 2">
-                  <div class="text">{{ $t("publics.deliveryAddr") }}：</div>
-                  <div class="res">
-                    {{ dataForm.userAddrOrder.province
-                    }}{{ dataForm.userAddrOrder.area
-                    }}{{ dataForm.userAddrOrder.city
-                    }}{{ dataForm.userAddrOrder.addr }}
-                  </div>
-                  <!-- <div class="res">北京市 北京市 朝阳区 元大都城垣遗址公园6号 辣婆婆(东元大都店)</div> -->
-                </div>
+          </div>
+          <div :class="['order-info', $t('language') === 'language' ? 'flex-wrap' : '']">
+            <div :class="['info-item', $t('language') === 'language' ? 'small-width' : '']"
+              v-if="dataForm.userAddrOrder && dataForm.userAddrOrder !== null">
+              <div class="item-tit">
+                {{ $t("order.recipientInformation") }}
               </div>
-              <div :class="['info-item',$t('language') === 'language'?'small-width':'']">
-                <div class="item-tit">
-                  {{ $t("order.shippingInformation") }}
+              <div class="item">
+                <div class="text">
+                  {{
+                    dataForm.dvyType === 2
+                    ? $t("order.deliveryPerson")
+                    : $t("publics.addressee")
+                  }}：
                 </div>
-                <div class="item">
-                  <div class="text">{{ $t("order.delType") }}：</div>
-                  <div class="res">
-                    {{
-                      [
-                        $t("order.distribution"),
-                        $t("order.selfMention"),
-                        $t("order.noNeedRequired"),
-                        $t("order.sameCityDelivery")
-                      ][dataForm.dvyType - 1]
-                    }}
-                  </div>
-                  <div class="res" v-if="dataForm.dvyType === null">
-                    {{ $t("order.notYet") }}
-                  </div>
-                  <!-- <div class="res" v-if="dataForm.dvyType == 1">快递</div>
+                <div class="res">{{ dataForm.userAddrOrder.receiver }}</div>
+              </div>
+              <div class="item">
+                <div class="text">{{ $t("publics.mobilePhone") }}：</div>
+                <div class="res">{{ dataForm.userAddrOrder.mobile }}</div>
+              </div>
+              <div class="item" v-if="dataForm.dvyType !== 2">
+                <div class="text">{{ $t("publics.deliveryAddr") }}：</div>
+                <div class="res">
+                  {{ dataForm.userAddrOrder.province
+                  }}{{ dataForm.userAddrOrder.area
+}}{{ dataForm.userAddrOrder.city
+}}{{ dataForm.userAddrOrder.addr }}
+                </div>
+                <!-- <div class="res">北京市 北京市 朝阳区 元大都城垣遗址公园6号 辣婆婆(东元大都店)</div> -->
+              </div>
+            </div>
+            <div :class="['info-item', $t('language') === 'language' ? 'small-width' : '']">
+              <div class="item-tit">
+                {{ $t("order.shippingInformation") }}
+              </div>
+              <div class="item">
+                <div class="text">{{ $t("order.delType") }}：</div>
+                <div class="res">
+                  {{
+                    [
+                      $t("order.distribution"),
+                      $t("order.selfMention"),
+                      $t("order.noNeedRequired"),
+                      $t("order.sameCityDelivery")
+                    ][dataForm.dvyType - 1]
+                  }}
+                </div>
+                <div class="res" v-if="dataForm.dvyType === null">
+                  {{ $t("order.notYet") }}
+                </div>
+                <!-- <div class="res" v-if="dataForm.dvyType == 1">快递</div>
                   <div class="res" v-if="dataForm.dvyType == 2">自提</div>
                   <div class="res" v-if="dataForm.dvyType == 3">无需快递</div>-->
-                </div>
-                <div class="item">
-                  <div class="text">{{ $t("order.deliveryTime") }}：</div>
-                  <div class="res">{{ dataForm.dvyTime }}</div>
-                  <div class="res" v-if="dataForm.dvyTime === null">
-                    {{ $t("order.notYet") }}
-                  </div>
-                </div>
-                <div class="item" v-if="dataForm.dvyType === 2">
-                  <div class="text">{{$t("shop.pickupLocationName")}}：</div>
-                  <div class="res">{{ dataForm.stationName }}</div>
+              </div>
+              <div class="item">
+                <div class="text">{{ $t("order.deliveryTime") }}：</div>
+                <div class="res">{{ dataForm.dvyTime }}</div>
+                <div class="res" v-if="dataForm.dvyTime === null">
+                  {{ $t("order.notYet") }}
                 </div>
               </div>
-              <div :class="['info-item',$t('language') === 'language'?'small-width':'']" v-if="dataForm.orderMold === 1">
-                <div class="item-tit">
-                  {{ $t("order.virtualInfo") }}
-                </div>
-                <div class="item">
-                  <div class="text">{{ $t("order.virtualMsg") }}：</div>
-                  <div class="res">
-                  <div
-                      v-for="(virtualRemark,index) in virtualRemarkList"
-                      :key="index" >
+              <div class="item" v-if="dataForm.dvyType === 2">
+                <div class="text">{{ $t("shop.pickupLocationName") }}：</div>
+                <div class="res">{{ dataForm.stationName }}</div>
+              </div>
+            </div>
+            <div :class="['info-item', $t('language') === 'language' ? 'small-width' : '']"
+              v-if="dataForm.orderMold === 1">
+              <div class="item-tit">
+                {{ $t("order.virtualInfo") }}
+              </div>
+              <div class="item">
+                <div class="text">{{ $t("order.virtualMsg") }}：</div>
+                <div class="res">
+                  <div v-for="(virtualRemark, index) in virtualRemarkList" :key="index">
                     {{
                       virtualRemark.name
                     }}：{{
-                      virtualRemark.value
-                    }}
-                  </div>
-                  </div>
-                </div>
-              </div>
-              <div :class="['info-item',$t('language') === 'language'?'small-width':'']">
-                <div class="item-tit">{{ $t("order.paymentInformation") }}</div>
-                <div class="item">
-                  <div class="text">{{ $t("order.actualAmount") }}：</div>
-                  <!-- <div class="res">{{dataForm.actualTotal}}元</div> -->
-                  {{
-                    $t("order.monetaryUnit") +
-                    dataForm.actualTotal +
-                    " + " +
-                    dataForm.score +
-                    $t("order.score")
-                  }}
-                </div>
-                <div class="item">
-                  <div class="text">{{ $t("order.payWay") }}：</div>
-                  <div v-if="dataForm.payType === null || dataForm.status === 1">
-                    {{ $t("order.unpaid") }}
-                  </div>
-                  <div
-                    class="res"
-                    v-else
-                  >
-                    {{
-                      [
-                        $t("order.pointsPayment"),
-                        $t("order.wecProPay"),
-                        $t("order.aliPay"),
-                        $t("order.wechatScanCodePayment"),
-                        $t("order.wechatH5Payment"),
-                        $t("order.weclAccountPay"),
-                        $t("order.alipayH5Payment"),
-                        $t("order.alipayAPPPayment"),
-                        $t("order.wechatAPPPayment"),
-                        $t("order.balancePayment"),
-                        $t("order.payPalPayment"),
-                      ][dataForm.payType]
-                    }}
-                  </div>
-                </div>
-                <div class="item">
-                  <div class="text">{{ $t("order.paymentTime") }}：</div>
-                  <div class="res">{{ dataForm.payTime }}</div>
-                  <div class="res" v-if="dataForm.payTime === null">
-                    {{ $t("order.notYet") }}
-                  </div>
-                </div>
-              </div>
-              <div :class="['info-item',$t('language') === 'language'?'small-width':'']">
-                <div class="item-tit">{{ $t("order.buyerInformation") }}</div>
-                <div class="item">
-                  <div class="text">{{ $t("order.buyerSNickname") }}：</div>
-                  <div class="res">{{ dataForm.nickName }}</div>
-                  <div class="res" v-if="dataForm.nickName === null">
-                    {{ $t("order.notYet") }}
-                  </div>
-                </div>
-                <!--                用户没有设置手机号，所以暂时注释掉-->
-                <!--                <div class="item">-->
-                <!--                  <div class="text">{{$t('publics.mobilePhone')}}：</div>-->
-                <!--                  <div-->
-                <!--                    class="res"-->
-                <!--                    v-if="!dataForm.userMobile || dataForm.userMobile === ''"-->
-                <!--                  >{{$t('order.notYet')}}</div>-->
-                <!--                  <div class="res" v-else>{{dataForm.userMobile}}</div>-->
-                <!--                </div>-->
-                <div class="item">
-                  <div class="text">{{ $t("order.buyerMessage") }}：</div>
-                  <div class="res">{{ dataForm.remarks }}</div>
-                  <div
-                    class="res"
-                    v-if="dataForm.remarks === null || dataForm.remarks === ''"
-                  >
-                    {{ $t("order.notYet") }}
+  virtualRemark.value
+}}
                   </div>
                 </div>
               </div>
             </div>
-
-            <!-- 商品信息 -->
-            <div class="goods-list">
-              <el-table :data="prodList" border>
-                <el-table-column prop :label="this.$i18n.t('order.product')">
-                  <template slot-scope="scope">
-                    <div class="df">
-                      <prod-pic
-                        :height="60"
-                        :width="60"
-                        class="prod-pic"
-                        :pic="scope.row.pic"
-                      ></prod-pic>
-                      <div class="name">
-                        <div>
-                          <span v-if="scope.row.giveawayOrderItemId" class="gift-icon">{{$t("order.giveawayPord")}}</span>
-                          <span>{{ scope.row.prodName }}</span>
-                          <span class="sku">{{ scope.row.skuName }}</span>
-                        </div>
-                        <div
-                          class="order-status"
-                          v-if="
-                            scope.row.returnMoneySts &&
-                            scope.row.returnMoneySts < 6 &&
-                            scope.row.returnMoneySts > 0
-                          "
-                        >
-                          {{
-                            [
-                              "",
-                              $t("refundOrderDetail.buyerApply"),
-                              $t("order.sellerAccepts"),
-                              $t("refundOrderDetail.buyerDelivery"),
-                              $t("order.sellerReceivesGoods"),
-                              $t("order.refundsuccessfully"),
-                            ][scope.row.returnMoneySts]
-                          }}
-                        </div>
-                      </div>
-                    </div>
-                    <!-- 赠品 -->
-                    <div v-if="dataForm.orderItems.length > 1" class="gift-prod">
-                      <div v-for="item in scope.row.giveawayList" class="item">
-                        <span class="name">{{'【' + $t("order.giveawayPord") + '】'}}{{item.prodName}}</span>
-                        <span class="num">{{item.skuName || ''}} ×{{item.prodCount}}</span>
-                      </div>
-                    </div>
-                    <!-- / 赠品 -->
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  prop="price"
-                  :label="this.$i18n.t('order.unitPrice')"
-                  width="180"
-                  align="center"
-                >
-                  <template slot-scope="scope">
-                    <span>{{ scope.row.giveawayOrderItemId ? '-' : scope.row.price }}</span>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  prop="count"
-                  :label="this.$i18n.t('order.quantity')"
-                  width="180"
-                  align="center"
-                >
-                  <template slot-scope="scope">
-                    <span>{{ scope.row.prodCount }}</span>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  prop="count"
-                  :label="this.$i18n.t('order.preferentialAmount')"
-                  width="180"
-                  align="center"
-                >
-                  <template slot-scope="scope">
-                    <span>{{ scope.row.giveawayOrderItemId ? '-' : scope.row.shareReduce }}</span>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  prop="totalPrice"
-                  :label="this.$i18n.t('order.totalPrice')"
-                  width="180"
-                  align="center"
-                >
-                  <template slot-scope="scope">
-                    <span>{{ scope.row.giveawayOrderItemId ? '-' : scope.row.productTotalAmount }}</span>
-                  </template>
-                </el-table-column>
-              </el-table>
-              <div class="goods-total">
-                <div class="text-box">
-                  <div class="item">
-                    <div class="text">{{ $t("order.prodTotalPrice") }}:</div>
-                    <div class="number">￥{{ dataForm.total }}</div>
-                  </div>
-                  <div class="item" v-if="dataForm.reduceAmount">
-                    <div class="text">{{ $t("marketing.discountedPrice") }}:</div>
-                    <div class="number">￥{{ dataForm.reduceAmount }}</div>
-                  </div>
-                  <div class="item" v-if="dataForm.freightAmount">
-                    <div class="text">{{ $t("order.shippingFees") }}:</div>
-                    <div class="number">￥{{ dataForm.freightAmount }}</div>
-                  </div>
-                  <div class="item" v-if="dataForm.platformFreeFreightAmount">
-                    <div class="text">{{ $t("order.platformFreeFreightAmount") }}:</div>
-                    <div class="number">￥{{ dataForm.platformFreeFreightAmount }}</div>
-                  </div>
-                  <div class="item act-price">
-                    <div class="text">{{ $t("order.actualAmount") }}:</div>
-                    <div class="number">￥{{ dataForm.actualTotal }}{{ dataForm.score?" + "+ dataForm.score +$t("order.score"):''}}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="order-log">
-              <div class="log-title">{{ $t("order.logs") }}</div>
-              <div class="log-cont" v-if="dataForm.createTime">
-                {{ dataForm.createTime }} {{ dataForm.nickName }}
-                {{ $t("order.createOrder") }}
-              </div>
-              <div class="log-cont" v-if="dataForm.payTime">
-                {{ dataForm.payTime }} {{ dataForm.nickName }}
-                {{ $t("order.payment") }}
-              </div>
-              <div class="log-cont" v-if="dataForm.dvyTime">
-                {{ dataForm.dvyTime }}
-                <!--  -->
+            <div :class="['info-item', $t('language') === 'language' ? 'small-width' : '']">
+              <div class="item-tit">{{ $t("order.paymentInformation") }}</div>
+              <div class="item">
+                <div class="text">{{ $t("order.actualAmount") }}：</div>
+                <!-- <div class="res">{{dataForm.actualTotal}}元</div> -->
                 {{
-                  dataForm.dvyType === 2
-                    ? dataForm.nickName + $t("order.selPickUpOrder")
-                    : $t("order.deliverys")
+                  $t("order.monetaryUnit") +
+                  dataForm.actualTotal +
+                  " + " +
+                  dataForm.score +
+                  $t("order.score")
                 }}
               </div>
-              <div class="log-cont" v-if="dataForm.finallyTime">
-                {{ dataForm.finallyTime }} {{ dataForm.nickName }}
-                {{ $t("order.completed") }}
+              <div class="item">
+                <div class="text">{{ $t("order.payWay") }}：</div>
+                <div v-if="dataForm.payType === null || dataForm.status === 1">
+                  {{ $t("order.unpaid") }}
+                </div>
+                <div class="res" v-else>
+                  {{
+                    [
+                      $t("order.pointsPayment"),
+                      $t("order.wecProPay"),
+                      $t("order.aliPay"),
+                      $t("order.wechatScanCodePayment"),
+                      $t("order.wechatH5Payment"),
+                      $t("order.weclAccountPay"),
+                      $t("order.alipayH5Payment"),
+                      $t("order.alipayAPPPayment"),
+                      $t("order.wechatAPPPayment"),
+                      $t("order.balancePayment"),
+                      $t("order.payPalPayment"),
+                    ][dataForm.payType]
+                  }}
+                </div>
               </div>
-              <div class="log-cont" v-if="dataForm.cancelTime">
-                {{ dataForm.cancelTime }} {{ dataForm.nickName }}
-                {{ $t("order.cancelOrder") }}
-              </div>
-              <div class="log-cont" v-if="dataForm.updateTime">
-                {{ dataForm.updateTime }} {{ dataForm.nickName }}
-                {{ $t("order.orderUpdate") }}
+              <div class="item">
+                <div class="text">{{ $t("order.paymentTime") }}：</div>
+                <div class="res">{{ dataForm.payTime }}</div>
+                <div class="res" v-if="dataForm.payTime === null">
+                  {{ $t("order.notYet") }}
+                </div>
               </div>
             </div>
-            <!-- ___ -->
+            <div :class="['info-item', $t('language') === 'language' ? 'small-width' : '']">
+              <div class="item-tit">{{ $t("order.buyerInformation") }}</div>
+              <div class="item">
+                <div class="text">{{ $t("order.buyerSNickname") }}：</div>
+                <div class="res">{{ dataForm.nickName }}</div>
+                <div class="res" v-if="dataForm.nickName === null">
+                  {{ $t("order.notYet") }}
+                </div>
+              </div>
+              <!--                用户没有设置手机号，所以暂时注释掉-->
+              <!--                <div class="item">-->
+              <!--                  <div class="text">{{$t('publics.mobilePhone')}}：</div>-->
+              <!--                  <div-->
+              <!--                    class="res"-->
+              <!--                    v-if="!dataForm.userMobile || dataForm.userMobile === ''"-->
+              <!--                  >{{$t('order.notYet')}}</div>-->
+              <!--                  <div class="res" v-else>{{dataForm.userMobile}}</div>-->
+              <!--                </div>-->
+              <div class="item">
+                <div class="text">{{ $t("order.buyerMessage") }}：</div>
+                <div class="res">{{ dataForm.remarks }}</div>
+                <div class="res" v-if="dataForm.remarks === null || dataForm.remarks === ''">
+                  {{ $t("order.notYet") }}
+                </div>
+              </div>
+            </div>
           </div>
+
+          <!-- 商品信息 -->
+          <div class="goods-list">
+            <el-table :data="prodList" border>
+              <el-table-column prop :label="this.$i18n.t('order.product')">
+                <template slot-scope="scope">
+                  <div class="df">
+                    <prod-pic :height="60" :width="60" class="prod-pic" :pic="scope.row.pic"></prod-pic>
+                    <div class="name">
+                      <div>
+                        <span v-if="scope.row.giveawayOrderItemId" class="gift-icon">{{ $t("order.giveawayPord") }}</span>
+                        <span>{{ scope.row.prodName }}</span>
+                        <span class="sku">{{ scope.row.skuName }}</span>
+                      </div>
+                      <div class="order-status" v-if="scope.row.returnMoneySts &&
+                        scope.row.returnMoneySts < 6 &&
+                        scope.row.returnMoneySts > 0
+                        ">
+                        {{
+                          [
+                            "",
+                            $t("refundOrderDetail.buyerApply"),
+                            $t("order.sellerAccepts"),
+                            $t("refundOrderDetail.buyerDelivery"),
+                            $t("order.sellerReceivesGoods"),
+                            $t("order.refundsuccessfully"),
+                          ][scope.row.returnMoneySts]
+                        }}
+                      </div>
+                    </div>
+                  </div>
+                  <!-- 赠品 -->
+                  <div v-if="dataForm.orderItems.length > 1" class="gift-prod">
+                    <div v-for="item in scope.row.giveawayList" class="item">
+                      <span class="name">{{ '【' + $t("order.giveawayPord") + '】' }}{{ item.prodName }}</span>
+                      <span class="num">{{ item.skuName || '' }} ×{{ item.prodCount }}</span>
+                    </div>
+                  </div>
+                  <!-- / 赠品 -->
+                </template>
+              </el-table-column>
+              <el-table-column prop="price" :label="this.$i18n.t('order.unitPrice')" width="180" align="center">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.giveawayOrderItemId ? '-' : scope.row.price }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="count" :label="this.$i18n.t('order.quantity')" width="180" align="center">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.prodCount }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="count" :label="this.$i18n.t('order.preferentialAmount')" width="180" align="center">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.giveawayOrderItemId ? '-' : scope.row.shareReduce }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="totalPrice" :label="this.$i18n.t('order.totalPrice')" width="180" align="center">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.giveawayOrderItemId ? '-' : scope.row.productTotalAmount }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" width="180" align="center">
+                <template slot-scope="scope">
+                  <span style="color: #155BD4; cursor: pointer;"
+                    @click="refundShow(dataForm.orderNumber, dataForm.nickName, dataForm.userMobile, 2, scope.row)">退款</span>
+                </template>
+              </el-table-column>
+            </el-table>
+            <div class="goods-total">
+              <div class="text-box">
+                <div class="item">
+                  <div class="text">{{ $t("order.prodTotalPrice") }}:</div>
+                  <div class="number">￥{{ dataForm.total }}</div>
+                </div>
+                <div class="item" v-if="dataForm.reduceAmount">
+                  <div class="text">{{ $t("marketing.discountedPrice") }}:</div>
+                  <div class="number">￥{{ dataForm.reduceAmount }}</div>
+                </div>
+                <div class="item" v-if="dataForm.freightAmount">
+                  <div class="text">{{ $t("order.shippingFees") }}:</div>
+                  <div class="number">￥{{ dataForm.freightAmount }}</div>
+                </div>
+                <div class="item" v-if="dataForm.platformFreeFreightAmount">
+                  <div class="text">{{ $t("order.platformFreeFreightAmount") }}:</div>
+                  <div class="number">￥{{ dataForm.platformFreeFreightAmount }}</div>
+                </div>
+                <div class="item act-price">
+                  <div class="text">{{ $t("order.actualAmount") }}:</div>
+                  <div class="number">￥{{ dataForm.actualTotal }}{{ dataForm.score ? " + " + dataForm.score
+                    + $t("order.score") : '' }}</div>
+                </div>
+                <!-- <div class="item" style="margin-top: 20px;">
+                  <div class="text">操作:</div>
+                  <div class="number" style="color: #155BD4; cursor: pointer;"
+                    @click="refundShow(dataForm.orderNumber, dataForm.nickName, dataForm.userMobile, 1, prodList)">整单退款
+                  </div>
+                </div> -->
+              </div>
+            </div>
+          </div>
+          <div class="order-log">
+            <div class="log-title">{{ $t("order.logs") }}</div>
+            <div class="log-cont" v-if="dataForm.createTime">
+              {{ dataForm.createTime }} {{ dataForm.nickName }}
+              {{ $t("order.createOrder") }}
+            </div>
+            <div class="log-cont" v-if="dataForm.payTime">
+              {{ dataForm.payTime }} {{ dataForm.nickName }}
+              {{ $t("order.payment") }}
+            </div>
+            <div class="log-cont" v-if="dataForm.dvyTime">
+              {{ dataForm.dvyTime }}
+              <!--  -->
+              {{
+                dataForm.dvyType === 2
+                ? dataForm.nickName + $t("order.selPickUpOrder")
+                : $t("order.deliverys")
+              }}
+            </div>
+            <div class="log-cont" v-if="dataForm.finallyTime">
+              {{ dataForm.finallyTime }} {{ dataForm.nickName }}
+              {{ $t("order.completed") }}
+            </div>
+            <div class="log-cont" v-if="dataForm.cancelTime">
+              {{ dataForm.cancelTime }} {{ dataForm.nickName }}
+              {{ $t("order.cancelOrder") }}
+            </div>
+            <div class="log-cont" v-if="dataForm.updateTime">
+              {{ dataForm.updateTime }} {{ dataForm.nickName }}
+              {{ $t("order.orderUpdate") }}
+            </div>
+          </div>
+          <!-- ___ -->
         </div>
-      </el-form>
-      <!-- 弹窗, 新增 / 修改 -->
-      <!-- <order-addr-update
+      </div>
+    </el-form>
+    <!-- 弹窗, 新增 / 修改 -->
+    <!-- <order-addr-update
         v-if="orderAddrUpdateVisible"
         ref="orderAddrUpdate"
         @refreshUserAddrOrder="getDataList"
@@ -642,6 +540,7 @@
         ref="orderRemarkUpdate"
         @refreshUserRemarkOrder="getDataList"
       ></order-remark-update>-->
+    <OrderInfoRefund v-if="refundVisible" ref="refundDialog"></OrderInfoRefund>
   </div>
 </template>
 
@@ -649,12 +548,13 @@
 // import OrderAddrUpdate from '@/components/order-addr-update'
 // import OrderRemarkUpdate from '@/components/order-remark-update'
 import ProdPic from '@/components/prod-pic'
-
+import OrderInfoRefund from './orderInfoRefund.vue'
 export default {
-  data () {
+  data() {
     return {
       visible: false,
       virtualRemarkList: [],
+      refundVisible: false,
       dataForm: {
         orderId: 0,
         orderNumber: '',
@@ -693,9 +593,8 @@ export default {
     }
   },
   components: {
-    // OrderAddrUpdate,
-    // OrderRemarkUpdate
-    ProdPic
+    ProdPic,
+    OrderInfoRefund
   },
   watch: {
     visible: function () {
@@ -729,12 +628,20 @@ export default {
       }
     }
   },
-  created () {
+  created() {
     this.dataForm.orderNumber = this.$route.query.orderNumber || 0
     this.init()
   },
   methods: {
-    init () {
+    // 打开退款弹窗
+    refundShow(orderNumber, nickName, tel, refundType, prodList) {
+      console.log(tel)
+      this.refundVisible = true
+      this.$nextTick(() => {
+        this.$refs.refundDialog.init(orderNumber, nickName, tel, refundType, prodList)
+      })
+    },
+    init() {
       this.visible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
@@ -758,15 +665,15 @@ export default {
           // 处理商品列表
           this.prodList = data.orderItems
           if (data.orderItems.length === 1 &&
-              data.orderItems[0].giveawayList &&
-              data.orderItems[0].giveawayList.length) {
+            data.orderItems[0].giveawayList &&
+            data.orderItems[0].giveawayList.length) {
             // 单个商品且有赠品时，将主商品和赠品放在同一级列表中展示
             this.prodList = [...data.orderItems, ...data.orderItems[0].giveawayList]
           }
         })
       }
     },
-    getDataList () {
+    getDataList() {
       this.$http({
         url: this.$http.adornUrl(`/platform/orderDelivery/orderInfo/${this.dataForm.orderNumber}`),
         method: 'get',
@@ -779,7 +686,7 @@ export default {
     /**
      * 物流事件
      */
-    onClickListDelivery (delivery, index) {
+    onClickListDelivery(delivery, index) {
       // this.deliveryExpresse = delivery
       this.$http({
         url: this.$http.adornUrl(`/platform/orderDelivery/deliveryOrder/${delivery.orderDeliveryId}`),
@@ -794,24 +701,24 @@ export default {
       this.indexs = index
     },
     // 表单提交
-    dataFormSubmit () {
+    dataFormSubmit() {
     },
     // 修改地址
-    changeUserAddrOrder (userAddrOrder) {
+    changeUserAddrOrder(userAddrOrder) {
       this.orderAddrUpdateVisible = true
       this.$nextTick(() => {
         this.$refs.orderAddrUpdate.init(this.dataForm)
       })
     },
     // 修改备注
-    changeRemarks () {
+    changeRemarks() {
       this.orderRemarkUpdateVisible = true
       this.$nextTick(() => {
         this.$refs.orderRemarkUpdate.init(this.dataForm)
       })
     },
     // 商品切换
-    prevItem () {
+    prevItem() {
       var len = this.deliveryExpresse.orderItems.length
       if (len - 4 > 0) {
         if (this.offsetCount > 0) {
@@ -827,7 +734,7 @@ export default {
       }
     },
 
-    nextItem () {
+    nextItem() {
       var len = this.deliveryExpresse.orderItems.length
       if (len - 4 > 0) {
         if (this.offsetCount < len - 4) {
@@ -864,6 +771,7 @@ export default {
 .detail-dialog .goods-list .el-table td {
   border-right: 0;
 }
+
 .left-line {
   /* padding-left: 30px;
   padding-bottom: 10px;
@@ -1238,6 +1146,7 @@ export default {
     // min-width: 70px;
     white-space: nowrap;
   }
+
   .order-info .info-item .item .res {
     word-break: break-word;
   }
@@ -1256,6 +1165,7 @@ export default {
     line-height: 20px;
     flex: 1;
   }
+
   .goods-list .df .name .gift-icon {
     display: inline-block;
     min-width: 34px;
@@ -1349,29 +1259,34 @@ export default {
   .gift-prod .item {
     margin-top: 5px;
     line-height: 1em;
+
     .name {
-    display: inline-block;
-    margin-right: 15px;
-    line-height: 20px;
+      display: inline-block;
+      margin-right: 15px;
+      line-height: 20px;
       // max-width: 400px;
       // overflow: hidden;
       // text-overflow: ellipsis;
       // white-space: nowrap;
     }
+
     .num {
       margin-left: 10px;
       color: #999;
     }
   }
 }
+
 // 小屏样式适配
 .flex-wrap {
   flex-wrap: wrap;
 }
+
 .small-width {
   width: 50% !important;
   margin-bottom: 10px;
 }
+
 .item-goods {
   position: relative;
   width: 278px;
