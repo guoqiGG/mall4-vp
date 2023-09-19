@@ -196,11 +196,11 @@ export default {
                         })
                     }).then(({ data }) => {
                         this.$message({
-                            message: this.$i18n.t('publics.operation'),
+                            message: '订单发起退款成功,请在退款管理中进行退款操作',
                             type: 'success',
                             duration: 1500,
                         })
-                        this.returnMoneyHandle(data.refundId, data.refundSn)
+                        this.visible=false
                     }).catch((e) => {
                         this.isSubmit = false
                     })
@@ -232,7 +232,6 @@ export default {
             }).catch(() => {
             })
         },
-
 
         /**
     * 退款请求（发放退款）

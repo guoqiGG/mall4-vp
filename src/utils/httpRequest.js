@@ -20,7 +20,10 @@ const http = axios.create({
  */
 http.interceptors.request.use(
   (config) => {
-    config.headers["Authorization"] = Vue.cookie.get("bbcAuthorization_vp"); // 请求头带上token
+    if (!config.url.includes("/order/refund/refundRequest")) {
+      config.headers["Authorization"] = Vue.cookie.get("bbcAuthorization_vp"); // 请求头带上token
+    }
+
     config.headers["locale"] = localStorage.getItem("bbcLang") || "zh_CN";
     // 只针对get方式进行序列化
     if (config.method === "get" || config.method === "GET") {

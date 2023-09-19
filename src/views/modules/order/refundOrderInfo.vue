@@ -6,7 +6,8 @@
         {{ $t('refundOrderDetail.returnDetails') }}
       </div>
     </div>
-      <el-form @submit.native.prevent :model="dataForm" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="auto">
+    <el-form @submit.native.prevent :model="dataForm" ref="dataForm" @keyup.enter.native="dataFormSubmit()"
+      label-width="auto">
       <div class="mod-order-refundOrderInfo">
         <div class="refundId">
           <span class="title">{{ $t('order.refundId') }}</span>
@@ -31,17 +32,27 @@
                     <div v-if="dataForm.applyType === 2">{{ $t("order.refundAndMoney") }}</div>
                   </div>
                 </div>
+
+                <div v-if="dataForm.decisionTime && !dataForm.refundTime" class="item" style="margin-top: 20px;">
+                  <div v-if="dataForm.returnMoneySts == 2" class="default-btn primary-btn"
+                    @click="refundRequest(dataForm.refundSn)">
+                    发放退款</div>
+                  <div v-else>{{ $t('order.wait') }}{{ dataForm.payType === 1 || dataForm.payType === 3 ||
+                    dataForm.payType === 4 || dataForm.payType === 5 || dataForm.payType === 8 ? '微信' :
+                    '支付宝' }}进行退款</div>
+                </div>
               </div>
               <div class="refund-progress">
                 <div class="item" v-if="dataForm.applyType === 1">
                   <el-steps :active="onlyRefundStepsStatus" align-center :process-status="onlyRefundProcessStatus">
-                    <el-step :title="$t('refundOrderDetail.buyerApplyRefund')"/>
-                    <el-step :title="$t('refundOrderDetail.MerchantAgreesRefund')"/>
-                    <el-step :title="$t('order.refundsuccessfully')"/>
+                    <el-step :title="$t('refundOrderDetail.buyerApplyRefund')" />
+                    <el-step :title="$t('refundOrderDetail.MerchantAgreesRefund')" />
+                    <el-step :title="$t('order.refundsuccessfully')" />
                   </el-steps>
                 </div>
                 <div class="item" v-else>
-                  <el-steps :active="stepsStatus" align-center :process-status="dataForm.returnMoneySts === -1 ? 'error' : 'wait'">
+                  <el-steps :active="stepsStatus" align-center
+                    :process-status="dataForm.returnMoneySts === -1 ? 'error' : 'wait'">
                     <el-step :title="$t('refundOrderDetail.BuyerApplyRetPur')"></el-step>
                     <el-step :title="$t('refundOrderDetail.MerchantAgreesRetPur')"></el-step>
                     <el-step :title="$t('refundOrderDetail.buyerDel')"></el-step>
@@ -77,7 +88,8 @@
                         </div>
                         <div class="text-width-item">
                           <span class="title">{{ $t('order.refundAmount') }}：</span>
-                          <span class="text">{{dataForm.refundAmount + $t("transport.yuan") + "+ " + dataForm.refundScore + $t("order.score") }}</span>
+                          <span class="text">{{ dataForm.refundAmount + $t("transport.yuan") + "+ " + dataForm.refundScore
+                            + $t("order.score") }}</span>
                         </div>
                         <div class="text-width-item">
                           <span class="title">{{ $t('order.applicationTime') }}：</span>
@@ -102,36 +114,41 @@
                   </div>
                   <div class="buyers-info">
                     <div class="img-up">
-                      <imgs-upload v-model="dataForm.photoFiles" :disabled="true" :modal="false" :prompt="false"/>
+                      <imgs-upload v-model="dataForm.photoFiles" :disabled="true" :modal="false" :prompt="false" />
                     </div>
                   </div>
                 </div>
                 <!-- / 退款凭证 -->
               </div>
-              <div class="order-info" v-if="this.dataForm.refundDelivery && (this.dataForm.refundDelivery.deyNu || this.dataForm.refundDelivery.imgs)">
+              <div class="order-info"
+                v-if="this.dataForm.refundDelivery && (this.dataForm.refundDelivery.deyNu || this.dataForm.refundDelivery.imgs)">
                 <div class="order-details">
                   <template>
                     <div class="detail-title">
-                      <span class="prompt">{{$t("refundOrderDetail.logisticsDetails") }}</span>
+                      <span class="prompt">{{ $t("refundOrderDetail.logisticsDetails") }}</span>
                     </div>
                     <div class="detail-cont">
                       <div class="detail01">
                         <div class="text-width">
-                          <div class="text-width-item" v-if="this.dataForm.refundDelivery && this.dataForm.refundDelivery.deyName">
-                            <span class="title">{{ $t('refundOrderDetail.logisticsName')  }}：</span>
-                            <span class="text">{{this.dataForm.refundDelivery.deyName }}</span>
+                          <div class="text-width-item"
+                            v-if="this.dataForm.refundDelivery && this.dataForm.refundDelivery.deyName">
+                            <span class="title">{{ $t('refundOrderDetail.logisticsName') }}：</span>
+                            <span class="text">{{ this.dataForm.refundDelivery.deyName }}</span>
                           </div>
-                          <div v-if="this.dataForm.refundDelivery && this.dataForm.refundDelivery.deyNu" class="text-width-item">
+                          <div v-if="this.dataForm.refundDelivery && this.dataForm.refundDelivery.deyNu"
+                            class="text-width-item">
                             <span class="title">{{ $t('order.trackingNumber') }}：</span>
-                            <span class="text">{{this.dataForm.refundDelivery.deyNu }}</span>
+                            <span class="text">{{ this.dataForm.refundDelivery.deyNu }}</span>
                           </div>
-                          <div class="text-width-item" v-if="this.dataForm.refundDelivery && this.dataForm.refundDelivery.senderRemarks">
+                          <div class="text-width-item"
+                            v-if="this.dataForm.refundDelivery && this.dataForm.refundDelivery.senderRemarks">
                             <span class="title">{{ $t('order.compradorMsg') }}：</span>
-                            <span class="text">{{this.dataForm.refundDelivery.senderRemarks }}</span>
+                            <span class="text">{{ this.dataForm.refundDelivery.senderRemarks }}</span>
                           </div>
-                          <div v-if="this.dataForm.refundDelivery && this.dataForm.refundDelivery.senderMobile" class="text-width-item">
-                            <span class="title">{{ $t('order.buyerPhone')  }}：</span>
-                            <span>{{this.dataForm.refundDelivery.senderMobile }}</span>
+                          <div v-if="this.dataForm.refundDelivery && this.dataForm.refundDelivery.senderMobile"
+                            class="text-width-item">
+                            <span class="title">{{ $t('order.buyerPhone') }}：</span>
+                            <span>{{ this.dataForm.refundDelivery.senderMobile }}</span>
                           </div>
                         </div>
                       </div>
@@ -142,7 +159,7 @@
                     </div>
                     <div class="buyers-info">
                       <div class="detail02">
-                        <imgs-upload v-model="refundDeliveryPhotos" :disabled="true" :modal="false" :prompt="false"/>
+                        <imgs-upload v-model="refundDeliveryPhotos" :disabled="true" :modal="false" :prompt="false" />
                         <!-- <div class="refundImg" v-for="(item, index) in refundDeliveryPhotos" :key="index">
                             <el-popover placement="right" title trigger="click">
                               <img slot="reference" :src="resourcesUrl + item"
@@ -164,7 +181,8 @@
                       <span class="l-state" v-if="deliveryDto.state === 2">{{ $t("order.delivering") }}</span>
                       <span class="l-state" v-if="deliveryDto.state === 3">{{ $t("order.haveBeenReceived") }}</span>
                       <span class="l-state" v-if="deliveryDto.state === 4">{{ $t("order.problemPiece") }}</span>
-                      <span class="l-state" v-if="deliveryDto.state === 201">{{ $t("order.reachTheDestinationCity") }}</span>
+                      <span class="l-state" v-if="deliveryDto.state === 201">{{ $t("order.reachTheDestinationCity")
+                      }}</span>
                     </div>
                     <div class="logistics-box" v-if="deliveryDto">
                       <!-- 退款时间 -->
@@ -185,7 +203,7 @@
                         <div class="time">{{ trace.acceptTime }}</div>
                         <div class="text">{{ trace.acceptStation }}</div>
                       </div>
-                      <div class="item" v-if="deliveryDto.traces &&deliveryDto.traces.length < 1">
+                      <div class="item" v-if="deliveryDto.traces && deliveryDto.traces.length < 1">
                         {{ $t("order.noLogisticsInformation") }}
                       </div>
                       <!-- 发货时间 -->
@@ -201,7 +219,8 @@
                         <div class="text">{{ $t("refund.merchantHasAgree") }}</div>
                       </div>
                       <!-- 申请时间 -->
-                      <div :class="['item', dataForm.returnMoneySts >= 1?'left-line':'']" v-if="dataForm.returnMoneySts >= 1">
+                      <div :class="['item', dataForm.returnMoneySts >= 1 ? 'left-line' : '']"
+                        v-if="dataForm.returnMoneySts >= 1">
                         <div class="time">{{ dataForm.applyTime }}</div>
                         <div class="text">
                           {{ $t("refund.buyerApply") }}
@@ -212,27 +231,27 @@
                 </div>
               </div>
               <div class="item-list">
-                <el-table :data="prodList" header-cell-class-name="table-header" row-class-name="table-row-row" :row-style="{ height:'82px'}">
+                <el-table :data="prodList" header-cell-class-name="table-header" row-class-name="table-row-row"
+                  :row-style="{ height: '82px' }">
                   <el-table-column prop :label="this.$i18n.t('refundOrderDetail.refundItems')" width="400">
                     <template slot-scope="scope">
                       <div class="prod-info">
                         <!-- <img :src="resourcesUrl + scope.row.pic" class="prod-img"/> -->
-                        <prod-pic
-                          height="60px"
-                          width="60px"
-                          :pic="scope.row.pic"
-                        ></prod-pic>
+                        <prod-pic height="60px" width="60px" :pic="scope.row.pic"></prod-pic>
                         <div class="con">
-                          <span class="gift-icon" v-if="scope.row.giveawayOrderItemId">{{ $t("order.giveawayPord") }}</span>
-                          <div class="prod-info-text" :class="{'gift-prod-text': scope.row.giveawayOrderItemId}">{{ scope.row.prodName }}</div>
+                          <span class="gift-icon" v-if="scope.row.giveawayOrderItemId">{{ $t("order.giveawayPord")
+                          }}</span>
+                          <div class="prod-info-text" :class="{ 'gift-prod-text': scope.row.giveawayOrderItemId }">{{
+                            scope.row.prodName }}</div>
                           <div class="prod-info-sku" v-if="scope.row.skuName">{{ scope.row.skuName }}</div>
                         </div>
                       </div>
                       <!-- 赠品 -->
                       <div v-if="dataForm.orderItems.length > 1" class="gift-prod table-cell-text">
                         <div v-for="item in scope.row.giveawayList" class="item">
-                          <div class="name prod-info-text">{{'【' + $t("order.giveawayPord") + '】'}}{{item.prodName}}</div>
-                          <span class="num">{{item.skuName}} ×{{item.prodCount}}</span>
+                          <div class="name prod-info-text">{{ '【' + $t("order.giveawayPord") + '】' }}{{ item.prodName }}
+                          </div>
+                          <span class="num">{{ item.skuName }} ×{{ item.prodCount }}</span>
                         </div>
                       </div>
                       <!-- / 赠品 -->
@@ -247,35 +266,133 @@
                     <template slot-scope="scope">
                       <!-- <span v-if="dataForm.refundType === 1">{{scope.row.prodCount }}</span>
                       <span v-if="dataForm.refundType === 2">{{dataForm.goodsNum }}</span> -->
-                      <span>{{scope.row.prodCount }}</span>
+                      <span>{{ scope.row.prodCount }}</span>
                     </template>
                   </el-table-column>
                   <el-table-column prop="productTotalAmount" :label="this.$i18n.t('order.prodTotalPrice')">
                     <template slot-scope="scope">
-                      <span v-if="dataForm.refundType === 1 && !scope.row.giveawayOrderItemId">￥{{scope.row.productTotalAmount | price }}</span>
-                      <span v-if="dataForm.refundType === 2 && !scope.row.giveawayOrderItemId">￥{{bigProductTotalAmount(scope.row.price, dataForm.goodsNum) | price }}</span>
-                      <span v-if="scope.row.giveawayOrderItemId">￥{{scope.row.giveawayAmount | price }}</span>
+                      <span v-if="dataForm.refundType === 1 && !scope.row.giveawayOrderItemId">￥{{
+                        scope.row.productTotalAmount
+                        | price }}</span>
+                      <span v-if="dataForm.refundType === 2 && !scope.row.giveawayOrderItemId">￥{{
+                        bigProductTotalAmount(scope.row.price,
+                          dataForm.goodsNum) | price }}</span>
+                      <span v-if="scope.row.giveawayOrderItemId">￥{{ scope.row.giveawayAmount | price }}</span>
                     </template>
                   </el-table-column>
 
                   <el-table-column prop="actualTotal" :label="this.$i18n.t('order.actualAmount')">
                     <template slot-scope="scope">
-                      <span v-if="dataForm.refundType === 1 && !scope.row.giveawayOrderItemId">￥{{scope.row.actualTotal | price }}</span>
-                      <span v-if="dataForm.refundType === 2 && !scope.row.giveawayOrderItemId">￥{{bigActualTotal(scope.row.actualTotal, scope.row.prodCount) | price }}</span>
+                      <span v-if="dataForm.refundType === 1 && !scope.row.giveawayOrderItemId">￥{{ scope.row.actualTotal |
+                        price }}</span>
+                      <span v-if="dataForm.refundType === 2 && !scope.row.giveawayOrderItemId">￥{{
+                        bigActualTotal(scope.row.actualTotal,
+                          scope.row.prodCount) | price }}</span>
                       <span v-if="scope.row.giveawayOrderItemId">-</span>
-                      <el-tag v-if="scope.row.shareReduce > 0" type="danger" size="mini" effect="dark">{{ $t("marketing.discount") }}</el-tag>
+                      <el-tag v-if="scope.row.shareReduce > 0" type="danger" size="mini" effect="dark">{{
+                        $t("marketing.discount") }}</el-tag>
                     </template>
                   </el-table-column>
-                  <el-table-column v-if="dataForm.refundType === 2" prop="productTotalAmount" :label="this.$i18n.t('order.returnAmount')" width="180">
+                  <el-table-column v-if="dataForm.refundType === 2" prop="productTotalAmount"
+                    :label="this.$i18n.t('order.returnAmount')" width="180">
                     <template slot-scope="scope">
                       <!-- <span>{{dataForm.refundAmount}}</span> -->
-                      <span v-if="!scope.row.giveawayOrderItemId">{{dataForm.refundAmount + $t("transport.yuan") + " + " + dataForm.refundScore + $t("order.score") }}</span>
+                      <span v-if="!scope.row.giveawayOrderItemId">{{ dataForm.refundAmount + $t("transport.yuan") + " + "
+                        +
+                        dataForm.refundScore + $t("order.score") }}</span>
                       <span v-if="scope.row.giveawayOrderItemId" class="">-</span>
                     </template>
                   </el-table-column>
                 </el-table>
               </div>
             </div>
+          </div>
+
+          <div v-if="dataForm.returnMoneySts === 1" class="sellerRemark">
+            <div class="remark-title">{{ $t("order.applyForApproval") }}：</div>
+            <div class="remark-content">
+              <el-radio-group v-model="isAgreeRefund">
+                <!-- <el-radio :label="1">待审核</el-radio> -->
+                <el-radio :label="2">{{ dataForm.applyType === 1 ? $t("order.agreeToRefundA") : $t("order.agree")
+                }}</el-radio>
+                <el-radio :label="3">{{ $t("order.disagree") }}</el-radio>
+              </el-radio-group>
+            </div>
+          </div>
+
+          <div class="sellerRemark"
+            v-if="dataForm.applyType === 2 && isAgreeRefund === 2 && dataForm.returnMoneySts !== -1">
+            <div class="remark-title" v-if="dataForm.refundDelivery">{{ $t("publics.deliveryAddr") }}：</div>
+            <div v-if="dataForm.returnMoneySts === 1" class="remark-content">
+              <el-select v-model="dataForm.refundAddrId" size="small" style="width: 350px"
+                :placeholder="this.$i18n.t('tip.select')" @change="$forceUpdate()">
+                <el-option v-for="item in addrList" :key="item.refundAddrId"
+                  :label="item.receiverName + '，' + item.receiverMobile + '，' + item.province + item.city + item.area + item.addr"
+                  :value="item.refundAddrId"></el-option>
+              </el-select>
+              <!--            新建/刷新-->
+              <div class="default-btn text-btn" @click="refreshChange">{{ $t('admin.refresh') }}</div>
+              <el-divider direction="vertical"></el-divider>
+              <div class="default-btn text-btn" @click.stop="addOrUpdateHandle()">{{ $t('admin.newConstruction') }}
+              </div>
+            </div>
+            <div v-if="dataForm.refundDelivery.receiverAddr" class="remark-content">
+              {{ dataForm.refundDelivery.receiverName
+                + '，' + dataForm.refundDelivery.receiverMobile + '，' + dataForm.refundDelivery.receiverAddr }}
+            </div>
+          </div>
+
+          <div v-if="dataForm.shipTime && !dataForm.cancelTime && !dataForm.rejectTime" class="sellerRemark">
+            <div class="remark-title">{{ $t("order.returnStatus") }}：</div>
+            <div class="remark-content">
+              <el-radio-group v-model="isReceiver" :disabled="dataForm.returnMoneySts !== 3">
+                <!-- <el-radio :label="1">待审核</el-radio> -->
+                <el-radio :label="1">{{ $t("order.received") }}</el-radio>
+                <el-radio :label="0">{{ $t("order.unreceived") }}</el-radio>
+              </el-radio-group>
+            </div>
+          </div>
+
+          <div v-if="dataForm.shipTime && !dataForm.cancelTime && !dataForm.rejectTime" class="sellerRemark">
+            <div class="remark-title">{{ $t("order.returnRequest") }}：</div>
+            <div class="remark-content">
+              <el-radio-group v-model="isAgreeRefund" :disabled="dataForm.returnMoneySts !== 3">
+                <!-- <el-radio :label="1">待审核</el-radio> -->
+                <el-radio :label="2">{{ $t("order.agreeToRefundA") }}</el-radio>
+                <el-radio :label="3">{{ $t("order.refusalToRefund") }}</el-radio>
+              </el-radio-group>
+            </div>
+          </div>
+
+          <div class="sellerRemark" v-if="isAgreeRefund === 3">
+            <div class="input-bar">
+              <div class="remark-title denial">{{ $t('order.denialReason') }}：</div>
+              <el-input type="textarea" style="width: 100%;outline-style: none;" v-model="dataForm.rejectMessage"
+                maxlength="250" show-word-limit></el-input>
+            </div>
+          </div>
+
+          <div class="sellerRemark">
+            <div v-if="dataForm.returnMoneySts !== 1" style="display: flex;align-items: baseline;">
+              <div class="remark-title" v-if="dataForm.sellerMsg">商家备注：</div>
+              <div class="remark-content" v-if="dataForm.sellerMsg">{{ dataForm.sellerMsg }}</div>
+            </div>
+
+            <div class="input-bar" v-else>
+              <div class="remark-title">商家备注：</div>
+              <el-input type="textarea" style="width: 100%;outline-style: none;margin-top:20px;"
+                v-model="dataForm.sellerMsg" :disabled="dataForm.returnMoneySts !== 1" maxlength="250" show-word-limit>
+              </el-input>
+            </div>
+          </div>
+
+          <div class="btn-bar">
+            <!-- 仅退款的时候进行的处理操作 -->
+            <div v-if="dataForm.returnMoneySts === 1" class="default-btn primary-btn" @click="checkHandel()">{{
+              $t("order.confirmTreatment") }}</div>
+            <!-- 退货退款的时候进行的处理操作 -->
+            <div v-if="dataForm.returnMoneySts === 3" class="default-btn primary-btn" @click="returnMoneyHandle()">{{
+              $t("order.confirmTreatment") }}</div>
           </div>
 
           <div class="order-log">
@@ -286,17 +403,17 @@
               <div v-if="dataForm.applyTime">
                 <span>{{ dataForm.applyTime }}{{ $t("refundOrderDetail.waitProcess") }}</span>
               </div>
-              <div v-if="dataForm.applyType === 2 && dataForm.handelTime  && !dataForm.rejectTime">
+              <div v-if="dataForm.applyType === 2 && dataForm.handelTime && !dataForm.rejectTime">
                 <span>{{ dataForm.handelTime }}{{ $t("refundOrderDetail.waitingBuyer") }}</span>
               </div>
 
-              <div v-if="dataForm.applyType === 1 && dataForm.handelTime  && !dataForm.rejectTime">
+              <div v-if="dataForm.applyType === 1 && dataForm.handelTime && !dataForm.rejectTime">
                 <span>{{ dataForm.handelTime }}{{ $t("refundOrderDetail.waitRefund") }}</span>
               </div>
               <div v-if="dataForm.shipTime">
                 <span>{{ dataForm.shipTime }}{{ $t("refundOrderDetail.waitsBuyerRec") }}</span>
               </div>
-              <div v-if="dataForm.receiveTime" >
+              <div v-if="dataForm.receiveTime">
                 <span>{{ dataForm.receiveTime }}{{ $t("refundOrderDetail.waitMerchantAgree") }}</span>
               </div>
               <div v-if="dataForm.decisionTime">
@@ -306,7 +423,7 @@
                 <span>{{ dataForm.refundTime }}{{ $t("order.refundsuccessfully") }}</span>
               </div>
 
-              <div v-if="dataForm.handelTime && dataForm.returnMoneySts === -1  && !dataForm.rejectTime">
+              <div v-if="dataForm.handelTime && dataForm.returnMoneySts === -1 && !dataForm.rejectTime">
                 <span>{{ dataForm.updateTime }}{{ $t("refundOrderDetail.refundClosed") }}</span>
               </div>
               <div v-if="dataForm.returnMoneySts === -1 && dataForm.cancelTime">
@@ -321,9 +438,7 @@
       </div>
     </el-form>
     <!-- 弹窗, 新增 / 修改 -->
-    <add-or-update v-if="addOrUpdateVisible"
-                   ref="addOrUpdate"
-                   @refreshDataList="refreshChange"></add-or-update>
+    <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="refreshChange"></add-or-update>
   </div>
 </template>
 
@@ -333,7 +448,7 @@ import AddOrUpdate from './order-addr'
 import Big from 'big.js'
 import ProdPic from '@/components/prod-pic'
 export default {
-  data () {
+  data() {
     return {
       visible: false,
       addrList: [],
@@ -355,7 +470,8 @@ export default {
       refundScore: 0,
 
       // 商品列表
-      prodList: []
+      prodList: [],
+      isProcessing: false, // 是否正在处理订单
     }
   },
   components: {
@@ -364,7 +480,7 @@ export default {
     ProdPic
   },
   filters: {
-    price (value) {
+    price(value) {
       if (!value) {
         return 0.00
       }
@@ -437,13 +553,13 @@ export default {
     }
 
   },
-  mounted () {
+  mounted() {
     const refundId = this.$route.query.refundId
     const shopId = this.$route.query.shopId
     this.init(refundId, shopId)
   },
   methods: {
-    init (id, shopId) {
+    init(id, shopId) {
       this.dataForm.refundId = id || 0
       this.dataForm.shopId = shopId || 0
       this.visible = true
@@ -479,7 +595,7 @@ export default {
       }
     },
 
-    getDataList () {
+    getDataList() {
       this.$http({
         url: this.$http.adornUrl(`/platform/orderRefund/info/${this.dataForm.refundId}`),
         method: 'get',
@@ -489,10 +605,10 @@ export default {
       })
     },
     // 表单提交
-    dataFormSubmit () {
+    dataFormSubmit() {
     },
     // 修改地址
-    changeAddr (val) {
+    changeAddr(val) {
       this.addOrUpdateVisible = true
       this.$nextTick(() => {
         this.$refs.addOrUpdate.init(val)
@@ -500,13 +616,13 @@ export default {
     },
 
     // 确认收货
-    confirmHandel () {
+    confirmHandel() {
     },
 
     /**
      * 加载收货地址模板
      */
-    getRefundAddrList () {
+    getRefundAddrList() {
       this.$http({
         url: this.$http.adornUrl('/platform/refundAddr/list'),
         method: 'get',
@@ -526,10 +642,14 @@ export default {
     /**
      * 提交处理
      */
-    checkHandel () {
+    checkHandel() {
+      if (this.isProcessing) {
+        return
+      }
+      this.isProcessing = true
       let tempRefundAddrId = this.isAgreeRefund === 2 ? this.dataForm.refundAddrId : undefined
       this.$http({
-        url: this.$http.adornUrl(`/order/refund/process`),
+        url: this.$http.adornUrl2(`/order/refund/process`),
         method: 'put',
         data: this.$http.adornData({
           refundId: this.dataForm.refundId,
@@ -540,24 +660,27 @@ export default {
           refundAddrId: tempRefundAddrId
         })
       }).then(({ data }) => {
+        this.init(this.dataForm.refundId, this.dataForm.shopId)
+        this.visible = false
+        this.isProcessing = false
         this.$message({
           message: this.$i18n.t('remindPop.success'),
           type: 'success',
           duration: 1500,
           onClose: () => {
-            this.visible = false
-            this.$emit('refreshDataList')
           }
         })
+      }).catch(() => {
+
       })
     },
 
     /**
-     * 确定退款
+     * 处理退款 (退货退款)
      */
-    returnMoneyHandle () {
+    returnMoneyHandle() {
       this.$http({
-        url: this.$http.adornUrl(`/order/refund/returnMoney`),
+        url: this.$http.adornUrl2(`/order/refund/returnMoney`),
         method: 'put',
         data: this.$http.adornData({
           refundId: this.dataForm.refundId,
@@ -568,6 +691,7 @@ export default {
           isReceiver: this.isReceiver
         })
       }).then(({ data }) => {
+        this.init(this.dataForm.refundId, this.dataForm.shopId)
         this.$message({
           message: this.$i18n.t('remindPop.success'),
           type: 'success',
@@ -582,21 +706,27 @@ export default {
     /**
      * 退款请求（发放退款）
      */
-    refundRequest (refundSn) {
+    refundRequest(refundSn) {
       this.$http({
-        url: this.$http.adornUrl(`/order/refund/refundRequest`),
+        url: this.$http.adornUrl2(`/order/refund/refundRequest`),
         method: 'put',
         data: refundSn
       }).then(({ data }) => {
-        this.$message({
-          message: this.$i18n.t('remindPop.success'),
-          type: 'success',
-          duration: 1500,
-          onClose: () => {
-            this.visible = false
-            this.$emit('refreshDataList')
-          }
-        })
+        if (data.code == '00000') {
+          this.$message({
+            message: '发放退款成功',
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              this.visible = false
+              this.$emit('refreshDataList')
+              setTimeout(() => {
+                this.init(this.dataForm.refundId, this.dataForm.shopId)
+              }, 20000)
+            }
+          })
+        }
+
       })
     },
     // /**
@@ -675,6 +805,7 @@ export default {
     display: flex;
     align-items: center;
   }
+
   .title-mid img {
     width: 18px;
     height: 18px;
@@ -707,6 +838,7 @@ export default {
     height: 18px;
     margin-right: 15px;
   }
+
   .order-info .logistics-box {
     height: 220px;
     overflow-y: scroll;
@@ -835,18 +967,22 @@ export default {
     width: 95%;
   }
 
-  .detail01  {
+  .detail01 {
     display: flex;
     align-items: center;
   }
+
   .text-width {
     margin-bottom: 10px;
   }
+
   .detail02 .text-width {
     width: 100%;
   }
+
   .text-width .text-width-item {
     line-height: 27px;
+
     .text {
       word-break: break-word;
     }
@@ -945,19 +1081,23 @@ export default {
   .order-log .log-cont {
     margin-top: 15px;
     color: #666666;
+
     div {
       margin-bottom: 10px;
     }
   }
+
   .refundId {
     // height: 15px;
     margin-bottom: 15px;
     margin-left: 20px;
   }
+
   .num-cont {
     width: 100%;
     display: flex;
     justify-content: flex-start;
+
     .state-title {
       width: 500px;
       height: 115px;
@@ -968,14 +1108,17 @@ export default {
       padding: 30px;
       border: 1px solid #E8E9EC;
       border-right: none;
+
       .item {
         display: flex;
+
         .text {
           color: #155BD4;
         }
       }
     }
   }
+
   .refund-progress {
     height: 115px;
     width: 100%;
@@ -983,32 +1126,39 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+
     .item {
       width: 100%;
     }
   }
+
   .btn-bar {
     margin-top: 15px;
-    text-align: right;
+    text-align: left;
   }
+
   .remark-title {
     display: inline-block;
     min-width: 70px;
     display: flex;
     align-items: center;
   }
-  .remark-content{
+
+  .remark-content {
     display: inline-block;
     word-break: break-word;
   }
+
   .input-bar {
     display: inline-block;
     width: 100%;
   }
+
   // 赠品
   .gift-prod .item {
     margin-top: 5px;
     line-height: 1em;
+
     .name {
       display: inline-block;
       margin-right: 15px;
@@ -1019,11 +1169,13 @@ export default {
     }
   }
 }
+
 div ::v-deep .el-step.is-center .el-step__head {
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 div ::v-deep .el-textarea__inner {
   border-radius: 0 !important;
   padding: 12px 10px;
@@ -1041,29 +1193,34 @@ div ::v-deep .el-textarea__inner {
   margin-left: 10px;
   line-height: 20px;
 }
+
 // 设置input光标起始位置，根据实际情况自行调整
 .text-in1 {
   ::v-deep .el-textarea__inner {
     text-indent: 67px;
   }
 }
+
 .text-in2 {
   ::v-deep .el-textarea__inner {
     text-indent: 130px;
   }
 }
+
 // 商品信息
 .item-list {
   .prod-info {
     display: flex;
     justify-content: flex-start;
     align-items: center;
+
     .prod-img {
       display: block;
       width: 60px;
       height: 60px;
       margin-right: 5px;
     }
+
     .gift-icon {
       display: inline-block;
       padding: 4px;
@@ -1076,10 +1233,12 @@ div ::v-deep .el-textarea__inner {
       line-height: 1em;
     }
   }
+
   // 赠品
   .gift-prod .item {
     margin-top: 5px;
     line-height: 1em;
+
     .name {
       display: inline-block;
       margin-right: 15px;
@@ -1091,17 +1250,21 @@ div ::v-deep .el-textarea__inner {
     }
   }
 }
+
 .con .prod-info-text {
   margin-left: 10px;
 }
+
 .con .prod-info-sku {
   margin-left: 10px;
   color: #999;
 }
+
 .gift-prod-text {
   margin-left: 0px !important;
   display: inline !important;
 }
+
 .prod-info-text {
   width: 300px;
   text-overflow: -o-ellipsis-lastline;

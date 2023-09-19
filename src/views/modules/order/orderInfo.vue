@@ -454,12 +454,14 @@
                   <span>{{ scope.row.giveawayOrderItemId ? '-' : scope.row.productTotalAmount }}</span>
                 </template>
               </el-table-column>
+
               <el-table-column label="操作" width="180" align="center">
                 <template slot-scope="scope">
-                  <span style="color: #155BD4; cursor: pointer;"
-                    @click="refundShow(dataForm.orderNumber, dataForm.nickName, dataForm.userMobile, 2, scope.row)">退款</span>
+                  <span style="color: #155BD4; cursor: pointer;" v-if="!scope.row.refundId"
+                    @click="refundShow(dataForm.orderNumber, dataForm.nickName, dataForm.userMobile, 2, scope.row)">后台发起退款</span>
                 </template>
               </el-table-column>
+              
             </el-table>
             <div class="goods-total">
               <div class="text-box">
