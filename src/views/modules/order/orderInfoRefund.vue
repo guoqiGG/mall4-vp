@@ -207,51 +207,7 @@ export default {
                 }
             })
         },
-        /**
-    * 确定退款
-    */
-        returnMoneyHandle(refundId, refundSn) {
-            this.$http({
-                url: this.$http.adornUrl2(`/order/refund/process`),
-                method: 'put',
-                data: this.$http.adornData({
-                    refundId: refundId,
-                    refundSts: 2,
-                    refundSn: refundSn,
-                    rejectMessage: '',
-                    sellerMsg: '同意'
-                })
-            }).then(({ data }) => {
-                console.log(data)
-                this.$message({
-                    message: '同意退款',
-                    type: 'success',
-                    duration: 1500
-                })
-                this.refundRequest(refundSn)
-            }).catch(() => {
-            })
-        },
-
-        /**
-    * 退款请求（发放退款）
-    */
-        refundRequest(refundSn) {
-            this.$http({
-                url: this.$http.adornUrl2(`/order/refund/refundRequest`),
-                method: 'put',
-                data: { 'refundSn': refundSn }
-            }).then(() => {
-                this.$message({
-                    message: '发放退款',
-                    type: 'success',
-                    duration: 1500,
-                    onClose: () => {
-                    }
-                })
-                this.visible = false
-            })
-        },
+ 
     },
 }
 </script>

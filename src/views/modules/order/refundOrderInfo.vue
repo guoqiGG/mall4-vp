@@ -710,23 +710,20 @@ export default {
       this.$http({
         url: this.$http.adornUrl2(`/order/refund/refundRequest`),
         method: 'put',
-        data: refundSn
+        data: { 'refundSn': refundSn }
       }).then(({ data }) => {
-        if (data.code == '00000') {
-          this.$message({
-            message: '发放退款成功',
-            type: 'success',
-            duration: 1500,
-            onClose: () => {
-              this.visible = false
-              this.$emit('refreshDataList')
-              setTimeout(() => {
-                this.init(this.dataForm.refundId, this.dataForm.shopId)
-              }, 20000)
-            }
-          })
-        }
-
+        this.$message({
+          message: '发放退款成功',
+          type: 'success',
+          duration: 1500,
+          onClose: () => {
+            this.visible = false
+            this.$emit('refreshDataList')
+            setTimeout(() => {
+              this.init(this.dataForm.refundId, this.dataForm.shopId)
+            }, 20000)
+          }
+        })
       })
     },
     // /**
