@@ -2470,7 +2470,7 @@ const zhCn = {
     clickView: '点击查看',
     tip2: '请选择审核状态',
     tip3: '请选择不通过原因',
-    titleTip1: '团长信息',
+    titleTip1: '修改团长信息',
     idCardFront: '身份证正面',
     idCardBack: '身份证背面',
     holdIdCard: '手持身份证',

@@ -120,12 +120,12 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="totalStocks" :label="$t('product.availableInventory')" width="140">
-            <!-- <template slot-scope="scope">
+          <el-table-column :label="$t('product.availableInventory')" width="140">
+            <template slot-scope="scope">
               <div class="water-sold-con">
                 <span slot="reference">{{ scope.row.totalStocks }}</span>
-                <el-popover placement="bottom" trigger="click" style="width: 150px !important;"
-                  @show="showTotalStocks(scope.row.totalStocks)"
+                <el-popover v-if="scope.row.isSpecification == 0" placement="bottom" trigger="click"
+                  style="width: 150px !important;" @show="showTotalStocks(scope.row.totalStocks)"
                   @after-enter="getCurrentSpuId(scope.row.prodId, 'totalStocks')" @hide="initProdInf()">
                   <div class="popover-box">
                     <div>
@@ -143,7 +143,7 @@
                     slot="reference" class="el-icon-edit" />
                 </el-popover>
               </div>
-            </template> -->
+            </template>
           </el-table-column>
           <el-table-column prop="prodType" :label="$t('product.prodType')" width="120">
             <template slot-scope="scope">
@@ -607,6 +607,7 @@ export default {
     changeTotalStocks(currentValue, oldValue) {
       this.totalStocks = currentValue
     },
+    // 列表页修改库存
     handleChange1(id) {
       let totalStocks = Math.round(this.totalStocks)
       if (totalStocks > 1000000000) {
@@ -621,12 +622,12 @@ export default {
         return
       }
       this.$http({
-        url: this.$http.adornUrl('/prod/prod/stock'),
-        method: 'put',
-        params: {
-          totalStocks: totalStocks,
-          prodId: id
-        }
+        url: this.$http.adornUrl2('/prod/prod/update/prod'),
+        method: 'get',
+        params: this.$http.adornParams({
+          number: totalStocks,
+          prod: id
+        })
       }).then(() => {
         this.$message({
           message: this.$i18n.t('remindPop.success'),

@@ -124,10 +124,11 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.el-form-item{
+.el-form-item {
     margin-top: 10px;
 }
-.title{
+
+.title {
     font-weight: 600;
 }
 </style>

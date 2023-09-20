@@ -35,36 +35,47 @@
         <el-table ref="distributionUserTable" :data="dataList" header-cell-class-name="table-header"
           row-class-name="table-row-low" style="width: 100%" @sort-change="sortChange">
           <!-- 昵称 -->
-          <el-table-column fixed="left" prop="nickName" :label="$t('users.nickName')" width="230">
+          <el-table-column fixed="left" prop="nickName" label="姓名" width="100">
             <template slot-scope="scope">
-              {{ scope.row.nickName }}
+              {{ scope.row.realName }}
             </template>
           </el-table-column>
           <!-- 团长手机号 -->
-          <el-table-column fixed="left" width="150" prop="userMobile" label="团长手机号">
+          <el-table-column width="120" prop="userMobile" label="手机号">
             <template slot-scope="scope">
               {{ scope.row.userMobile }}
             </template>
           </el-table-column>
-          <el-table-column fixed="left" width="150" label="团长等级">
+          <el-table-column width="120" label="等级">
             <template slot-scope="scope">
               {{ scope.row.distributionInfo ? scope.row.distributionInfo.name : '无' }}
             </template>
           </el-table-column>
+
+          <el-table-column label="门店" width="200">
+            <template slot-scope="scope">
+              {{ scope.row.station.stationName }}
+            </template>
+          </el-table-column>
+          <el-table-column label="门店地址" width="200">
+            <template slot-scope="scope">
+              {{ scope.row.station.province + scope.row.station.city + scope.row.station.area + scope.row.station.addr }}
+            </template>
+          </el-table-column>
           <!-- 邀请人手机号 -->
-          <el-table-column width="150" prop="parentUserMobile" :label="$t('distributionMsg.inviteesPhoneNumber')">
+          <!-- <el-table-column width="150" prop="parentUserMobile" :label="$t('distributionMsg.inviteesPhoneNumber')">
             <template slot-scope="scope">
               <span v-if="!scope.row.parentDistributionUser">无</span>
               <span v-else>{{ scope.row.parentDistributionUser.userMobile }}</span>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <!-- 邀请人 -->
-          <el-table-column prop="parentName" :label="$t('distributionMsg.invitees')">
+          <!-- <el-table-column prop="parentName" :label="$t('distributionMsg.invitees')">
             <template slot-scope="scope">
               <span v-if="!scope.row.parentDistributionUser">无</span>
               <span v-else>{{ scope.row.parentDistributionUser.nickName }}</span>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <!-- 等级 -->
           <!-- <el-table-column
             prop="level"
@@ -118,7 +129,7 @@
                 </div>
                 <div v-if="isAuth('distribution:distributionUser:info')" class="default-btn text-btn"
                   @click="info(scope.row)">
-                  {{ $t('seckill.view') }}
+                  {{ $t('seckill.edit') }}
                 </div>
                 <div v-if="isAuth('distribution:distributionUser:update') && scope.row.state !== -1"
                   class="default-btn text-btn" @click="addOrUpdateHandle(scope.row)">
@@ -145,10 +156,11 @@
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="refreshChange"></add-or-update>
 
     <!-- 弹窗, 新增 / 修改 -->
-    <Info v-if="infoVisible" ref="info"></Info>
+    <Info v-if="infoVisible" ref="info" @refreshDataList="refreshChange"></Info>
 
     <!-- 修改团长等级 -->
-    <DistributionLevelUpdate v-if="distributionLevelVisible" ref="distributionLevel" @refreshDataList="refreshChange"></DistributionLevelUpdate>
+    <DistributionLevelUpdate v-if="distributionLevelVisible" ref="distributionLevel" @refreshDataList="refreshChange">
+    </DistributionLevelUpdate>
   </div>
 </template>
 <script>
@@ -178,7 +190,7 @@ export default {
       dataList: [],
       dataListLoading: false,
       addOrUpdateVisible: false,
-      distributionLevelVisible:false,
+      distributionLevelVisible: false,
       infoVisible: false,
       sortParam: 1, // 0无 1加入时间 2累计客户 3累计邀请 4累计收益
       sortType: 2 // 0无 1 正序 2倒序
@@ -233,9 +245,10 @@ export default {
     },
     // 新增 / 修改
     info(data) {
+      let aa=data
       this.infoVisible = true
       this.$nextTick(() => {
-        this.$refs.info.init(data)
+        this.$refs.info.init(aa)
       })
     },
     // 点击查询
