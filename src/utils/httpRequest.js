@@ -8,7 +8,7 @@ import { Message } from "element-ui";
 import i18n from "../i18n/i18n";
 
 const http = axios.create({
-  timeout: 1000 * 30,
+  timeout: 1000 * 60,
   withCredentials: true,
   headers: {
     "Content-Type": "application/json; charset=utf-8",
@@ -20,7 +20,13 @@ const http = axios.create({
  */
 http.interceptors.request.use(
   (config) => {
-    if (!config.url.includes("/order/refund/refundRequest")) {
+    // 不用校验权限的接口
+    const array = [
+      "/order/refund/refundRequest",
+      "platform/order/ship/exportOrderExcel",
+    ];
+
+    if (!array.includes(config.url)) {
       config.headers["Authorization"] = Vue.cookie.get("bbcAuthorization_vp"); // 请求头带上token
     }
 

@@ -100,6 +100,7 @@
             <div class="default-btn primary-btn" @click="searchChange(true)">{{ $t("order.query") }}</div>
             <div class="default-btn" @click="getSoldExcel()">{{ $t("order.export") }}</div>
             <div class="default-btn" @click="clear()">{{ $t("product.reset") }}</div>
+            <div class="default-btn" @click="uploadSpu">批量收货</div>
           </el-form-item>
         </div>
         <!-- <div class="operation-box">
@@ -467,6 +468,8 @@
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
     <consignment-info v-if="consignmentInfoVisible" ref="consignmentInfo"
       @inputCallback="getWaitingConsignmentExcel"></consignment-info>
+    <order-send-upload v-if="uploadVisible" ref="spuUpload" :param="dataForm" @refreshDataList1="getWaitingConsignmentExcel" />
+
   </div>
 </template>
 
@@ -475,6 +478,7 @@ import AddOrUpdate from './orderInfo'
 import ConsignmentInfo from './consignment-info'
 import moment from 'moment'
 import ProdPic from '@/components/prod-pic'
+import OrderSendUpload from './order-send-upload'
 import { isAuth } from '@/utils'
 export default {
   name: 'order-order',
@@ -602,7 +606,8 @@ export default {
       isIndeterminate: false,
       orderNumberList: [],
       orderIdList: [],
-      prodDataList: []
+      prodDataList: [],
+      uploadVisible: false,// 是否显示批量发货弹窗
     }
   },
   computed: {
@@ -615,7 +620,8 @@ export default {
   components: {
     AddOrUpdate,
     ConsignmentInfo,
-    ProdPic
+    ProdPic,
+    OrderSendUpload
   },
   created() {
     // 首页跳转状态参数
@@ -1011,7 +1017,17 @@ export default {
         this.prodDataList = data.records
       })
     },
-  
+    // 打开导入框
+    uploadSpu() {
+      this.uploadVisible = true
+      this.$nextTick(() => {
+        this.$refs.spuUpload.init()
+      })
+    },
+    getWaitingConsignmentExcel() {
+      this.getDataList(this.page)
+    },
+
   },
   destroyed() {
     // 页面销毁时移除监听
