@@ -7,9 +7,22 @@
                     <el-form-item prop="userMobile" label="团长手机号:">
                         <el-input v-model="searchForm.userMobile" type="text" clearable placeholder="手机号"></el-input>
                     </el-form-item>
+                    <!-- <el-form-item prop="tel" label="会员手机号:">
+                        <el-input v-model="searchForm.tel" type="text" clearable placeholder="会员手机号"></el-input>
+                    </el-form-item> -->
+                    <el-form-item prop="scoreName" label="礼物名称:">
+                        <el-input v-model="searchForm.scoreName" type="text" clearable placeholder="礼物名称"></el-input>
+                    </el-form-item>
+                    <el-form-item label="日期:">
+                        <el-date-picker size="small" v-model="date" type="daterange" :range-separator="$t('date.tip')"
+                            value-format="yyyy-MM-dd HH:mm:ss" start-placeholder="开始时间" end-placeholder="结束时间"
+                            @change="createTimeChange"></el-date-picker>
+                    </el-form-item>
+
                     <el-form-item>
                         <div class="default-btn primary-btn" @click="searchChange(true)">{{ $t('crud.searchBtn') }}</div>
                         <div class="default-btn" @click="resetForm('searchForm')">{{ $t('product.reset') }}</div>
+                        <div class="default-btn" @click="getSoldExcel()">导出</div>
                     </el-form-item>
                 </div>
             </el-form>
@@ -22,7 +35,7 @@
                     </el-table-column>
                     <el-table-column prop="userModile" label="团长手机号">
                     </el-table-column>
-                    <el-table-column prop="userName" label="用户昵称">
+                    <el-table-column prop="userName" label="团员">
                     </el-table-column>
                     <el-table-column label="直播间图片">
                         <template slot-scope="scope">
@@ -33,7 +46,7 @@
                     </el-table-column>
                     <el-table-column prop="bizName" label="礼物名称">
                     </el-table-column>
-                    <el-table-column label="日期">
+                    <el-table-column label="核销日期">
                         <template slot-scope="scope">
                             {{ scope.row.date.split(' ')[0] }}
                         </template>
@@ -61,14 +74,22 @@
 </template>
   
 <script>
+import moment from 'moment'
+
 export default {
     data() {
         return {
             theData: null, // 保存上次点击查询的请求条件
             theParams: null, // 保存上次点击查询的请求条件
             dataList: [],
+            date: '',//日期
             searchForm: {
-                userMobile: null
+                userMobile: null, // 团长手机号
+                // tel: null, // 会员手机号
+                scoreName: '',// 礼物名称
+                starTime: '',//开始时间
+                endTime: '',//结束时间
+                type: 0
             }, // 搜索
             dataListLoading: false,
             addOrUpdateVisible: false,
@@ -89,23 +110,35 @@ export default {
     methods: {
         getDataList(page, newData = false) {
             this.dataListLoading = true
-            this.theParams = JSON.parse(JSON.stringify(this.searchForm))
-            if (newData || !this.theData) {
-                this.theData = {
-                    current: page == null ? this.page.currentPage : page.currentPage,
-                    size: page == null ? this.page.pageSize : page.pageSize,
-                    userMobile: this.searchForm.userMobile
-                }
-            } else {
-                this.theData.current = page == null ? this.page.currentPage : page.currentPage
-                this.theData.size = page == null ? this.page.pageSize : page.pageSize
+            let params = {
+                type: 0
+            }
+            if (this.searchForm.userMobile) {
+                params.userMobile = this.searchForm.userMobile
+            }
+            // if (this.searchForm.tel) {
+            //     params.tel = this.searchForm.tel
+            // }
+            if (this.searchForm.scoreName) {
+                params.scoreName = this.searchForm.scoreName
+            }
+            if (this.searchForm.starTime) {
+                params.starTime = this.searchForm.starTime
+            }
+            if (this.searchForm.endTime) {
+                params.endTime = this.searchForm.endTime
+            }
+
+            this.theData = {
+                current: page == null ? this.page.currentPage : page.currentPage,
+                size: page == null ? this.page.pageSize : page.pageSize,
             }
 
             this.$http({
                 url: this.$http.adornUrl('/distribution/distributionUser/get/list'),
                 method: 'get',
                 params: this.$http.adornParams(
-                    Object.assign(this.theData, this.theParams), false
+                    Object.assign(this.theData, params), false
                 )
             }).then(({ data }) => {
                 this.dataList = data.records
@@ -125,7 +158,7 @@ export default {
         },
         resetForm(formName) {
             this.$refs[formName].resetFields()
-            this.searchForm.userMobile = null
+            this.date = null
         },
         /**
          * 刷新回调
@@ -145,6 +178,68 @@ export default {
         handleCurrentChange(val) {
             this.page.currentPage = val
             this.getDataList()
+        },
+        createTimeChange() {
+            console.log(this.date)
+            if (!this.date || this.date.length === 0) {
+                this.searchForm.starTime = null
+                this.searchForm.endTime = null
+            } else {
+                this.searchForm.starTime = this.date[0].split(' ')[0]
+                this.searchForm.endTime = this.date[1].split(' ')[0]
+
+            }
+        },
+        getSoldExcel() {
+            let params = {
+                type: 0
+            }
+            if (this.searchForm.userMobile) {
+                params.userMobile = this.searchForm.userMobile
+            }
+            // if (this.searchForm.tel) {
+            //     params.tel = this.searchForm.tel
+            // }
+            if (this.searchForm.scoreName) {
+                params.scoreName = this.searchForm.scoreName
+            }
+            if (this.searchForm.starTime) {
+                params.starTime = this.searchForm.starTime
+            }
+            if (this.searchForm.endTime) {
+                params.endTime = this.searchForm.endTime
+            }
+            const loading = this.$loading({
+                lock: true,
+                target: '.mod-order-order',
+                customClass: 'export-load',
+                background: 'transparent',
+                text: this.$i18n.t('shop.exportIng')
+            })
+            this.$http({
+                url: this.$http.adornUrl('/platform/order/resources/excel'),
+                method: 'get',
+                params: this.$http.adornParams(params),
+                responseType: 'blob' // 解决文件下载乱码问题
+            }).then(({ data }) => {
+                loading.close()
+                var blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8' })
+                const fileName = '核销礼物记录'
+                const elink = document.createElement('a')
+                if ('download' in elink) { // 非IE下载
+                    elink.download = fileName
+                    elink.style.display = 'none'
+                    elink.href = URL.createObjectURL(blob)
+                    document.body.appendChild(elink)
+                    elink.click()
+                    URL.revokeObjectURL(elink.href) // 释放URL 对象
+                    document.body.removeChild(elink)
+                } else { // IE10+下载
+                    navigator.msSaveBlob(blob, fileName)
+                }
+            }).catch((e) => {
+                loading.close()
+            })
         }
     }
 }

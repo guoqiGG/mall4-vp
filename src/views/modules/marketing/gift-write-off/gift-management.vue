@@ -26,7 +26,7 @@
                             <template slot-scope="scope">
                                 <div class="text-btn-con">
                                     <div class="default-btn text-btn" v-if="isAuth('platform:giftManagement:update')"
-                                        @click="addOrUpdateHandle(scope.row.id)">修改</div>
+                                        @click="addOrUpdateHandle(scope.row)">修改</div>
                                     <!-- <div class="default-btn text-btn" @click="addOrUpdateHandle(scope.row.id)">下架</div> -->
                                     <div class="default-btn text-btn" v-if="isAuth('platform:giftManagement:update')"
                                         @click="deleteHandle(scope.row.id)">删除</div>
@@ -79,10 +79,10 @@ export default {
             })
         },
         // 新增 / 修改
-        addOrUpdateHandle(id) {
+        addOrUpdateHandle(data) {
             this.addOrUpdateVisible = true
             this.$nextTick(() => {
-                this.$refs.addOrUpdate.init(id)
+                this.$refs.addOrUpdate.init(data)
             })
         },
         // 删除

@@ -16,20 +16,20 @@
               <el-option :label="$t('publics.yes')" :value="1"></el-option>
             </el-select>
           </el-form-item> -->
-          <el-form-item prop="isCompose" :label="$t('product.prodMold') + ':'">
+          <!-- <el-form-item prop="isCompose" :label="$t('product.prodMold') + ':'">
             <el-select v-model="searchForm.mold" :placeholder="$t('product.prodMold')">
               <el-option :label="$t('product.physicalGoods')" :value="0"></el-option>
               <el-option :label="$t('product.virtualGoods')" :value="1"></el-option>
             </el-select>
-          </el-form-item>
-          <el-form-item prop="isCompose" :label="$t('product.prodType') + ':'">
+          </el-form-item> -->
+          <!-- <el-form-item prop="isCompose" :label="$t('product.prodType') + ':'">
             <el-select v-model="searchForm.prodType" :placeholder="$t('product.prodType')">
               <el-option :label="$t('product.ordProd')" :value="0"></el-option>
               <el-option :label="$t('product.groupProd')" :value="1"></el-option>
               <el-option :label="$t('product.limitedTimeProd')" :value="2"></el-option>
               <el-option :label="$t('product.activeProd')" :value="5"></el-option>
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item prop="status" :label="$t('product.status') + ':'" class="search-form-item">
             <el-select v-model="searchForm.status" :placeholder="$t('product.status')">
               <el-option :label="$t('publics.LowerShelf')" :value="0"></el-option>
@@ -39,20 +39,20 @@
               <el-option :label="$t('product.pendingReview')" :value="6"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item prop="deliveryMode" :label="$t('product.delType') + ':'" class="search-form-item">
+          <!-- <el-form-item prop="deliveryMode" :label="$t('product.delType') + ':'" class="search-form-item">
             <el-select v-model="searchForm.deliveryMode" :placeholder="$t('product.delType')">
               <el-option :label="$t('product.userPickUp')" :value="2"></el-option>
               <el-option :label="$t('product.ExpressDistribution')" :value="1"></el-option>
               <el-option :label="$t('product.sameCityDelivery')" :value="4"></el-option>
               <el-option :label="$t('order.noNeedRequired')" :value="5"></el-option>
             </el-select>
-          </el-form-item>
-          <el-form-item prop="category" :label="$t('product.category') + ':'" class="search-form-item">
+          </el-form-item> -->
+          <!-- <el-form-item prop="category" :label="$t('product.category') + ':'" class="search-form-item">
             <el-select v-model="searchForm.categoryId" :placeholder="$t('product.category')">
               <el-option v-for="(item, index) in categoryList" :key="index" :label="item.categoryName"
                 :value="item.categoryId"></el-option>
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item prop="isTop" :label="$t('product.isTop') + ':'" class="search-form-item">
             <el-select v-model="isTop" :placeholder="$t('product.isTop')">
               <el-option :label="$t('publics.no')" :value="0"></el-option>
@@ -76,6 +76,7 @@
           style="width: 100%" @selection-change="selectionChange" @sort-change="changeTableSort"
           @cell-mouse-enter="enterTableRow" @cell-mouse-leave="leaveTableRow">
           <el-table-column type="selection" prop="prodId" width="55" />
+          <el-table-column fixed prop="prodId" width="55" label="ID"/>
           <el-table-column fixed prop="shopName" :label="$t('prodList.shopName')" width="auto">
             <template slot-scope="scope">
               <span class="table-cell-text">{{ scope.row.shopName }}</span>
@@ -91,8 +92,8 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="oriPrice" :label="$t('prodList.marketValue')" width="100">
-          </el-table-column>
+          <!-- <el-table-column prop="oriPrice" :label="$t('prodList.marketValue')" width="100">
+          </el-table-column> -->
           <el-table-column prop="price" :label="$t('prodList.salesPrice')" width="100">
           </el-table-column>
           <el-table-column :label="$t('product.waterSoldNum')" width="auto">
@@ -145,21 +146,20 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="prodType" :label="$t('product.prodType')" width="120">
+          <el-table-column align="center" prop="actualSoldNum" label="总销量"></el-table-column>
+          <!-- <el-table-column prop="prodType" :label="$t('product.prodType')" width="120">
             <template slot-scope="scope">
-              <!-- 商品类型(0普通商品 1拼团 2秒杀 3氢春豆 5活动商品) -->
               <div class="tag-text">
                 {{ [$t('product.ordProd'), $t('product.groupProd'), $t('product.limitedTimeProd'), $t('goods.points'), '',
                 $t('product.activeProd')][scope.row.prodType] }}</div>
             </template>
-          </el-table-column>
-          <el-table-column prop="mold" :label="$t('product.prodMold')" width="120">
+          </el-table-column> -->
+          <!-- <el-table-column prop="mold" :label="$t('product.prodMold')" width="120">
             <template slot-scope="scope">
-              <!-- 商品类型(0普通商品 1拼团 2秒杀 3氢春豆 5活动商品) -->
               <div class="tag-text">{{ scope.row.mold === 0 ? $t('product.physicalGoods') : $t('product.virtualGoods') }}
               </div>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column prop="status" :label="$t('product.status')" width="auto">
             <!-- 0:商家下架 1:正常 2:平台下架 3:违规下架待平台审核 4:审核失败 6:待审核 -1表示删除 -->
             <template slot-scope="scope">
@@ -172,13 +172,13 @@
               <span v-else class="tag-text">{{ $t("prodList.other") }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="deliveryMode" align="center" :label="$t('product.delType')" width="100">
+          <!-- <el-table-column prop="deliveryMode" align="center" :label="$t('product.delType')" width="100">
             <template slot-scope="scope">
               <div v-if="scope.row.mold === 1">{{ $t('order.noNeedRequired') }}</div>
               <div v-else-if="scope.row.prodType === 5">-</div>
               <div v-else>{{ scope.row.deliveryMode | DeliveryMode }}</div>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column prop="isTop" :label="$t('publics.isTop')" width="auto">
             <template slot-scope="scope">
               <span v-if="scope.row.isTop === 0" class="tag-text">{{ $t('publics.no') }}</span>

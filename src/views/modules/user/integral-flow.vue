@@ -13,12 +13,12 @@
           :start-placeholder="$t('text.startTime')" :end-placeholder="$t('date.end')"
           :range-separator="$t('date.tip')"></el-date-picker>
       </el-form-item>
-      <el-form-item label="主播" prop="anchorId">
+      <!-- <el-form-item label="主播" prop="anchorId">
         <el-select v-model="dataForm.anchorId" filterable clearable placeholder="请选择主播">
           <el-option v-for="item in anchorOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="消息类型" prop="source">
         <el-select v-model="dataForm.source" filterable clearable placeholder="请选择消息类型">
           <el-option v-for="item in sourceTypeOptions" :key="item.value" :label="item.label" :value="item.value">

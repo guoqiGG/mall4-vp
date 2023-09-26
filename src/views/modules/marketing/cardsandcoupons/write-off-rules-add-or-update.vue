@@ -23,7 +23,7 @@
     </el-form>
 
     <span slot="footer" class="dialog-footer">
-      <el-button @click="visible == false">{{ $t('coupon.cancel') }}</el-button>
+      <el-button @click="cancle()">{{ $t('coupon.cancel') }}</el-button>
       <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
     </span>
   </el-dialog>
@@ -96,6 +96,10 @@ export default {
         }
       })
     },
+    cancle(){
+      console.log(1)
+      this.visible=false
+    }
   }
 }
 </script>

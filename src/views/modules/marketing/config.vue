@@ -19,6 +19,11 @@
                     <el-radio :label="1">开启</el-radio>
                 </el-radio-group>
             </el-form-item>
+            <div class="title">签到送豆设置</div>
+            <el-form-item label="送多少豆">
+                <el-input-number v-model="signInScoreOne" placeholder="观看时长(分钟)" controls-position="right" :min="0"
+                    size="small" @change="scoreChange()"></el-input-number>
+            </el-form-item>
 
             <div class="title">观看多少分钟送礼物设置</div>
             <el-form-item label="观看时长(分钟)">
@@ -38,6 +43,17 @@ export default {
             openViewTime: {},// 116
             open: null,
             gift: {}, //117
+            score: {},
+            signInScoreOne: 0,
+            signInScoreTwo: 0,
+            signInScoreThree: 0,
+            signInScoreFour: 0,
+            signInScoreFive: 0,
+            signInScoreSix: 0,
+            signInScoreSeven: 0,
+            useDiscountRange: 0,
+            getDiscountRange: 0,
+            categoryConfigs: []
         }
     },
     created() {
@@ -77,6 +93,35 @@ export default {
             }).then(({ data }) => {
                 this.gift = data
             })
+
+            // 送豆设置
+            this.$http({
+                url: this.$http.adornUrl('/user/scoreConfig/info/' + 'SCORE_CONFIG'),
+                method: 'get',
+                params: this.$http.adornParams()
+            }).then(({ data }) => {
+                if (data.signInScoreString) {
+                    this.score = data
+                    this.signInScoreOne = data.signInScore[0]
+                    this.signInScoreTwo = data.signInScore[1]
+                    this.signInScoreThree = data.signInScore[2]
+                    this.signInScoreFour = data.signInScore[3]
+                    this.signInScoreFive = data.signInScore[4]
+                    this.signInScoreSix = data.signInScore[5]
+                    this.signInScoreSeven = data.signInScore[6]
+                    if (!data.useDiscountRange) {
+                        this.useDiscountRange = 0
+                    } else {
+                        this.useDiscountRange = this.score.useDiscountRange
+                    }
+                    if (!data.getDiscountRange) {
+                        this.getDiscountRange = 0
+                    } else {
+                        this.getDiscountRange = this.score.getDiscountRange
+                    }
+                }
+                this.score.categoryConfigs = data.categoryConfigs
+            })
         },
 
         // 修改
@@ -112,6 +157,39 @@ export default {
                     duration: 1500,
                     onClose: () => {
                         this.visible = false
+                        this.$nextTick(() => {
+                            this.init()
+                        })
+                    }
+                })
+            })
+        },
+
+        // 修改送豆设置
+        scoreChange() {
+            this.score.useDiscountRange = this.useDiscountRange
+            this.score.getDiscountRange = this.getDiscountRange
+            this.score.getDiscount = !this.score.getDiscount ? 0 : this.score.getDiscount
+            this.score.useDiscount = !this.score.useDiscount ? 0 : this.score.useDiscount
+            this.score.signInScore = []
+            this.score.signInScore.push(this.signInScoreOne || 0)
+            this.score.signInScore.push(this.signInScoreTwo || 0)
+            this.score.signInScore.push(this.signInScoreThree || 0)
+            this.score.signInScore.push(this.signInScoreFour || 0)
+            this.score.signInScore.push(this.signInScoreFive || 0)
+            this.score.signInScore.push(this.signInScoreSix || 0)
+            this.score.signInScore.push(this.signInScoreSeven || 0)
+
+            this.$http({
+                url: this.$http.adornUrl('/user/scoreConfig'),
+                method: 'post',
+                data: this.$http.adornData(this.score)
+            }).then(({ data }) => {
+                this.$message({
+                    message: this.$i18n.t('publics.operation'),
+                    type: 'success',
+                    duration: 1500,
+                    onClose: () => {
                         this.$nextTick(() => {
                             this.init()
                         })

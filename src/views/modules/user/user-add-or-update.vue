@@ -222,9 +222,9 @@
           <el-tab-pane :label="$t('user.couponDetails')">
             <coupon-detail ref="couponDetail" />
           </el-tab-pane>
-          <el-tab-pane :label="$t('user.growthLog')">
+          <!-- <el-tab-pane :label="$t('user.growthLog')">
             <growth-detail ref="growthDetail" />
-          </el-tab-pane>
+          </el-tab-pane> -->
         </el-tabs>
       </div>
 

@@ -93,7 +93,7 @@
           </el-table-column>
           <el-table-column prop="coupons" width="120" :label="$t('user.coupons')" />
           <el-table-column prop="vouchers" width="120" :label="$t('user.vouchers')" />
-          <el-table-column prop="growth" width="120" :label="$t('user.growth')" />
+          <!-- <el-table-column prop="growth" width="120" :label="$t('user.growth')" /> -->
           <el-table-column prop="score" width="120" :label="$t('user.userScore')" />
           <el-table-column prop="sumScore" width="120" :label="$t('user.cumulativeScore')" />
           <el-table-column prop="status" width="120" :label="$t('publics.status')">

@@ -175,7 +175,7 @@
           <el-radio :label="0">{{ $t("marketing.allProdsPar") }}</el-radio>
           <el-radio :label="1">{{ $t("marketing.participateInD") }}</el-radio>
           <el-radio :label="2">{{ $t("marketing.specifiedProduct") }}</el-radio>
-          <el-radio :label="3">指定分类</el-radio>
+          <!-- <el-radio :label="3">指定分类</el-radio> -->
         </el-radio-group>
       </el-form-item>
       <!-- 分类 -->

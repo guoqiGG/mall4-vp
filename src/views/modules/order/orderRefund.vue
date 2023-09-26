@@ -63,7 +63,7 @@
             ></el-input>
           </el-form-item>
 
-          <el-form-item :label="this.$i18n.t('order.orderType') + '：'">
+          <!-- <el-form-item :label="this.$i18n.t('order.orderType') + '：'">
             <template>
               <el-select
                 v-model="searchForm.orderType"
@@ -79,9 +79,9 @@
                 ></el-option>
               </el-select>
             </template>
-          </el-form-item>
+          </el-form-item> -->
 
-          <el-form-item
+          <!-- <el-form-item
             :label="this.$i18n.t('refundOrderDetail.refundType') + '：'"
           >
             <template>
@@ -102,9 +102,9 @@
                 ></el-option>
               </el-select>
             </template>
-          </el-form-item>
+          </el-form-item> -->
 
-          <el-form-item
+          <!-- <el-form-item
             :label="this.$i18n.t('refundOrderDetail.applyWay') + '：'"
           >
             <template>
@@ -123,7 +123,7 @@
                 ></el-option>
               </el-select>
             </template>
-          </el-form-item>
+          </el-form-item> -->
 
           <!-- &nbsp;&nbsp;&nbsp; -->
           <el-form-item :label="this.$i18n.t('order.createTime') + '：'">

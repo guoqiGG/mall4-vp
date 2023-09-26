@@ -4,16 +4,33 @@
     <div class="coupon-mod">
       <!-- 搜索栏 -->
       <div class="search-bar">
-        <el-form @submit.native.prevent :inline="true" class="search-form" ref="test-form" :model="searchForm"
+        <el-form @submit.native.prevent :inline="true" class="search-form" ref="searchForm" :model="searchForm"
           size="small">
           <div class="input-row">
             <el-form-item label="团长手机号:" class="search-form-item">
-              <el-input v-model="searchForm.distributionUserMobile" placeholder="团长手机号"></el-input>
+              <el-input v-model="searchForm.distributionUserMobile" placeholder="团长手机号" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="合成券名称:" class="search-form-item">
+              <el-input v-model="searchForm.name" placeholder="合成券名称" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="用户昵称:" class="search-form-item">
+              <el-input v-model="searchForm.userName" placeholder="用户昵称" clearable></el-input>
+            </el-form-item>
+            <!-- <el-form-item label="状态:" class="search-form-item">
+              <el-select v-model="searchForm.status" placeholder="核销状态" clearable>
+                <el-option label="已核销" :value="1"></el-option>
+                <el-option label="未核销" :value="0"></el-option>
+              </el-select>
+            </el-form-item> -->
+            <el-form-item label="日期:">
+              <el-date-picker size="small" v-model="date" type="datetimerange" :range-separator="$t('date.tip')"
+                value-format="yyyy-MM-dd HH:mm:ss" start-placeholder="开始时间" end-placeholder="结束时间"
+                @change="createTimeChange"></el-date-picker>
             </el-form-item>
             <el-form-item>
               <div class="default-btn primary-btn" @click="searchChange(true)">{{ $t('shopFeature.searchBar.search') }}
               </div>
-              <div class="default-btn" @click="clearSearch">{{ $t('product.reset') }}</div>
+              <div class="default-btn" @click="clearSearch('searchForm')">{{ $t('product.reset') }}</div>
               <div class="default-btn" @click="getSoldExcel()">{{ $t("order.export") }}</div>
             </el-form-item>
           </div>
@@ -30,8 +47,13 @@
             <el-table-column prop="userName" label="用户昵称"></el-table-column>
             <el-table-column prop="realName" label="团长"></el-table-column>
             <el-table-column prop="distributionUserMobile" label="团长手机号"></el-table-column>
+            <!-- <el-table-column prop="status" label="状态">
+              <template slot-scope="scope">
+                {{ scope.row.status == 1 ? '已核销' : '未核销' }}
+              </template>
+            </el-table-column> -->
             <el-table-column prop="remark" label="备注"></el-table-column>
-            <el-table-column prop="createTime" label="核销时间"></el-table-column>
+            <el-table-column prop="createTime" label="时间"></el-table-column>
           </el-table>
         </div>
       </div>
@@ -61,9 +83,15 @@ export default {
         currentPage: 1, // 当前页数
         pageSize: 10 // 每页显示多少条
       },
+      date: '',//日期
       // 头部搜索表单
       searchForm: {
-        distributionUserMobile: ''
+        distributionUserMobile: '',// 团长手机号
+        // status: '', // 核销状态
+        name: '', // 券名称
+        userName: '',// 用户姓名
+        starTime: '',//开始时间
+        endTime: '',//结束时间
       }
     }
   },
@@ -71,12 +99,27 @@ export default {
     this.getDataList()
   },
   methods: {
-    // 订单导出
+    // 导出
     getSoldExcel() {
-      // if (!this.searchForm.distributionUserMobile) {
-      //   this.$message.error(this.$i18n.t('请输入需要导出的团长手机号'))
-      //   return
+      let params = {}
+      if (this.searchForm.distributionUserMobile) {
+        params.distributionUserMobile = this.searchForm.distributionUserMobile
+      }
+      // if (this.searchForm.status) {
+      //   params.status = this.searchForm.status
       // }
+      if (this.searchForm.name) {
+        params.name = this.searchForm.name
+      }
+      if (this.searchForm.userName) {
+        params.userName = this.searchForm.userName
+      }
+      if (this.searchForm.starTime) {
+        params.starTime = this.searchForm.starTime
+      }
+      if (this.searchForm.endTime) {
+        params.endTime = this.searchForm.endTime
+      }
       this.$confirm(this.$i18n.t('order.exportReport'), this.$i18n.t('remindPop.remind'), {
         confirmButtonText: this.$i18n.t('remindPop.confirm'),
         cancelButtonText: this.$i18n.t('remindPop.cancel'),
@@ -92,10 +135,7 @@ export default {
         this.$http({
           url: this.$http.adornUrl('/platform/order/distribution/card/write/soldExcel'),
           method: 'get',
-          params: this.$http.adornParams({
-            'distributionUserMobile': this.searchForm.distributionUserMobile,
-
-          }),
+          params: this.$http.adornParams(params),
           responseType: 'blob' // 解决文件下载乱码问题
         }).then(({ data }) => {
           loading.close()
@@ -121,23 +161,35 @@ export default {
     // 获取数据列表
     getDataList(page, newData = false) {
       this.dataListLoading = true
-      if (newData || !this.theData) {
-        this.theParams = JSON.parse(JSON.stringify(this.searchForm))
-        this.theData = {
-          current: page == null ? this.page.currentPage : page.currentPage,
-          size: page == null ? this.page.pageSize : page.pageSize,
-          distributionUserMobile: this.searchForm.distributionUserMobile
-        }
-      } else {
-        this.theData.current = page == null ? this.page.currentPage : page.currentPage
-        this.theData.size = page == null ? this.page.pageSize : page.pageSize
+      this.theData = {
+        current: page == null ? this.page.currentPage : page.currentPage,
+        size: page == null ? this.page.pageSize : page.pageSize,
+      }
+      let params = {}
+      if (this.searchForm.distributionUserMobile) {
+        params.distributionUserMobile = this.searchForm.distributionUserMobile
+      }
+      // if (this.searchForm.status) {
+      //   params.status = this.searchForm.status
+      // }
+      if (this.searchForm.name) {
+        params.name = this.searchForm.name
+      }
+      if (this.searchForm.userName) {
+        params.userName = this.searchForm.userName
+      }
+      if (this.searchForm.starTime) {
+        params.starTime = this.searchForm.starTime
+      }
+      if (this.searchForm.endTime) {
+        params.endTime = this.searchForm.endTime
       }
       this.$http({
         // url: this.$http.adornUrl('/platform/shopCompany/get/wx/marketing/coupon/detail'),
         url: this.$http.adornUrl('/platform/shopCompany/get/user/coupon/list'),
         method: 'get',
         params: this.$http.adornParams(
-          Object.assign(this.theData, this.theParams), false
+          Object.assign(this.theData, params), false
         )
       }).then(({ data }) => {
         this.dataList = data.records
@@ -151,13 +203,24 @@ export default {
         }
       })
     },
+    createTimeChange() {
+      if (!this.date || this.date.length === 0) {
+        this.searchForm.starTime = null
+        this.searchForm.endTime = null
+      } else {
+        this.searchForm.starTime = this.date[0].split(' ')[0]
+        this.searchForm.endTime = this.date[1].split(' ')[0]
+
+      }
+    },
     // 条件查询
     searchChange(newData = false) {
       this.page.currentPage = 1
       this.getDataList(this.page, newData)
     },
-    clearSearch() {
-      this.searchForm.distributionUserMobile = ''
+    clearSearch(formName) {
+      this.$refs[formName].resetFields()
+      this.searchForm = {}
     },
     // 刷新回调用
     refreshChange() {

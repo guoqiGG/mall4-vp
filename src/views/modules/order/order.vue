@@ -33,15 +33,15 @@
               </el-select>
             </template>
           </el-form-item>
-          <el-form-item :label="this.$i18n.t('order.paymentMethod') + '：'">
+          <!-- <el-form-item :label="this.$i18n.t('order.paymentMethod') + '：'">
             <template>
               <el-select v-model="dataForm.payType" clearable :placeholder="this.$i18n.t('order.paymentMethod')"
                 size="small">
                 <el-option v-for="item in payType" :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select>
             </template>
-          </el-form-item>
-          <el-form-item :label="this.$i18n.t('order.orderType') + '：'">
+          </el-form-item> -->
+          <!-- <el-form-item :label="this.$i18n.t('order.orderType') + '：'">
             <template>
               <el-select v-model="dataForm.orderType" clearable :placeholder="this.$i18n.t('order.orderType')"
                 size="small">
@@ -49,13 +49,13 @@
                   :value="item.value"></el-option>
               </el-select>
             </template>
-          </el-form-item>
-          <el-form-item :label="this.$i18n.t('order.orderMold') + ':'" :label-width="lang === 'en' ? '145px' : '85px'">
+          </el-form-item> -->
+          <!-- <el-form-item :label="this.$i18n.t('order.orderMold') + ':'" :label-width="lang === 'en' ? '145px' : '85px'">
             <el-select v-model="dataForm.orderMold" clearable :placeholder="this.$i18n.t('order.pleaseSelectOrderMold')"
               size="small">
               <el-option v-for="item in orderMold" :key="item.value" :label="item.label" :value="item.value"></el-option>
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
           <!-- &nbsp;&nbsp;&nbsp; -->
           <el-form-item :label="this.$i18n.t('order.theRecipientSName') + '：'">
             <el-input style="min-width: 240px;" v-model="dataForm.receiver"
@@ -468,7 +468,8 @@
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
     <consignment-info v-if="consignmentInfoVisible" ref="consignmentInfo"
       @inputCallback="getWaitingConsignmentExcel"></consignment-info>
-    <order-send-upload v-if="uploadVisible" ref="spuUpload" :param="dataForm" @refreshDataList1="getWaitingConsignmentExcel" />
+    <order-send-upload v-if="uploadVisible" ref="spuUpload" :param="dataForm"
+      @refreshDataList1="getWaitingConsignmentExcel" />
 
   </div>
 </template>
@@ -564,14 +565,15 @@ export default {
         value: 2,
         label: this.$i18n.t('order.selfMention')
       },
-      {
-        value: 3,
-        label: this.$i18n.t('order.noNeedRequired')
-      },
-      {
-        value: 4,
-        label: this.$i18n.t('order.sameCityDelivery')
-      }],
+        // {
+        //   value: 3,
+        //   label: this.$i18n.t('order.noNeedRequired')
+        // },
+        // {
+        //   value: 4,
+        //   label: this.$i18n.t('order.sameCityDelivery')
+        // }
+      ],
       payType: [{
         value: 0,
         label: this.$i18n.t('order.pointsPayment')
@@ -982,6 +984,7 @@ export default {
         method: 'get',
         params: this.$http.adornParams({
           'prodId': this.dataForm1.prodId,
+          'status': this.status
         }),
         responseType: 'blob' // 解决文件下载乱码问题
       }).then(({ data }) => {

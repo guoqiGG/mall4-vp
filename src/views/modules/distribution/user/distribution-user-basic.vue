@@ -152,11 +152,11 @@
     </div>
 
 
-    <!-- 弹窗, 新增 / 修改 -->
+    <!-- 弹窗, 新增 / 修改  状态-->
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="refreshChange"></add-or-update>
 
-    <!-- 弹窗, 新增 / 修改 -->
-    <Info v-if="infoVisible" ref="info" @refreshDataList="refreshChange"></Info>
+    <!-- 弹窗, 新增 / 修改 信息 -->
+    <InfoUpdate v-if="infoVisible" ref="info" @refreshDataList="refreshChange"></InfoUpdate>
 
     <!-- 修改团长等级 -->
     <DistributionLevelUpdate v-if="distributionLevelVisible" ref="distributionLevel" @refreshDataList="refreshChange">
@@ -165,7 +165,7 @@
 </template>
 <script>
 import AddOrUpdate from './distribution-user-update'
-import Info from './distribution-user-info'
+import InfoUpdate from './distribution-user-info-update'
 import DistributionLevelUpdate from './distribution-level-update'
 export default {
   data() {
@@ -198,7 +198,7 @@ export default {
   },
   components: {
     AddOrUpdate,
-    Info,
+    InfoUpdate,
     DistributionLevelUpdate
   },
   created() {
@@ -245,7 +245,7 @@ export default {
     },
     // 新增 / 修改
     info(data) {
-      let aa=data
+      let aa = data
       this.infoVisible = true
       this.$nextTick(() => {
         this.$refs.info.init(aa)
