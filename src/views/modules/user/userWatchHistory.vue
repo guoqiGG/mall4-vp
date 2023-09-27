@@ -1,8 +1,10 @@
 <template>
     <div class="mod-api-userBalance">
         <div class="search-bar">
+
             <el-form @submit.native.prevent :inline="true" class="search-form" ref="searchForm" :model="searchForm"
                 size="small">
+
                 <div class="input-row">
                     <el-form-item label="日期:">
                         <el-date-picker v-model="searchForm.date" value-format="yyyy-MM-dd" type="date" placeholder="日期"
@@ -19,14 +21,14 @@
                         </el-select>
                     </el-form-item>
 
-                    <!-- <el-form-item label="会员手机号">
+                    <el-form-item label="会员手机号">
                         <el-select v-model="searchForm.userId" filterable remote clearable placeholder="会员手机号"
                             :remote-method="userIdRemoteMethod" :loading="loading" class="select-parent">
                             <el-option v-for="item in userIdDataList" :key="item.userId" :label="item.userMobile"
                                 :value="item.userId">
                             </el-option>
                         </el-select>
-                    </el-form-item> -->
+                    </el-form-item>
 
                     <el-form-item label="直播间名称">
                         <el-select v-model="searchForm.roomId" filterable remote clearable placeholder="直播间名称"
@@ -45,8 +47,12 @@
                     </el-form-item>
                 </div>
             </el-form>
-
-            <div v-if="dataList !== null">
+            <div class="query-instructions">
+                <div class="tip">查询说明</div>
+                <div>1、查询单个用户：查询条件(日期、会员手机号、直播间名称)，点击搜索按钮，即可查询用户该场直播的观看时长；</div>
+                <div>2、观看记录根据团长导出：查询条件(日期、团长手机号、直播间名称)，点击导出按钮，即可该团长下面所有用户，当场直播的所有观看时长。</div>
+            </div>
+            <div v-if="dataList !== null" class="watchTime">
                 观看时长：{{ dataList }}
             </div>
         </div>
@@ -104,28 +110,26 @@ export default {
                 })
                 return
             }
-
-            if (!this.searchForm.distributionId) {
+            if (!this.searchForm.userId) {
                 this.$message({
-                    message: '团长手机号不能为空',
+                    message: '用户手机号不能为空',
                     type: 'error',
                     duration: 1000
                 })
                 return
             }
-            this.dataListLoading = true
-            let params = {
-            }
 
+            this.dataListLoading = true
+            let params = {}
             if (this.searchForm.date) {
                 params.date = this.searchForm.date
             }
             if (this.searchForm.roomId) {
                 params.roomId = this.searchForm.roomId
             }
-            // if (this.searchForm.userId) {
-            //     params.userId = this.searchForm.userId
-            // }
+            if (this.searchForm.userId) {
+                params.userId = this.searchForm.userId
+            }
             if (this.searchForm.distributionId) {
                 params.distributionId = this.searchForm.distributionId
             }
@@ -217,15 +221,6 @@ export default {
                 })
                 return
             }
-            if (!this.searchForm.roomId) {
-                this.$message({
-                    message: '房间名称不能为空',
-                    type: 'error',
-                    duration: 1000
-                })
-                return
-            }
-
             if (!this.searchForm.distributionId) {
                 this.$message({
                     message: '团长手机号不能为空',
@@ -234,19 +229,14 @@ export default {
                 })
                 return
             }
-
-            let params = {
-            }
-
+            
+            let params = {}
             if (this.searchForm.date) {
                 params.date = this.searchForm.date
             }
             if (this.searchForm.roomId) {
                 params.roomId = this.searchForm.roomId
             }
-            // if (this.searchForm.userId) {
-            //     params.userId = this.searchForm.userId
-            // }
             if (this.searchForm.distributionId) {
                 params.distributionId = this.searchForm.distributionId
             }
@@ -291,6 +281,20 @@ export default {
         margin: 0;
         padding: 0;
     }
+}
+
+.query-instructions {
+    line-height: 25px;
+
+    .tip {
+        font-size: 18px;
+    }
+}
+
+.watchTime {
+    margin-top: 100px;
+    font-size: 20px;
+    text-align: center;
 }
 </style>
   

@@ -16,14 +16,8 @@
             <el-form-item label="用户昵称:" class="search-form-item">
               <el-input v-model="searchForm.userName" placeholder="用户昵称" clearable></el-input>
             </el-form-item>
-            <!-- <el-form-item label="状态:" class="search-form-item">
-              <el-select v-model="searchForm.status" placeholder="核销状态" clearable>
-                <el-option label="已核销" :value="1"></el-option>
-                <el-option label="未核销" :value="0"></el-option>
-              </el-select>
-            </el-form-item> -->
             <el-form-item label="日期:">
-              <el-date-picker size="small" v-model="date" type="datetimerange" :range-separator="$t('date.tip')"
+              <el-date-picker size="small" v-model="date" type="daterange" :range-separator="$t('date.tip')"
                 value-format="yyyy-MM-dd HH:mm:ss" start-placeholder="开始时间" end-placeholder="结束时间"
                 @change="createTimeChange"></el-date-picker>
             </el-form-item>
@@ -101,7 +95,7 @@ export default {
   methods: {
     // 导出
     getSoldExcel() {
-      let params = {}
+      let params = { status: 1 }
       if (this.searchForm.distributionUserMobile) {
         params.distributionUserMobile = this.searchForm.distributionUserMobile
       }
@@ -165,13 +159,13 @@ export default {
         current: page == null ? this.page.currentPage : page.currentPage,
         size: page == null ? this.page.pageSize : page.pageSize,
       }
-      let params = {}
+      let params = {
+        status: 1
+      }
       if (this.searchForm.distributionUserMobile) {
         params.distributionUserMobile = this.searchForm.distributionUserMobile
       }
-      // if (this.searchForm.status) {
-      //   params.status = this.searchForm.status
-      // }
+
       if (this.searchForm.name) {
         params.name = this.searchForm.name
       }

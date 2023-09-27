@@ -694,6 +694,8 @@ export default {
           onClose: () => {
           }
         })
+        this.checkAll = false
+        this.orderNumberList = []
         this.getDataList(this.page, {}, 1)
       })
     },
