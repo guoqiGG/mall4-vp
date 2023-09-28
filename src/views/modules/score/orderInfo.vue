@@ -470,7 +470,7 @@
                 <div class="text">礼品券：</div>
                 <div class="res">
                   <span v-for="item in dataForm.userGiftInfos">
-                    {{ item.giftName + ' : ' }}{{ item.number + ' 张' }}
+                    {{ item.giftName + '  ' }}{{ item.number + ' 张' }}
                   </span>
                 </div>
               </div>

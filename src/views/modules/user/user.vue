@@ -84,6 +84,13 @@
               <div>{{ scope.row.userMobile }}</div>
             </template>
           </el-table-column>
+          <el-table-column prop="distributionName" width="170" label="团长信息">
+            <template slot-scope="scope">
+              <div>团长:{{ scope.row.distributionName ? scope.row.distributionName : '-' }}</div>
+              <div>手机号:{{ scope.row.distributionTel ? scope.row.distributionTel : '-' }}</div>
+              <div>自提点:{{ scope.row.stationName ? scope.row.stationName : '-' }}</div>
+            </template>
+          </el-table-column>
           <el-table-column prop="userGroup" width="120" :label="$t('user.userGroup')" />
           <el-table-column prop="levelName" width="120" :label="$t('user.membershipLevel')" />
           <el-table-column prop="levelType" width="120" :label="$t('user.memberType')">
@@ -129,7 +136,7 @@
           <el-table-column width="120" prop="afterSaleTimes" :label="$t('user.refundTimes')" />
           <el-table-column width="120" prop="currentBalance" :label="$t('user.currentBalance')" />
           <el-table-column width="120" prop="sumBalance" :label="$t('user.cumulativeBalances')" />
-          <el-table-column fixed="right" align="center" :label="$t('crud.menu')" width="230">
+          <el-table-column fixed="right" align="center" :label="$t('crud.menu')" width="270">
             <template slot-scope="scope">
               <div class="text-btn-con">
                 <div class="text-btn default-btn" v-if="isAuth('plateform:user:update')"
@@ -138,10 +145,11 @@
                   @click.stop="updateBalance(scope.row.userId, 0, scope.row.currentBalance)">{{ $t('user.modifyBalance')
                   }}
                 </div>
+                <div v-if="!scope.row.distributionName" class="default-btn text-btn"
+                  @click.stop="updateDistribution(scope.row)">绑定团长</div>
               </div>
             </template>
           </el-table-column>
-
           <div slot="empty">
             &nbsp;
           </div>
@@ -153,7 +161,8 @@
     </div>
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="refreshChange"></add-or-update>
-    <update-user-group v-if="updateUserGroupVisible" ref="updateUserGroup" @refreshDataList="refreshChange"></update-user-group>
+    <update-user-group v-if="updateUserGroupVisible" ref="updateUserGroup"
+      @refreshDataList="refreshChange"></update-user-group>
     <update-growth v-if="updateGrowthVisible" ref="updateGrowth" @refreshDataList="refreshChange"></update-growth>
     <update-score v-if="updateScoreVisible" ref="updateScore" @refreshDataList="refreshChange"></update-score>
     <update-tags v-if="updateTagsVisible" ref="updateTags" @refreshDataList="refreshChange"></update-tags>
@@ -161,6 +170,8 @@
     <update-coupon v-if="updateCouponVisible" ref="updateCoupon" :getWay="1"
       @refreshDataList="refreshChange"></update-coupon>
     <update-voucher v-if="updateVoucherVisible" ref="updateVoucher" @refreshDataList="refreshChange"></update-voucher>
+    <update-distribution v-if="updateDistributionVisible" ref="updateDistribution"
+      @refreshDataList="refreshChange"></update-distribution>
     <import-user v-if="importUserVisible" ref="importUser" @refreshDataList="refreshChange"></import-user>
   </div>
 </template>
@@ -174,6 +185,7 @@ import UpdateTags from './update-user-tags'
 import UpdateBalance from './update-user-balance'
 import UpdateCoupon from './update-user-copon'
 import UpdateVoucher from './update-user-voucher'
+import UpdateDistribution from './update-user-distribution'
 import ImportUser from './excel-user-import'
 import { clearLoginInfo } from '@/utils'
 
@@ -209,6 +221,7 @@ export default {
       updateBalanceVisible: false,
       updateCouponVisible: false,
       updateVoucherVisible: false,
+      updateDistributionVisible: false,
       dataListSelections: [],
       addOrUpdateVisible: false,
       updateUserGroupVisible: false,
@@ -273,7 +286,8 @@ export default {
     UpdateCoupon,
     UpdateVoucher,
     ImportUser,
-    UpdateBalance
+    UpdateBalance,
+    UpdateDistribution
   },
   mounted() {
     this.getMemberLevelList()
@@ -457,6 +471,13 @@ export default {
       this.updateBalanceVisible = true
       this.$nextTick(() => {
         this.$refs.updateBalance.init(ids, type, balance)
+      })
+    },
+    // 修改团长
+    updateDistribution(data) {
+      this.updateDistributionVisible = true
+      this.$nextTick(() => {
+        this.$refs.updateDistribution.init(data)
       })
     },
     updateCoupon(id) {

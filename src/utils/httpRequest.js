@@ -23,13 +23,12 @@ http.interceptors.request.use(
     // 不用校验权限的接口
     const array = [
       "/order/refund/refundRequest",
-      "platform/order/ship/exportOrderExcel",
+      "/platform/order/ship/exportOrderExcel",
+      "/platform/order/ship/goods/exportOrderExcel",
+      "/order/order/exportOrderExcel",
+      "/order/order/unDeliveryOrderExcel",
     ];
-
-    if (!array.includes(config.url)) {
-      config.headers["Authorization"] = Vue.cookie.get("bbcAuthorization_vp"); // 请求头带上token
-    }
-
+    config.headers["Authorization"] = Vue.cookie.get("bbcAuthorization_vp"); // 请求头带上token
     config.headers["locale"] = localStorage.getItem("bbcLang") || "zh_CN";
     // 只针对get方式进行序列化
     if (config.method === "get" || config.method === "GET") {

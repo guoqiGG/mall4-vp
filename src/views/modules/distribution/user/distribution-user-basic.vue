@@ -120,12 +120,15 @@
             </template>
           </el-table-column>
           <!-- 操作 -->
-          <el-table-column fixed="right" align="center" :label="$t('publics.operating')" width="200">
+          <el-table-column fixed="right" align="center" :label="$t('publics.operating')" width="270">
             <template slot-scope="scope">
               <div class="text-btn-con">
                 <div v-if="isAuth('distribution:distributionUserLevel:update')" class="default-btn text-btn"
                   @click="distributionLevelUpdateHandle(scope.row)">
                   修改等级
+                </div>
+                <div class="default-btn text-btn" @click="distributionReplaceUpdateHandle(scope.row)">
+                  团长更换
                 </div>
                 <div v-if="isAuth('distribution:distributionUser:info')" class="default-btn text-btn"
                   @click="info(scope.row)">
@@ -161,12 +164,17 @@
     <!-- 修改团长等级 -->
     <DistributionLevelUpdate v-if="distributionLevelVisible" ref="distributionLevel" @refreshDataList="refreshChange">
     </DistributionLevelUpdate>
+    <!-- 团长更换 -->
+    <DistributionReplaceUpdate v-if="distributionReplaceVisible" ref="distributionReplace"
+      @refreshDataList="refreshChange">
+    </DistributionReplaceUpdate>
   </div>
 </template>
 <script>
 import AddOrUpdate from './distribution-user-update'
 import InfoUpdate from './distribution-user-info-update'
 import DistributionLevelUpdate from './distribution-level-update'
+import DistributionReplaceUpdate from './distribution-replace-update'
 export default {
   data() {
     return {
@@ -191,6 +199,7 @@ export default {
       dataListLoading: false,
       addOrUpdateVisible: false,
       distributionLevelVisible: false,
+      distributionReplaceVisible: false,
       infoVisible: false,
       sortParam: 1, // 0无 1加入时间 2累计客户 3累计邀请 4累计收益
       sortType: 2 // 0无 1 正序 2倒序
@@ -199,7 +208,8 @@ export default {
   components: {
     AddOrUpdate,
     InfoUpdate,
-    DistributionLevelUpdate
+    DistributionLevelUpdate,
+    DistributionReplaceUpdate
   },
   created() {
     this.getDataList()
@@ -241,6 +251,13 @@ export default {
       this.distributionLevelVisible = true
       this.$nextTick(() => {
         this.$refs.distributionLevel.init(data)
+      })
+    },
+    // 团长更换
+    distributionReplaceUpdateHandle(data) {
+      this.distributionReplaceVisible = true
+      this.$nextTick(() => {
+        this.$refs.distributionReplace.init(data)
       })
     },
     // 新增 / 修改

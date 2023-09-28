@@ -582,7 +582,7 @@ export default {
           this.dataForm.launchTime = this.dataForm.launchTime && this.launchTimeValue ? this.dataForm.launchTime + ' ' + this.launchTimeValue + ':00' : ''
           this.dataForm.startTime = this.dataForm.startTime && this.startTimeValue ? this.dataForm.startTime + ' ' + this.startTimeValue + ':00' : ''
           this.dataForm.endTime = this.dataForm.endTime && this.endTimeValue ? this.dataForm.endTime + ' ' + this.endTimeValue + ':00' : ''
-          if (this.dataForm.couponType === 1 && this.dataForm.cashCondition && (parseFloat(this.dataForm.cashCondition) <= parseFloat(this.dataForm.reduceAmount))) {
+          if (this.dataForm.couponType === 1 && this.dataForm.cashCondition && (parseFloat(this.dataForm.cashCondition) < parseFloat(this.dataForm.reduceAmount))) {
             this.$message.error(this.$i18n.t('marketing.amounnCannotBe'))
             return false
           }

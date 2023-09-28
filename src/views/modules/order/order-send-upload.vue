@@ -1,6 +1,6 @@
 <template>
     <!-- 发货信息，用于导出代发货订单的excel交给快递公司 -->
-    <el-dialog :modal="false" :title="$t('order.uploadTips1')" :close-on-click-modal="false" :visible.sync="visible"
+    <el-dialog :modal="false" title="请选择操作,同时只能上传一个文件" :close-on-click-modal="false" :visible.sync="visible"
         width="38%" class="box">
         <div class="tips">
             <p>
@@ -18,9 +18,8 @@
         <el-upload ref="upload" v-loading="loading" :auto-upload="false" :v-loading="loading"
             :before-upload="beforeAvatarUpload" :file-list="files" :limit="1" :on-error="uploadFalse"
             :on-preview="handlePreview" :on-remove="handleRemove" :on-success="uploadSuccess"
-            :action="this.$http.adornUrl('/platform/order/ship/exportOrderExcel')"
-            :headers="{ Authorization: $cookie.get('bbcAuthorization_vs'), locale: lang }" class="upload-demo"
-            name="orderExcelFile">
+            :action="this.$http.adornUrl('/platform/order/ship/exportOrderExcel')" name="orderExcelFile">
+            <!-- :headers="{ Authorization: $cookie.get('bbcAuthorization_vs'), locale: lang }" class="upload-demo" -->
             <!-- :file-list="fileList" -->
             <!-- multiple -->
             <div slot="tip" class="el-upload__tip" />
@@ -123,7 +122,7 @@ export default {
         },
         uploadFalse(response) {
             this.loading = false
-            alert(this.$i18n.t('order.fileUploadFail'))
+            alert('文件上传失败')
         },
         init(id) {
             this.visible = true
@@ -162,9 +161,9 @@ export default {
         },
         handlePreview(file) {
             if (file.response.status) {
-                alert(this.$i18n.t('order.fileSuccess'))
+                alert('文件导入成功')
             } else {
-                alert(this.$i18n.t('order.fileFail'))
+                alert('文件导入失败')
             }
             this.visible = false
             this.$emit('refreshDataList1')

@@ -76,7 +76,7 @@
           style="width: 100%" @selection-change="selectionChange" @sort-change="changeTableSort"
           @cell-mouse-enter="enterTableRow" @cell-mouse-leave="leaveTableRow">
           <el-table-column type="selection" prop="prodId" width="55" />
-          <el-table-column fixed prop="prodId" width="55" label="ID"/>
+          <el-table-column fixed prop="prodId" width="55" label="ID" />
           <el-table-column fixed prop="shopName" :label="$t('prodList.shopName')" width="auto">
             <template slot-scope="scope">
               <span class="table-cell-text">{{ scope.row.shopName }}</span>
@@ -147,6 +147,7 @@
             </template>
           </el-table-column>
           <el-table-column align="center" prop="actualSoldNum" label="总销量"></el-table-column>
+          <el-table-column align="center" prop="dailySales" label="今日销量"></el-table-column>
           <!-- <el-table-column prop="prodType" :label="$t('product.prodType')" width="120">
             <template slot-scope="scope">
               <div class="tag-text">

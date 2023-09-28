@@ -100,7 +100,9 @@
             <div class="default-btn primary-btn" @click="searchChange(true)">{{ $t("order.query") }}</div>
             <div class="default-btn" @click="getSoldExcel()">{{ $t("order.export") }}</div>
             <div class="default-btn" @click="clear()">{{ $t("product.reset") }}</div>
-            <div class="default-btn" @click="uploadSpu">批量收货</div>
+            <div class="default-btn" @click="uploadSpu">快递批量发货</div>
+            <div class="default-btn" @click="pickUpBulkDeliveryUpload">自提批量发货</div>
+            <div class="default-btn" @click="orderSendUploadMethod">批量收货</div>
           </el-form-item>
         </div>
         <!-- <div class="operation-box">
@@ -468,10 +470,17 @@
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
     <consignment-info v-if="consignmentInfoVisible" ref="consignmentInfo"
       @inputCallback="getWaitingConsignmentExcel"></consignment-info>
-    <order-send-upload v-if="uploadVisible" ref="spuUpload" :param="dataForm"
-      @refreshDataList1="getWaitingConsignmentExcel" />
 
-  </div>
+    <!-- /修改物流弹窗 -->
+    <!-- 快递 -->
+    <order-upload v-if="uploadVisible" ref="spuUpload" :param="dataForm" @refreshDataList1="getWaitingConsignmentExcel" />
+    <!-- 自提 -->
+    <pick-up-bulk-delivery v-if="pickUpBulkDeliverUploadVisible" ref="pickUpBulkDeliveryUploadSpu"
+      @refreshDataList1="getWaitingConsignmentExcel" />
+      <!-- 收货 不分快递自提 -->
+    <order-send-upload v-if="orderSendUploadVisible" ref="orderSendUpload"
+      @refreshDataList1="getWaitingConsignmentExcel" />
+   </div>   
 </template>
 
 <script>
@@ -479,7 +488,9 @@ import AddOrUpdate from './orderInfo'
 import ConsignmentInfo from './consignment-info'
 import moment from 'moment'
 import ProdPic from '@/components/prod-pic'
-import OrderSendUpload from './order-send-upload'
+import OrderSendUpload from './order-send-upload' // 一键收货 不分自提和快递
+import OrderUpload from './order-upload' // 快递批量发货
+import PickUpBulkDelivery from './order-pickup-upload' // 自提批量发货
 import { isAuth } from '@/utils'
 export default {
   name: 'order-order',
@@ -609,7 +620,9 @@ export default {
       orderNumberList: [],
       orderIdList: [],
       prodDataList: [],
-      uploadVisible: false,// 是否显示批量发货弹窗
+      uploadVisible: false,// 快递
+      pickUpBulkDeliverUploadVisible: false, // 自提
+      orderSendUploadVisible: false, // 收货
     }
   },
   computed: {
@@ -623,7 +636,9 @@ export default {
     AddOrUpdate,
     ConsignmentInfo,
     ProdPic,
-    OrderSendUpload
+    OrderSendUpload,
+    OrderUpload,
+    PickUpBulkDelivery
   },
   created() {
     // 首页跳转状态参数
@@ -1022,13 +1037,30 @@ export default {
         this.prodDataList = data.records
       })
     },
-    // 打开导入框
+    // 快递批量发货
     uploadSpu() {
+      this.dataForm.startTime = this.dateRange === null ? null : this.dateRange[0]
+      this.dataForm.endTime = this.dateRange === null ? null : this.dateRange[1]
       this.uploadVisible = true
       this.$nextTick(() => {
         this.$refs.spuUpload.init()
       })
     },
+    // 自提批量发货
+    pickUpBulkDeliveryUpload() {
+      this.pickUpBulkDeliverUploadVisible = true
+      this.$nextTick(() => {
+        this.$refs.pickUpBulkDeliveryUploadSpu.init()
+      })
+    },
+    // 批量收货(不分自提和快递)
+    orderSendUploadMethod() {
+      this.orderSendUploadVisible = true
+      this.$nextTick(() => {
+        this.$refs.orderSendUpload.init()
+      })
+    },
+
     getWaitingConsignmentExcel() {
       this.getDataList(this.page)
     },

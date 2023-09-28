@@ -221,14 +221,14 @@ export default {
                 })
                 return
             }
-            if (!this.searchForm.distributionId) {
-                this.$message({
-                    message: '团长手机号不能为空',
-                    type: 'error',
-                    duration: 1000
-                })
-                return
-            }
+            // if (!this.searchForm.distributionId) {
+            //     this.$message({
+            //         message: '团长手机号不能为空',
+            //         type: 'error',
+            //         duration: 1000
+            //     })
+            //     return
+            // }
             
             let params = {}
             if (this.searchForm.date) {

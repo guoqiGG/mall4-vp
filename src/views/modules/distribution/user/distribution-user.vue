@@ -1,18 +1,18 @@
 <template>
   <div class="mod-marketing-distribution">
     <el-tabs @tab-click="hanldeClick">
-        <el-tab-pane label="团长管理">
-          <user />
-        </el-tab-pane>
-        <el-tab-pane label="团长审核">
-          <auditing />
-        </el-tab-pane>
-        <el-tab-pane :label="$t('user.relationshipSearch')">
-          <bind />
-        </el-tab-pane>
-        <el-tab-pane :label="$t('user.blockingRecords')">
-          <ban ref="ban" ></ban>
-        </el-tab-pane>
+      <el-tab-pane label="团长管理">
+        <user />
+      </el-tab-pane>
+      <el-tab-pane label="团长审核">
+        <auditing />
+      </el-tab-pane>
+      <el-tab-pane :label="$t('user.relationshipSearch')">
+        <bind />
+      </el-tab-pane>
+      <el-tab-pane :label="$t('user.blockingRecords')">
+        <ban ref="ban"></ban>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -31,13 +31,13 @@ export default {
     bind,
     ban
   },
-  data () {
+  data() {
     return {
 
     }
   },
   methods: {
-    hanldeClick (el) {
+    hanldeClick(el) {
       this.$nextTick(() => {
         if (Number(el.index) === 3) {
           this.$refs.ban.getDataList()
