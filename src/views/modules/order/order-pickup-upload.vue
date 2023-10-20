@@ -69,7 +69,7 @@ export default {
       //   alert(data)
       // }
       this.loading = false
-      alert(response.data || '上传成功')
+      alert(response.msg || '上传成功')
       this.files = []
       this.visible = false
       this.$emit('refreshDataList1')

@@ -54,12 +54,12 @@
 
           <el-table-column label="门店" width="200">
             <template slot-scope="scope">
-              {{ scope.row.station.stationName }}
+              {{ scope.row.station?scope.row.station.stationName:'-' }}
             </template>
           </el-table-column>
           <el-table-column label="门店地址" width="200">
             <template slot-scope="scope">
-              {{ scope.row.station.province + scope.row.station.city + scope.row.station.area + scope.row.station.addr }}
+              {{ scope.row.station?(scope.row.station.province + scope.row.station.city + scope.row.station.area + scope.row.station.addr):'-' }}
             </template>
           </el-table-column>
           <!-- 邀请人手机号 -->

@@ -1,35 +1,69 @@
 <template>
   <div class="mod-order-order">
     <div class="search-bar">
-      <el-form @submit.native.prevent :inline="true" :model="dataForm" @keyup.enter.native="getDataList(this.page)"
-        size="small">
+      <el-form
+        @submit.native.prevent
+        :inline="true"
+        :model="dataForm"
+        @keyup.enter.native="getDataList(this.page)"
+        size="small"
+      >
         <div class="input-row">
           <!-- &nbsp;&nbsp;&nbsp; -->
           <el-form-item :label="this.$i18n.t('order.number') + '：'">
-            <el-input v-model="dataForm.orderNumber" :placeholder="this.$i18n.t('order.number')" clearable
-              size="small"></el-input>
+            <el-input
+              v-model="dataForm.orderNumber"
+              :placeholder="this.$i18n.t('order.number')"
+              clearable
+              size="small"
+            ></el-input>
           </el-form-item>
           <!-- <el-form-item label="商品名称：">
             <el-input v-model="dataForm.prodName" placeholder="请输入商品名称" clearable></el-input>
           </el-form-item>-->
           <el-form-item :label="this.$i18n.t('prodList.shopName') + '：'">
-            <el-input style="min-width: 210px;" v-model="dataForm.shopName"
-              :placeholder="this.$i18n.t('prodList.inputShopName')" clearable size="small"></el-input>
+            <el-input
+              style="min-width: 210px"
+              v-model="dataForm.shopName"
+              :placeholder="this.$i18n.t('prodList.inputShopName')"
+              clearable
+              size="small"
+            ></el-input>
           </el-form-item>
           <el-form-item :label="this.$i18n.t('order.status') + '：'">
             <template>
-              <el-select v-model="status" clearable :placeholder="this.$i18n.t('order.statusMsg')" size="small"
-                @change="orderStatus">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              <el-select
+                v-model="status"
+                clearable
+                :placeholder="this.$i18n.t('order.statusMsg')"
+                size="small"
+                @change="orderStatus"
+              >
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
               </el-select>
             </template>
           </el-form-item>
           <!-- &nbsp;&nbsp;&nbsp; -->
           <el-form-item :label="this.$i18n.t('order.afterSalesStatus') + '：'">
             <template>
-              <el-select style="min-width: 230px;" v-model="dataForm.refundStatus" clearable
-                :placeholder="this.$i18n.t('order.pleSelAfterSalesSta')" size="small">
-                <el-option v-for="item in refund" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              <el-select
+                style="min-width: 230px"
+                v-model="dataForm.refundStatus"
+                clearable
+                :placeholder="this.$i18n.t('order.pleSelAfterSalesSta')"
+                size="small"
+              >
+                <el-option
+                  v-for="item in refund"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
               </el-select>
             </template>
           </el-form-item>
@@ -58,51 +92,96 @@
           </el-form-item> -->
           <!-- &nbsp;&nbsp;&nbsp; -->
           <el-form-item :label="this.$i18n.t('order.theRecipientSName') + '：'">
-            <el-input style="min-width: 240px;" v-model="dataForm.receiver"
-              :placeholder="this.$i18n.t('order.pleaseEnRecipName')" clearable size="small"></el-input>
+            <el-input
+              style="min-width: 240px"
+              v-model="dataForm.receiver"
+              :placeholder="this.$i18n.t('order.pleaseEnRecipName')"
+              clearable
+              size="small"
+            ></el-input>
           </el-form-item>
           <el-form-item :label="this.$i18n.t('order.contactTel') + '：'">
-            <el-input style="min-width: 340px;" v-model="dataForm.mobile"
-              :placeholder="this.$i18n.t('order.pleaseEnterNumber')" clearable type="number" size="small"
-              class="myinput-appearance"></el-input>
+            <el-input
+              style="min-width: 340px"
+              v-model="dataForm.mobile"
+              :placeholder="this.$i18n.t('order.pleaseEnterNumber')"
+              clearable
+              type="number"
+              size="small"
+              class="myinput-appearance"
+            ></el-input>
           </el-form-item>
           <el-form-item :label="this.$i18n.t('order.logisticsType') + '：'">
             <template>
-              <el-select style="min-width: 210px;" v-model="dataForm.dvyType" clearable
-                :placeholder="this.$i18n.t('order.selectLogType')" size="small">
-                <el-option v-for="item in dvyType" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              <el-select
+                style="min-width: 210px"
+                v-model="dataForm.dvyType"
+                clearable
+                :placeholder="this.$i18n.t('order.selectLogType')"
+                size="small"
+              >
+                <el-option
+                  v-for="item in dvyType"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
               </el-select>
             </template>
           </el-form-item>
           <el-form-item :label="this.$i18n.t('order.pickUpPoint') + '：'">
-            <el-input v-model="dataForm.stationName" :placeholder="this.$i18n.t('order.pickUpPoint')" clearable
-              size="small"></el-input>
+            <el-input
+              v-model="dataForm.stationName"
+              :placeholder="this.$i18n.t('order.pickUpPoint')"
+              clearable
+              size="small"
+            ></el-input>
           </el-form-item>
           <!-- &nbsp;&nbsp;&nbsp; -->
           <el-form-item :label="this.$i18n.t('order.createTime') + '：'">
-            <el-date-picker size="small" v-model="dateRange" type="datetimerange" range-separator="—"
-              value-format="yyyy-MM-dd HH:mm:ss" :start-placeholder="this.$i18n.t('date.start')"
-              :end-placeholder="this.$i18n.t('date.end')"></el-date-picker>
-            <div style="margin-left: 20px;" class="default-btn" @click="setDateRange(1)">{{
-              $t("date.t")
-            }}</div>
-            <div class="default-btn" @click="setDateRange(2)">{{
-              $t("date.y")
-            }}</div>
-            <div class="default-btn" @click="setDateRange(3)">{{
-              $t("date.n")
-            }}</div>
-            <div class="default-btn" @click="setDateRange(4)">{{
-              $t("th")
-            }}</div>
+            <el-date-picker
+              size="small"
+              v-model="dateRange"
+              type="datetimerange"
+              range-separator="—"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              :start-placeholder="this.$i18n.t('date.start')"
+              :end-placeholder="this.$i18n.t('date.end')"
+            ></el-date-picker>
+            <div
+              style="margin-left: 20px"
+              class="default-btn"
+              @click="setDateRange(1)"
+            >
+              {{ $t("date.t") }}
+            </div>
+            <div class="default-btn" @click="setDateRange(2)">
+              {{ $t("date.y") }}
+            </div>
+            <div class="default-btn" @click="setDateRange(3)">
+              {{ $t("date.n") }}
+            </div>
+            <div class="default-btn" @click="setDateRange(4)">
+              {{ $t("th") }}
+            </div>
           </el-form-item>
           <el-form-item>
-            <div class="default-btn primary-btn" @click="searchChange(true)">{{ $t("order.query") }}</div>
-            <div class="default-btn" @click="getSoldExcel()">{{ $t("order.export") }}</div>
-            <div class="default-btn" @click="clear()">{{ $t("product.reset") }}</div>
-            <div class="default-btn" @click="uploadSpu">快递批量发货</div>
-            <div class="default-btn" @click="pickUpBulkDeliveryUpload">自提批量发货</div>
-            <div class="default-btn" @click="orderSendUploadMethod">批量收货</div>
+            <div class="default-btn primary-btn" @click="searchChange(true)">
+              {{ $t("order.query") }}
+            </div>
+            <div class="default-btn" @click="getSoldExcel()">
+              {{ $t("order.export") }}
+            </div>
+            <div class="default-btn" @click="clear()">
+              {{ $t("product.reset") }}
+            </div>
+            <!-- <div class="default-btn" @click="uploadSpu">快递批量发货</div> -->
+            <div class="default-btn" @click="pickUpBulkDeliveryUpload">
+              自提批量发货
+            </div>
+            <div class="default-btn" @click="orderSendUploadMethod">
+              批量收货
+            </div>
           </el-form-item>
         </div>
         <!-- <div class="operation-box">
@@ -128,19 +207,36 @@
           </el-form-item>
         </div>-->
       </el-form>
-      <el-form @submit.native.prevent :inline="true" :model="dataForm1" size="small">
+      <el-form
+        @submit.native.prevent
+        :inline="true"
+        :model="dataForm1"
+        size="small"
+      >
         <div class="input-row">
           <!-- &nbsp;&nbsp;&nbsp; -->
           <el-form-item label="商品名称：">
             <template>
-              <el-select style="min-width: 230px;" v-model="dataForm1.prodId" clearable placeholder="商品名称" size="small">
-                <el-option v-for="item in prodDataList" :key="item.prodId" :label="item.prodName"
-                  :value="item.prodId"></el-option>
+              <el-select
+                style="min-width: 230px"
+                v-model="dataForm1.prodId"
+                clearable
+                placeholder="商品名称"
+                size="small"
+              >
+                <el-option
+                  v-for="item in prodDataList"
+                  :key="item.prodId"
+                  :label="item.prodName"
+                  :value="item.prodId"
+                ></el-option>
               </el-select>
             </template>
           </el-form-item>
           <el-form-item>
-            <div class="default-btn" @click="getSoldExcelByProd()">按商品导出</div>
+            <div class="default-btn" @click="getSoldExcelByProd()">
+              按商品导出
+            </div>
           </el-form-item>
         </div>
       </el-form>
@@ -148,27 +244,61 @@
     <div class="main-container main">
       <div class="content">
         <!-- 导航 -->
-        <div :class="['order-status-nav', 'clearfix', showHeadScroll ? 'status-nav-bottom' : '']">
+        <div
+          :class="[
+            'order-status-nav',
+            'clearfix',
+            showHeadScroll ? 'status-nav-bottom' : '',
+          ]"
+        >
           <ul class="nav-list clearfix">
-            <li :class="['nav-item', sts == 0 ? 'selected' : '']" data-sts="0" @click="selectNav($event)">
+            <li
+              :class="['nav-item', sts == 0 ? 'selected' : '']"
+              data-sts="0"
+              @click="selectNav($event)"
+            >
               {{ $t("date.a") }}
             </li>
-            <li :class="['nav-item', sts == 1 ? 'selected' : '']" data-sts="1" @click="selectNav($event)">
+            <li
+              :class="['nav-item', sts == 1 ? 'selected' : '']"
+              data-sts="1"
+              @click="selectNav($event)"
+            >
               {{ $t("order.pendingPayment") }}
             </li>
-            <li :class="['nav-item', sts == 2 ? 'selected' : '']" data-sts="2" @click="selectNav($event)">
+            <li
+              :class="['nav-item', sts == 2 ? 'selected' : '']"
+              data-sts="2"
+              @click="selectNav($event)"
+            >
               {{ $t("order.toBeShipped") }}
             </li>
-            <li :class="['nav-item', sts == 3 ? 'selected' : '']" data-sts="3" @click="selectNav($event)">
+            <li
+              :class="['nav-item', sts == 3 ? 'selected' : '']"
+              data-sts="3"
+              @click="selectNav($event)"
+            >
               {{ $t("order.pendingReceipt") }}
             </li>
-            <li :class="['nav-item', sts == 5 ? 'selected' : '']" data-sts="5" @click="selectNav($event)">
+            <li
+              :class="['nav-item', sts == 5 ? 'selected' : '']"
+              data-sts="5"
+              @click="selectNav($event)"
+            >
               {{ $t("order.successfulTransaction") }}
             </li>
-            <li :class="['nav-item', sts == 6 ? 'selected' : '']" data-sts="6" @click="selectNav($event)">
+            <li
+              :class="['nav-item', sts == 6 ? 'selected' : '']"
+              data-sts="6"
+              @click="selectNav($event)"
+            >
               {{ $t("order.transactionFailed") }}
             </li>
-            <li :class="['nav-item', sts == 7 ? 'selected' : '']" data-sts="7" @click="selectNav($event)">
+            <li
+              :class="['nav-item', sts == 7 ? 'selected' : '']"
+              data-sts="7"
+              @click="selectNav($event)"
+            >
               {{ $t("group.waitGroup") }}
             </li>
             <li v-if="status == 3" class="nav-item" @click="oneClickDelivery()">
@@ -179,19 +309,33 @@
         </div>
 
         <!-- 列标题 -->
-        <div :class="['tit', showHeadScroll ? sidebarFold ? 'fixed-top-fold' : 'fixed-top' : '']">
+        <div
+          :class="[
+            'tit',
+            showHeadScroll
+              ? sidebarFold
+                ? 'fixed-top-fold'
+                : 'fixed-top'
+              : '',
+          ]"
+        >
           <el-row style="width: 100%">
-            <el-col :span="1" style="text-align: center;">
-              <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll"
-                @change="handleCheckAllChange"></el-checkbox>
+            <el-col :span="1" style="text-align: center">
+              <el-checkbox
+                :indeterminate="isIndeterminate"
+                v-model="checkAll"
+                @change="handleCheckAllChange"
+              ></el-checkbox>
             </el-col>
             <el-col :span="5">
               <span class="item product">{{ $t("group.prodInfo") }}</span>
             </el-col>
             <el-col :span="2" class="transaction-price">
-              <span class="item">{{ $t("prodList.goodsPrice") }}/{{
-                $t("order.quantity")
-              }}</span>
+              <span class="item"
+                >{{ $t("prodList.goodsPrice") }}/{{
+                  $t("order.quantity")
+                }}</span
+              >
             </el-col>
             <el-col :span="3" class="column-title">
               <span class="item">{{ $t("order.paymentAmount") }}</span>
@@ -217,7 +361,10 @@
           </el-row>
         </div>
 
-        <el-checkbox-group v-model="orderNumberList" @change="handleCheckedChange">
+        <el-checkbox-group
+          v-model="orderNumberList"
+          @change="handleCheckedChange"
+        >
           <div class="prod" v-for="order in dataList" :key="order.orderId">
             <div class="prod-tit">
               <span>{{ $t("order.number") }}：{{ order.orderNumber }}</span>
@@ -228,14 +375,29 @@
             </div>
             <div class="prod-cont">
               <el-row style="width: 100%">
-                <el-col :span="1" style="height:100%;">
-                  <div style="display: flex;align-items:center;justify-content: center;height:100%;">
-                    <el-checkbox :label="order.orderNumber" :key="order.orderNumber"><br></el-checkbox>
+                <el-col :span="1" style="height: 100%">
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      height: 100%;
+                    "
+                  >
+                    <el-checkbox
+                      :label="order.orderNumber"
+                      :key="order.orderNumber"
+                      ><br
+                    /></el-checkbox>
                   </div>
                 </el-col>
                 <el-col :span="7" style="height: 100%">
                   <div class="item prod-item">
-                    <div class="items name" v-for="orderItem in order.orderItems" :key="orderItem.orderItemId">
+                    <div
+                      class="items name"
+                      v-for="orderItem in order.orderItems"
+                      :key="orderItem.orderItemId"
+                    >
                       <!-- 商品信息 -->
                       <div class="order-prod-item-info">
                         <div class="info">
@@ -247,38 +409,53 @@
                               <div class="prod-name-txt">
                                 {{ orderItem.prodName }}
                               </div>
-                              <div v-if="orderItem.skuName" class="prod-name-sku">
+                              <div
+                                v-if="orderItem.skuName"
+                                class="prod-name-sku"
+                              >
                                 {{ orderItem.skuName }}
                               </div>
-                              <div class="order-status" v-if="order.orderType === 1 || order.orderType === 2">
+                              <div
+                                class="order-status"
+                                v-if="
+                                  order.orderType === 1 || order.orderType === 2
+                                "
+                              >
                                 {{
                                   order.orderType === 1
-                                  ? $t("order.groupPurchaseOrder")
-                                  : order.orderType === 2
+                                    ? $t("order.groupPurchaseOrder")
+                                    : order.orderType === 2
                                     ? $t("order.spikeOrder")
                                     : ""
                                 }}
                               </div>
-                              <div class="order-status" v-if="order.orderMold === 1">
+                              <div
+                                class="order-status"
+                                v-if="order.orderMold === 1"
+                              >
                                 {{ $t("order.virtualOrder") }}
                               </div>
-                              <div class="order-status" v-if="!orderItem.returnMoneySts ||
-                                orderItem.returnMoneySts < 0 ||
-                                orderItem.returnMoneySts > 5
-                                ">
+                              <div
+                                class="order-status"
+                                v-if="
+                                  !orderItem.returnMoneySts ||
+                                  orderItem.returnMoneySts < 0 ||
+                                  orderItem.returnMoneySts > 5
+                                "
+                              >
                                 {{
                                   orderItem.status === 0 && order.status === 2
-                                  ? $t("order.pendingReceipt")
-                                  : [
-                                    "",
-                                    $t("order.pendingPayment"),
-                                    $t("order.toBeShipped"),
-                                    $t("order.pendingReceipt"),
-                                    "",
-                                    $t("order.successfulTransaction"),
-                                    $t("order.transactionFailed"),
-                                    $t("group.waitGroup"),
-                                  ][order.status]
+                                    ? $t("order.pendingReceipt")
+                                    : [
+                                        "",
+                                        $t("order.pendingPayment"),
+                                        $t("order.toBeShipped"),
+                                        $t("order.pendingReceipt"),
+                                        "",
+                                        $t("order.successfulTransaction"),
+                                        $t("order.transactionFailed"),
+                                        $t("group.waitGroup"),
+                                      ][order.status]
                                 }}
                               </div>
                               <div class="order-status" v-else>
@@ -293,66 +470,109 @@
                                   ][orderItem.returnMoneySts]
                                 }}
                               </div>
-                              <div class="order-status" v-if="order.dvyType === 2 || order.dvyType === 4">
+                              <div
+                                class="order-status"
+                                v-if="
+                                  order.dvyType === 2 || order.dvyType === 4
+                                "
+                              >
                                 {{
                                   order.dvyType === 2
-                                  ? $t("order.selfMention")
-                                  : order.dvyType === 4
+                                    ? $t("order.selfMention")
+                                    : order.dvyType === 4
                                     ? $t("order.sameCityDelivery")
                                     : ""
                                 }}
                               </div>
                               <!-- <span class="prod-info">{{orderItem.skuName}}</span> -->
-                              <div class="order-status" v-if="orderItem.preSaleTime !== null">
-                                {{ $t('order.EstimatedDeliveryTime') }}{{ orderItem.preSaleTime }}
+                              <div
+                                class="order-status"
+                                v-if="orderItem.preSaleTime !== null"
+                              >
+                                {{ $t("order.EstimatedDeliveryTime")
+                                }}{{ orderItem.preSaleTime }}
                               </div>
                             </div>
                           </div>
                         </div>
                         <!-- 赠品信息 -->
-                        <div v-if="orderItem.giveawayList" class="order-prod-item-give-con">
-                          <div class="giveaway-item" v-for="(giveawayItem, giveIndex) in orderItem.giveawayList"
-                            :key="giveIndex">
-                            <div class="giveaway-name"> 【{{ $i18n.t('order.giveawayPord') }}】 {{ giveawayItem.prodName }}
+                        <div
+                          v-if="orderItem.giveawayList"
+                          class="order-prod-item-give-con"
+                        >
+                          <div
+                            class="giveaway-item"
+                            v-for="(
+                              giveawayItem, giveIndex
+                            ) in orderItem.giveawayList"
+                            :key="giveIndex"
+                          >
+                            <div class="giveaway-name">
+                              【{{ $i18n.t("order.giveawayPord") }}】
+                              {{ giveawayItem.prodName }}
                             </div>
-                            <div class="giveaway-name giveaway-sku-name">{{ giveawayItem.skuName || '' }}</div>
-                            <div class="giveaway-item-sku-count"> x{{ giveawayItem.prodCount }}</div>
+                            <div class="giveaway-name giveaway-sku-name">
+                              {{ giveawayItem.skuName || "" }}
+                            </div>
+                            <div class="giveaway-item-sku-count">
+                              x{{ giveawayItem.prodCount }}
+                            </div>
                           </div>
                         </div>
                       </div>
                       <div class="prod-price">
                         <span>{{ orderItem.price.toFixed(2) }}</span>
-                        <span>{{ orderItem.prodCount
-                        }}{{ $t("marketing.item") }}</span>
+                        <span
+                          >{{ orderItem.prodCount
+                          }}{{ $t("marketing.item") }}</span
+                        >
                       </div>
                     </div>
                   </div>
                 </el-col>
-                <el-col :span="3" style="height: 100%;text-align: center;">
+                <el-col :span="3" style="height: 100%; text-align: center">
                   <div class="item">
                     <div>
                       <span class="totalprice">
                         {{ order.actualTotal.toFixed(2) }}
                         {{
                           order.score && order.score > 0
-                          ? "+ " + order.score + $t("order.score")
-                          : ""
+                            ? "+ " + order.score + $t("order.score")
+                            : ""
                         }}
                       </span>
-                      <span class="totalprice" v-if="order.freightAmount - order.platformFreeFreightAmount > 0">（{{
-                        $t("order.includingFreight") }}：
-                        {{ (order.freightAmount - order.platformFreeFreightAmount).toFixed(2) }}）</span>
-                      <span>{{ $t("order.total") }} {{ order.productNums }}
-                        {{ $t("order.piece") }}</span>
+                      <span
+                        class="totalprice"
+                        v-if="
+                          order.freightAmount -
+                            order.platformFreeFreightAmount >
+                          0
+                        "
+                        >（{{ $t("order.includingFreight") }}：
+                        {{
+                          (
+                            order.freightAmount -
+                            order.platformFreeFreightAmount
+                          ).toFixed(2)
+                        }}）</span
+                      >
+                      <span
+                        >{{ $t("order.total") }} {{ order.productNums }}
+                        {{ $t("order.piece") }}</span
+                      >
                     </div>
                   </div>
                 </el-col>
                 <el-col :span="2" style="height: 100%">
                   <div class="item">
                     <div>
-                      <span v-if="(!order.payType && order.payType != 0) || order.status === 1">{{
-                        $t("order.unpaid")
-                      }}</span>
+                      <span
+                        v-if="
+                          (!order.payType && order.payType != 0) ||
+                          order.status === 1
+                        "
+                        >{{ $t("order.unpaid") }}</span
+                      >
                       <span v-else>
                         {{
                           [
@@ -377,18 +597,25 @@
                 <el-col :span="3" style="height: 100%">
                   <div class="item">
                     <div v-if="order.distributionUserResult">
-                      <span>{{ order.distributionUserResult.distributionName + '电话：' +
-                        order.distributionUserResult.stationTel }}</span>
-                      <span style="margin-top: 5px;">{{ '门店：' + order.distributionUserResult.distributionStationName
+                      <span>{{
+                        order.distributionUserResult.distributionName +
+                        "电话：" +
+                        order.distributionUserResult.stationTel
                       }}</span>
-                      <span style="margin-top: 5px;">
-                        地址：{{ order.distributionUserResult.province + order.distributionUserResult.city +
-                          order.distributionUserResult.area + order.distributionUserResult.addr }}
+                      <span style="margin-top: 5px">{{
+                        "门店：" +
+                        order.distributionUserResult.distributionStationName
+                      }}</span>
+                      <span style="margin-top: 5px">
+                        地址：{{
+                          order.distributionUserResult.province +
+                          order.distributionUserResult.city +
+                          order.distributionUserResult.area +
+                          order.distributionUserResult.addr
+                        }}
                       </span>
                     </div>
-                    <div v-else>
-                      无
-                    </div>
+                    <div v-else>无</div>
                   </div>
                 </el-col>
                 <el-col :span="2" style="height: 100%">
@@ -407,13 +634,36 @@
                   <div class="item">
                     <!-- <span v-if="order.refundStatus === 1" size="small" type="danger">退款申请中</span> -->
                     <span>
-                      <span v-if="order.status === 1" size="small" type="danger">{{ $t("order.pendingPayment") }}</span>
-                      <span v-else-if="order.status === 2" size="small" type="danger">{{ $t("order.toBeShipped") }}</span>
-                      <span v-else-if="order.status === 3" size="small" type="danger">{{ $t("order.pendingReceipt")
-                      }}</span>
-                      <span v-else-if="order.status === 7" size="small" type="danger">{{ $t("group.waitGroup") }}</span>
-                      <span v-else-if="order.status === 5" size="small" type="danger">{{ $t("order.successfulTransaction")
-                      }}</span>
+                      <span
+                        v-if="order.status === 1"
+                        size="small"
+                        type="danger"
+                        >{{ $t("order.pendingPayment") }}</span
+                      >
+                      <span
+                        v-else-if="order.status === 2"
+                        size="small"
+                        type="danger"
+                        >{{ $t("order.toBeShipped") }}</span
+                      >
+                      <span
+                        v-else-if="order.status === 3"
+                        size="small"
+                        type="danger"
+                        >{{ $t("order.pendingReceipt") }}</span
+                      >
+                      <span
+                        v-else-if="order.status === 7"
+                        size="small"
+                        type="danger"
+                        >{{ $t("group.waitGroup") }}</span
+                      >
+                      <span
+                        v-else-if="order.status === 5"
+                        size="small"
+                        type="danger"
+                        >{{ $t("order.successfulTransaction") }}</span
+                      >
                       <span v-else-if="order.status === 6" size="small">{{
                         $t("order.transactionFailed")
                       }}</span>
@@ -422,15 +672,30 @@
                 </el-col>
                 <el-col :span="2" style="height: 100%">
                   <div class="item">
-                    <span v-if="order.refundStatus === 1" size="small" type="danger">{{ $t("order.requestARefund")
-                    }}</span>
-                    <span v-else-if="order.refundStatus === 2" size="small" type="danger">{{
-                      $t("order.refundsuccessfully")
-                    }}</span>
-                    <span v-else-if="order.refundStatus === 3" size="small" type="danger">{{ $t("order.partialRefundSucc")
-                    }}</span>
-                    <span v-else-if="order.refundStatus === 4" size="small" type="danger">{{ $t("order.refundFailed")
-                    }}</span>
+                    <span
+                      v-if="order.refundStatus === 1"
+                      size="small"
+                      type="danger"
+                      >{{ $t("order.requestARefund") }}</span
+                    >
+                    <span
+                      v-else-if="order.refundStatus === 2"
+                      size="small"
+                      type="danger"
+                      >{{ $t("order.refundsuccessfully") }}</span
+                    >
+                    <span
+                      v-else-if="order.refundStatus === 3"
+                      size="small"
+                      type="danger"
+                      >{{ $t("order.partialRefundSucc") }}</span
+                    >
+                    <span
+                      v-else-if="order.refundStatus === 4"
+                      size="small"
+                      type="danger"
+                      >{{ $t("order.refundFailed") }}</span
+                    >
                     <span v-else size="small" type="danger">{{
                       $t("order.noAfterSales")
                     }}</span>
@@ -440,12 +705,22 @@
                   <div class="item">
                     <div class="operate">
                       <!-- <button onclick="">打印订单</button><br> -->
-                      <div class="default-btn text-btn" @click="addOrUpdateHandle(order.orderNumber)">{{
-                        $t("order.seeDetails") }}</div>
-                      <div class="default-btn text-btn" @click="toImbox(order)">{{ $t("order.contactBuyer") }}</div>
-                      <div class="default-btn text-btn" @click="refundRoute(order.orderNumber)" v-if="order.refundStatus">
-                        {{
-                          $t("order.refundInformation") }}</div>
+                      <div
+                        class="default-btn text-btn"
+                        @click="addOrUpdateHandle(order.orderNumber)"
+                      >
+                        {{ $t("order.seeDetails") }}
+                      </div>
+                      <div class="default-btn text-btn" @click="toImbox(order)">
+                        {{ $t("order.contactBuyer") }}
+                      </div>
+                      <div
+                        class="default-btn text-btn"
+                        @click="refundRoute(order.orderNumber)"
+                        v-if="order.refundStatus"
+                      >
+                        {{ $t("order.refundInformation") }}
+                      </div>
                     </div>
                   </div>
                 </el-col>
@@ -463,37 +738,62 @@
         </div>
       </div>
     </div>
-    <el-pagination v-if="dataList.length" @size-change="sizeChangeHandle" @current-change="currentChangeHandle"
-      :current-page="page.currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="page.pageSize" :total="page.total"
-      layout="total, sizes, prev, pager, next, jumper"></el-pagination>
+    <el-pagination
+      v-if="dataList.length"
+      @size-change="sizeChangeHandle"
+      @current-change="currentChangeHandle"
+      :current-page="page.currentPage"
+      :page-sizes="[10, 20, 50, 100]"
+      :page-size="page.pageSize"
+      :total="page.total"
+      layout="total, sizes, prev, pager, next, jumper"
+    ></el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
-    <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
-    <consignment-info v-if="consignmentInfoVisible" ref="consignmentInfo"
-      @inputCallback="getWaitingConsignmentExcel"></consignment-info>
+    <add-or-update
+      v-if="addOrUpdateVisible"
+      ref="addOrUpdate"
+      @refreshDataList="getDataList"
+    ></add-or-update>
+    <consignment-info
+      v-if="consignmentInfoVisible"
+      ref="consignmentInfo"
+      @inputCallback="getWaitingConsignmentExcel"
+    ></consignment-info>
 
     <!-- /修改物流弹窗 -->
     <!-- 快递 -->
-    <order-upload v-if="uploadVisible" ref="spuUpload" :param="dataForm" @refreshDataList1="getWaitingConsignmentExcel" />
+    <order-upload
+      v-if="uploadVisible"
+      ref="spuUpload"
+      :param="dataForm"
+      @refreshDataList1="getWaitingConsignmentExcel"
+    />
     <!-- 自提 -->
-    <pick-up-bulk-delivery v-if="pickUpBulkDeliverUploadVisible" ref="pickUpBulkDeliveryUploadSpu"
-      @refreshDataList1="getWaitingConsignmentExcel" />
-      <!-- 收货 不分快递自提 -->
-    <order-send-upload v-if="orderSendUploadVisible" ref="orderSendUpload"
-      @refreshDataList1="getWaitingConsignmentExcel" />
-   </div>   
+    <pick-up-bulk-delivery
+      v-if="pickUpBulkDeliverUploadVisible"
+      ref="pickUpBulkDeliveryUploadSpu"
+      @refreshDataList1="getWaitingConsignmentExcel"
+    />
+    <!-- 收货 不分快递自提 -->
+    <order-send-upload
+      v-if="orderSendUploadVisible"
+      ref="orderSendUpload"
+      @refreshDataList1="getWaitingConsignmentExcel"
+    />
+  </div>
 </template>
 
 <script>
-import AddOrUpdate from './orderInfo'
-import ConsignmentInfo from './consignment-info'
-import moment from 'moment'
-import ProdPic from '@/components/prod-pic'
-import OrderSendUpload from './order-send-upload' // 一键收货 不分自提和快递
-import OrderUpload from './order-upload' // 快递批量发货
-import PickUpBulkDelivery from './order-pickup-upload' // 自提批量发货
-import { isAuth } from '@/utils'
+import AddOrUpdate from "./orderInfo";
+import ConsignmentInfo from "./consignment-info";
+import moment from "moment";
+import ProdPic from "@/components/prod-pic";
+import OrderSendUpload from "./order-send-upload"; // 一键收货 不分自提和快递
+import OrderUpload from "./order-upload"; // 快递批量发货
+import PickUpBulkDelivery from "./order-pickup-upload"; // 自提批量发货
+import { isAuth } from "@/utils";
 export default {
-  name: 'order-order',
+  name: "order-order",
   data() {
     return {
       theData: null, // 保存上次点击查询的请求条件
@@ -503,79 +803,91 @@ export default {
       sts: 0,
       dataForm: {},
       dataForm1: {
-        prodId: null
+        prodId: null,
       },
       dateRange: [],
       status: null,
-      options: [{
-        value: 1,
-        label: this.$i18n.t('order.pendingPayment')
-      },
-      {
-        value: 2,
-        label: this.$i18n.t('order.toBeShipped')
-      },
-      {
-        value: 3,
-        label: this.$i18n.t('order.pendingReceipt')
-      },
-      {
-        value: 5,
-        label: this.$i18n.t('order.successfulTransaction')
-      },
-      {
-        value: 6,
-        label: this.$i18n.t('order.transactionFailed')
-      },
-      {
-        value: 7,
-        label: this.$i18n.t('group.waitGroup')
-      }],
-      refund: [{
-        value: 0,
-        label: this.$i18n.t('order.noAfterSales')
-      },
-      {
-        value: 1,
-        label: this.$i18n.t('order.requestARefund')
-      },
-      {
-        value: 2,
-        label: this.$i18n.t('order.refundsuccessfully')
-      },
-      {
-        value: 3,
-        label: this.$i18n.t('order.partialRefundSucc')
-      },
-      {
-        value: 4,
-        label: this.$i18n.t('order.refundFailed')
-      }],
-      orderType: [{
-        value: 0,
-        label: this.$i18n.t('order.normalOrder')
-      }, {
-        value: 1,
-        label: this.$i18n.t('order.groupPurchaseOrder')
-      }, {
-        value: 2,
-        label: this.$i18n.t('order.spikeOrder')
-      }],
-      orderMold: [{
-        value: 0,
-        label: this.$i18n.t('order.physicalOrder')
-      }, {
-        value: 1,
-        label: this.$i18n.t('order.virtualOrder')
-      }],
-      dvyType: [{
-        value: 1,
-        label: this.$i18n.t('order.expressDelivery')
-      },
-      {
-        value: 2,
-        label: this.$i18n.t('order.selfMention')
-      },
+      options: [
+        {
+          value: 1,
+          label: this.$i18n.t("order.pendingPayment"),
+        },
+        {
+          value: 2,
+          label: this.$i18n.t("order.toBeShipped"),
+        },
+        {
+          value: 3,
+          label: this.$i18n.t("order.pendingReceipt"),
+        },
+        {
+          value: 5,
+          label: this.$i18n.t("order.successfulTransaction"),
+        },
+        {
+          value: 6,
+          label: this.$i18n.t("order.transactionFailed"),
+        },
+        {
+          value: 7,
+          label: this.$i18n.t("group.waitGroup"),
+        },
+      ],
+      refund: [
+        {
+          value: 0,
+          label: this.$i18n.t("order.noAfterSales"),
+        },
+        {
+          value: 1,
+          label: this.$i18n.t("order.requestARefund"),
+        },
+        {
+          value: 2,
+          label: this.$i18n.t("order.refundsuccessfully"),
+        },
+        {
+          value: 3,
+          label: this.$i18n.t("order.partialRefundSucc"),
+        },
+        {
+          value: 4,
+          label: this.$i18n.t("order.refundFailed"),
+        },
+      ],
+      orderType: [
+        {
+          value: 0,
+          label: this.$i18n.t("order.normalOrder"),
+        },
+        {
+          value: 1,
+          label: this.$i18n.t("order.groupPurchaseOrder"),
+        },
+        {
+          value: 2,
+          label: this.$i18n.t("order.spikeOrder"),
+        },
+      ],
+      orderMold: [
+        {
+          value: 0,
+          label: this.$i18n.t("order.physicalOrder"),
+        },
+        {
+          value: 1,
+          label: this.$i18n.t("order.virtualOrder"),
+        },
+      ],
+      dvyType: [
+        {
+          value: 1,
+          label: this.$i18n.t("order.expressDelivery"),
+        },
+        {
+          value: 2,
+          label: this.$i18n.t("order.selfMention"),
+        },
         // {
         //   value: 3,
         //   label: this.$i18n.t('order.noNeedRequired')
@@ -585,34 +897,40 @@ export default {
         //   label: this.$i18n.t('order.sameCityDelivery')
         // }
       ],
-      payType: [{
-        value: 0,
-        label: this.$i18n.t('order.pointsPayment')
-      }, {
-        value: 1,
-        label: this.$i18n.t('order.weixinPay')
-      }, {
-        value: 2,
-        label: this.$i18n.t('order.aliPay')
-      }, {
-        value: 3,
-        label: this.$i18n.t('publics.balancePay')
-      }, {
-        value: 4,
-        label: this.$i18n.t('order.payPalPayment')
-      }],
+      payType: [
+        {
+          value: 0,
+          label: this.$i18n.t("order.pointsPayment"),
+        },
+        {
+          value: 1,
+          label: this.$i18n.t("order.weixinPay"),
+        },
+        {
+          value: 2,
+          label: this.$i18n.t("order.aliPay"),
+        },
+        {
+          value: 3,
+          label: this.$i18n.t("publics.balancePay"),
+        },
+        {
+          value: 4,
+          label: this.$i18n.t("order.payPalPayment"),
+        },
+      ],
       resourcesUrl: process.env.VUE_APP_RESOURCES_URL,
       dataList: [],
       page: {
         total: 0, // 总页数
         currentPage: 1, // 当前页数
-        pageSize: 10 // 每页显示多少条
+        pageSize: 10, // 每页显示多少条
       },
       dataListLoading: false,
       dataListSelections: [],
       addOrUpdateVisible: false,
       consignmentInfoVisible: false,
-      lang: localStorage.getItem('bbcLang') || 'zh_CN',
+      lang: localStorage.getItem("bbcLang") || "zh_CN",
 
       oldPar: {},
       checkAll: false,
@@ -620,17 +938,21 @@ export default {
       orderNumberList: [],
       orderIdList: [],
       prodDataList: [],
-      uploadVisible: false,// 快递
+      uploadVisible: false, // 快递
       pickUpBulkDeliverUploadVisible: false, // 自提
       orderSendUploadVisible: false, // 收货
-    }
+    };
   },
   computed: {
     // 二级菜单折叠状态
     sidebarFold: {
-      get() { return this.$store.state.common.sidebarFold },
-      set(val) { this.$store.commit('common/updateSidebarFold', val) }
-    }
+      get() {
+        return this.$store.state.common.sidebarFold;
+      },
+      set(val) {
+        this.$store.commit("common/updateSidebarFold", val);
+      },
+    },
   },
   components: {
     AddOrUpdate,
@@ -638,88 +960,92 @@ export default {
     ProdPic,
     OrderSendUpload,
     OrderUpload,
-    PickUpBulkDelivery
+    PickUpBulkDelivery,
   },
   created() {
     // 首页跳转状态参数
-    this.activeName = this.$route.query.status ? String(this.$route.query.status) : '0'
-    this.sts = this.$route.query.status || 0
-    this.status = this.sts === 0 ? null : this.sts
+    this.activeName = this.$route.query.status
+      ? String(this.$route.query.status)
+      : "0";
+    this.sts = this.$route.query.status || 0;
+    this.status = this.sts === 0 ? null : this.sts;
 
     // 携带参数查询
-    this.getDataList(this.page, this.$route.query)
-    this.getProdList()
+    this.getDataList(this.page, this.$route.query);
+    this.getProdList();
   },
   activated() {
     // 携带参数查询
-    var query = this.$route.query
+    var query = this.$route.query;
     if (Object.keys(query).length > 0) {
-      this.getDataList(this.page, query)
+      this.getDataList(this.page, query);
     }
   },
   mounted() {
     // 监听页面滚动
-    window.addEventListener('scroll', this.scrollToTop)
+    window.addEventListener("scroll", this.scrollToTop);
 
-    this.resizeProportion = window.outerHeight / window.innerHeight
-    window.addEventListener('resize', function () {
-      this.resizeProportion = window.outerHeight / window.innerHeight
-    })
+    this.resizeProportion = window.outerHeight / window.innerHeight;
+    window.addEventListener("resize", function () {
+      this.resizeProportion = window.outerHeight / window.innerHeight;
+    });
   },
   methods: {
     // 处理退款
     ProcessRefund(order) {
-      console.log(order)
+      console.log(order);
     },
     handleCheckAllChange(val) {
-      console.log(val)
-      this.orderNumberList = val ? this.orderIdList : []
-      this.indeterminate = false
+      console.log(val);
+      this.orderNumberList = val ? this.orderIdList : [];
+      this.indeterminate = false;
     },
     handleCheckedChange(val) {
-      console.log(val)
-      let checkedCount = val.length
-      this.checkAll = checkedCount === this.orderIdList.length
-      this.isIndeterminate = checkedCount > 0 && checkedCount < this.orderIdList.length;
+      console.log(val);
+      let checkedCount = val.length;
+      this.checkAll = checkedCount === this.orderIdList.length;
+      this.isIndeterminate =
+        checkedCount > 0 && checkedCount < this.orderIdList.length;
     },
     // 一键发货
     oneClickDelivery() {
-      console.log(1111, this.orderNumberList.length)
+      console.log(1111, this.orderNumberList.length);
       if (!this.orderNumberList.length) {
         this.$message.error({
-          message: '请选择待收货的订单',
-          type: 'success',
+          message: "请选择待收货的订单",
+          type: "success",
           duration: 1500,
-          onClose: () => {
-          }
-        })
-        return
+          onClose: () => {},
+        });
+        return;
       }
       this.$http({
-        url: this.$http.adornUrl('/platform/order/receipt/list'),
-        method: 'put',
+        url: this.$http.adornUrl("/platform/order/receipt/list"),
+        method: "put",
         data: this.$http.adornData({
-          orderNumberList: this.orderNumberList
-        })
+          orderNumberList: this.orderNumberList,
+        }),
       }).then((data) => {
         this.$message.success({
-          message: '一键收货成功',
-          type: 'success',
+          message: "一键收货成功",
+          type: "success",
           duration: 1500,
-          onClose: () => {
-          }
-        })
-        this.checkAll = false
-        this.orderNumberList = []
-        this.getDataList(this.page, {}, 1)
-      })
+          onClose: () => {},
+        });
+        this.checkAll = false;
+        this.orderNumberList = [];
+        this.getDataList(this.page, {}, 1);
+      });
     },
     /**
      * 页面滚动事件
      */
     scrollToTop() {
-      let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
-      this.showHeadScroll = scrollTop > (400 * this.resizeProportion)
+      let scrollTop =
+        window.pageYOffset ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop;
+      this.showHeadScroll = scrollTop > 400 * this.resizeProportion;
     },
 
     /**
@@ -728,126 +1054,130 @@ export default {
     getDataList(page, params, type = 0, newData = false) {
       let par = Object.assign(
         {
-          'orderNumber': this.dataForm.orderNumber,
+          orderNumber: this.dataForm.orderNumber,
           // 'prodName': this.dataForm.prodName,
-          'shopName': this.dataForm.shopName,
-          'orderType': this.dataForm.orderType,
-          'orderMold': this.dataForm.orderMold,
-          'payType': this.dataForm.payType,
-          'receiver': this.dataForm.receiver,
-          'mobile': this.dataForm.mobile,
-          'status': this.status,
-          'dvyType': this.dataForm.dvyType,
-          'stationName': this.dataForm.stationName,
-          'refundStatus': this.dataForm.refundStatus,
-          'startTime': this.dateRange === null ? null : this.dateRange[0], // 开始时间
-          'endTime': this.dateRange === null ? null : this.dateRange[1] // 结束时间
+          shopName: this.dataForm.shopName,
+          orderType: this.dataForm.orderType,
+          orderMold: this.dataForm.orderMold,
+          payType: this.dataForm.payType,
+          receiver: this.dataForm.receiver,
+          mobile: this.dataForm.mobile,
+          status: this.status,
+          dvyType: this.dataForm.dvyType,
+          stationName: this.dataForm.stationName,
+          refundStatus: this.dataForm.refundStatus,
+          startTime: this.dateRange === null ? null : this.dateRange[0], // 开始时间
+          endTime: this.dateRange === null ? null : this.dateRange[1], // 结束时间
         },
         params
-      )
+      );
       if (type === 0) {
-        this.oldPar = par
+        this.oldPar = par;
       } else {
-        par = this.oldPar
+        par = this.oldPar;
       }
       if (newData || !this.theData) {
-        this.theData = par
+        this.theData = par;
       } else {
-        this.theData.status = this.status
+        this.theData.status = this.status;
       }
-      page = (page === undefined ? this.page : page)
-      this.dataListLoading = true
+      page = page === undefined ? this.page : page;
+      this.dataListLoading = true;
       this.$http({
-        url: this.$http.adornUrl('/platform/order/page'),
-        method: 'get',
+        url: this.$http.adornUrl("/platform/order/page"),
+        method: "get",
         params: this.$http.adornParams(
           Object.assign(
             {
               current: page == null ? this.page.currentPage : page.currentPage,
-              size: page == null ? this.page.pageSize : page.pageSize
+              size: page == null ? this.page.pageSize : page.pageSize,
             },
             this.theData
-          ), false
-        )
+          ),
+          false
+        ),
       }).then(({ data }) => {
-        this.dataList = data.records
-        this.orderIdList = []
+        this.dataList = data.records;
+        this.orderIdList = [];
         if (this.status !== 3) {
-          this.checkAll = false
-          this.isIndeterminate = false
-          this.orderNumberList = []
+          this.checkAll = false;
+          this.isIndeterminate = false;
+          this.orderNumberList = [];
         }
         if (data.records) {
           data.records.forEach((e, i) => {
-            this.orderIdList[i] = e.orderNumber
+            this.orderIdList[i] = e.orderNumber;
           });
         } else {
-          this.orderIdList = []
+          this.orderIdList = [];
         }
         // console.log(this.orderIdList)
-        this.page.total = data.total
-        this.sts = !this.status ? 0 : this.status
-        this.dataListLoading = false
-      })
+        this.page.total = data.total;
+        this.sts = !this.status ? 0 : this.status;
+        this.dataListLoading = false;
+      });
     },
     // 每页数
     sizeChangeHandle(val) {
-      this.page.pageSize = val
-      this.page.currentPage = 1
-      this.getDataList(this.page, {}, 1)
+      this.page.pageSize = val;
+      this.page.currentPage = 1;
+      this.getDataList(this.page, {}, 1);
     },
     // 当前页
     currentChangeHandle(val) {
-      this.page.currentPage = val
-      this.getDataList(this.page, {}, 1)
+      this.page.currentPage = val;
+      this.getDataList(this.page, {}, 1);
     },
 
     /**
      * 导航选择状态
      */
     selectNav(e) {
-      var sts = e.currentTarget.dataset.sts
-      this.sts = parseInt(sts)
-      this.status = this.sts === 0 ? null : parseInt(sts)
-      this.page.currentPage = 1
-      this.getDataList(this.page)
+      var sts = e.currentTarget.dataset.sts;
+      this.sts = parseInt(sts);
+      this.status = this.sts === 0 ? null : parseInt(sts);
+      this.page.currentPage = 1;
+      this.getDataList(this.page);
     },
     // 多选
     selectionChangeHandle(val) {
-      this.dataListSelections = val
+      this.dataListSelections = val;
     },
     orderStatus(val) {
-      this.status = val
-      this.sts = val
-      this.getDataList()
+      this.status = val;
+      this.sts = val;
+      this.getDataList();
     },
     /**
      * 根据选项设置时间
      * 1:今天 2:昨天 3: 近七天 4:近30天 5:近60天
      */
     setDateRange(val) {
-      var startDay = null
-      var endDay = null
+      var startDay = null;
+      var endDay = null;
       if (val === 1) {
-        startDay = 0
-        endDay = 0
+        startDay = 0;
+        endDay = 0;
       } else if (val === 2) {
-        startDay = -1
-        endDay = -1
+        startDay = -1;
+        endDay = -1;
       } else if (val === 3) {
-        startDay = -7
-        endDay = -1
+        startDay = -7;
+        endDay = -1;
       } else if (val === 4) {
-        startDay = -30
-        endDay = -1
+        startDay = -30;
+        endDay = -1;
       } else {
-        return
+        return;
       }
       // 开始时间
-      let startTime = moment().add(startDay, 'days').startOf('days').format('LL')
+      let startTime = moment()
+        .add(startDay, "days")
+        .startOf("days")
+        .format("LL");
       // 结束时间
-      let endTime = moment().add(endDay, 'days').endOf('days').format('LL')
-      this.dateRange = [startTime, endTime]
+      let endTime = moment().add(endDay, "days").endOf("days").format("LL");
+      this.dateRange = [startTime, endTime];
     },
     // 新增 / 修改
     addOrUpdateHandle(val) {
@@ -856,223 +1186,261 @@ export default {
       //   this.$refs.addOrUpdate.init(val)
       // })
       this.$router.push({
-        path: '/order-orderInfo',
+        path: "/order-orderInfo",
         query: {
-          orderNumber: val
-        }
-      })
+          orderNumber: val,
+        },
+      });
     },
     // 前往消息盒子
     toImbox(order) {
-      if (isAuth('message:message:view')) {
-        window.open(location.href.split('#')[0] + '#/imBox?userId=' + order.userId + '&orderNumber=' + order.orderNumber, 'view_window')
+      if (isAuth("message:message:view")) {
+        window.open(
+          location.href.split("#")[0] +
+            "#/imBox?userId=" +
+            order.userId +
+            "&orderNumber=" +
+            order.orderNumber,
+          "view_window"
+        );
       } else {
-        this.$message.info(this.$i18n.t('home.authTip'))
+        this.$message.info(this.$i18n.t("home.authTip"));
       }
     },
     // 退款路由跳转
     refundRoute(val) {
       // 修改缓存页面
-      this.$store.commit('router/updateIncludePageList', 'order-orderRefund')
-      this.$store.commit('router/pushHisPageList', 'order-orderRefund')
+      this.$store.commit("router/updateIncludePageList", "order-orderRefund");
+      this.$store.commit("router/pushHisPageList", "order-orderRefund");
       this.$router.push({
-        path: '/order-orderRefund',
-        query: { orderNumber: val }
-      })
+        path: "/order-orderRefund",
+        query: { orderNumber: val },
+      });
     },
     // 删除
     deleteHandle(id) {
-      var ids = id ? [id] : this.dataListSelections.map(item => {
-        return item.orderId
-      })
-      this.$confirm(this.$i18n.t('remindPop.makeSure') + ' ' + `[${id ? this.$i18n.t('remindPop.delete') : this.$i18n.t('remindPop.batchDeletion')}]` + ' ' + this.$i18n.t('remindPop.operation') + '?', this.$i18n.t('remindPop.remind'), {
-        confirmButtonText: this.$i18n.t('remindPop.confirm'),
-        cancelButtonText: this.$i18n.t('remindPop.cancel'),
-        type: 'warning'
-      }).then(() => {
-        this.$http({
-          url: this.$http.adornUrl(`/prod/spec/${ids}`),
-          method: 'delete',
-          data: this.$http.adornData(ids, false)
-        }).then(({ data }) => {
-          this.$message({
-            message: this.$i18n.t('remindPop.succeeded'),
-            type: 'success',
-            duration: 1500,
-            onClose: () => {
-              this.getDataList(this.page)
-            }
-          })
+      var ids = id
+        ? [id]
+        : this.dataListSelections.map((item) => {
+            return item.orderId;
+          });
+      this.$confirm(
+        this.$i18n.t("remindPop.makeSure") +
+          " " +
+          `[${
+            id
+              ? this.$i18n.t("remindPop.delete")
+              : this.$i18n.t("remindPop.batchDeletion")
+          }]` +
+          " " +
+          this.$i18n.t("remindPop.operation") +
+          "?",
+        this.$i18n.t("remindPop.remind"),
+        {
+          confirmButtonText: this.$i18n.t("remindPop.confirm"),
+          cancelButtonText: this.$i18n.t("remindPop.cancel"),
+          type: "warning",
+        }
+      )
+        .then(() => {
+          this.$http({
+            url: this.$http.adornUrl(`/prod/spec/${ids}`),
+            method: "delete",
+            data: this.$http.adornData(ids, false),
+          }).then(({ data }) => {
+            this.$message({
+              message: this.$i18n.t("remindPop.succeeded"),
+              type: "success",
+              duration: 1500,
+              onClose: () => {
+                this.getDataList(this.page);
+              },
+            });
+          });
         })
-      }).catch(() => { })
+        .catch(() => {});
     },
     showConsignmentInfo() {
-      this.consignmentInfoVisible = true
+      this.consignmentInfoVisible = true;
       this.$nextTick(() => {
-        this.$refs.consignmentInfo.init()
-      })
+        this.$refs.consignmentInfo.init();
+      });
     },
     // 清空按钮
     clear() {
-      this.dataForm = {}
-      this.dateRange = []
-      this.status = null
+      this.dataForm = {};
+      this.dateRange = [];
+      this.status = null;
     },
     // 搜索查询
     searchChange(newData = false) {
-      this.page.currentPage = 1
-      this.getDataList(this.page, null, 0, newData)
+      this.page.currentPage = 1;
+      this.getDataList(this.page, null, 0, newData);
     },
     // 订单导出
     getSoldExcel() {
       if (!this.dateRange || this.dateRange.length < 2) {
-        this.$message.error(this.$i18n.t('order.pleExpOrderFirst'))
-        return
+        this.$message.error(this.$i18n.t("order.pleExpOrderFirst"));
+        return;
       }
-      this.$confirm(this.$i18n.t('order.exportReport'), this.$i18n.t('remindPop.remind'), {
-        confirmButtonText: this.$i18n.t('remindPop.confirm'),
-        cancelButtonText: this.$i18n.t('remindPop.cancel'),
-        type: 'warning'
-      }).then(() => {
+      this.$confirm(
+        this.$i18n.t("order.exportReport"),
+        this.$i18n.t("remindPop.remind"),
+        {
+          confirmButtonText: this.$i18n.t("remindPop.confirm"),
+          cancelButtonText: this.$i18n.t("remindPop.cancel"),
+          type: "warning",
+        }
+      ).then(() => {
         const loading = this.$loading({
           lock: true,
-          target: '.mod-order-order',
-          customClass: 'export-load',
-          background: 'transparent',
-          text: this.$i18n.t('shop.exportIng')
-        })
+          target: ".mod-order-order",
+          customClass: "export-load",
+          background: "transparent",
+          text: this.$i18n.t("shop.exportIng"),
+        });
         this.$http({
-          url: this.$http.adornUrl('/platform/order/soldExcel'),
-          method: 'get',
+          url: this.$http.adornUrl("/platform/order/soldExcel"),
+          method: "get",
           params: this.$http.adornParams({
-            'orderNumber': this.dataForm.orderNumber,
+            orderNumber: this.dataForm.orderNumber,
             // 'prodName': this.dataForm.prodName,
-            'shopName': this.dataForm.shopName,
-            'orderType': this.dataForm.orderType,
-            'payType': this.dataForm.payType,
-            'receiver': this.dataForm.receiver,
-            'mobile': this.dataForm.mobile,
-            'lang': this.lang === 'en' ? 1 : 0,
-            'status': this.status,
-            'dvyType': this.dataForm.dvyType,
-            'stationName': this.dataForm.stationName,
-            'refundStatus': this.dataForm.refundStatus,
-            'startTime': this.dateRange === null ? null : this.dateRange[0], // 开始时间
-            'endTime': this.dateRange === null ? null : this.dateRange[1] // 结束时间
+            shopName: this.dataForm.shopName,
+            orderType: this.dataForm.orderType,
+            payType: this.dataForm.payType,
+            receiver: this.dataForm.receiver,
+            mobile: this.dataForm.mobile,
+            lang: this.lang === "en" ? 1 : 0,
+            status: this.status,
+            dvyType: this.dataForm.dvyType,
+            stationName: this.dataForm.stationName,
+            refundStatus: this.dataForm.refundStatus,
+            startTime: this.dateRange === null ? null : this.dateRange[0], // 开始时间
+            endTime: this.dateRange === null ? null : this.dateRange[1], // 结束时间
           }),
-          responseType: 'blob' // 解决文件下载乱码问题
-        }).then(({ data }) => {
-          loading.close()
-          var blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8' })
-          const fileName = this.$i18n.t('order.orderInfCollationXls')
-          const elink = document.createElement('a')
-          if ('download' in elink) { // 非IE下载
-            elink.download = fileName
-            elink.style.display = 'none'
-            elink.href = URL.createObjectURL(blob)
-            document.body.appendChild(elink)
-            elink.click()
-            URL.revokeObjectURL(elink.href) // 释放URL 对象
-            document.body.removeChild(elink)
-          } else { // IE10+下载
-            navigator.msSaveBlob(blob, fileName)
-          }
-        }).catch((e) => {
-          loading.close()
+          responseType: "blob", // 解决文件下载乱码问题
         })
-      })
+          .then(({ data }) => {
+            loading.close();
+            var blob = new Blob([data], {
+              type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+            });
+            const fileName = this.$i18n.t("order.orderInfCollationXls");
+            const elink = document.createElement("a");
+            if ("download" in elink) {
+              // 非IE下载
+              elink.download = fileName;
+              elink.style.display = "none";
+              elink.href = URL.createObjectURL(blob);
+              document.body.appendChild(elink);
+              elink.click();
+              URL.revokeObjectURL(elink.href); // 释放URL 对象
+              document.body.removeChild(elink);
+            } else {
+              // IE10+下载
+              navigator.msSaveBlob(blob, fileName);
+            }
+          })
+          .catch((e) => {
+            loading.close();
+          });
+      });
     },
     // 订单按商品导出
     getSoldExcelByProd() {
-
       if (!this.dataForm1.prodId) {
-        this.$message.error('请选择要导出的商品')
-        return
+        this.$message.error("请选择要导出的商品");
+        return;
       }
       const loading = this.$loading({
         lock: true,
-        target: '.mod-order-order',
-        customClass: 'export-load',
-        background: 'transparent',
-        text: this.$i18n.t('shop.exportIng')
-      })
+        target: ".mod-order-order",
+        customClass: "export-load",
+        background: "transparent",
+        text: this.$i18n.t("shop.exportIng"),
+      });
       this.$http({
-        url: this.$http.adornUrl('/platform/order/prod/soldExcel'),
-        method: 'get',
+        url: this.$http.adornUrl("/platform/order/prod/soldExcel"),
+        method: "get",
         params: this.$http.adornParams({
-          'prodId': this.dataForm1.prodId,
-          'status': this.status
+          prodId: this.dataForm1.prodId,
+          status: this.status,
         }),
-        responseType: 'blob' // 解决文件下载乱码问题
-      }).then(({ data }) => {
-        loading.close()
-        var blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8' })
-        const fileName = '商品订单导出'
-        const elink = document.createElement('a')
-        if ('download' in elink) { // 非IE下载
-          elink.download = fileName
-          elink.style.display = 'none'
-          elink.href = URL.createObjectURL(blob)
-          document.body.appendChild(elink)
-          elink.click()
-          URL.revokeObjectURL(elink.href) // 释放URL 对象
-          document.body.removeChild(elink)
-        } else { // IE10+下载
-          navigator.msSaveBlob(blob, fileName)
-        }
-      }).catch((e) => {
-        loading.close()
+        responseType: "blob", // 解决文件下载乱码问题
       })
+        .then(({ data }) => {
+          loading.close();
+          var blob = new Blob([data], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+          });
+          const fileName = "商品订单导出";
+          const elink = document.createElement("a");
+          if ("download" in elink) {
+            // 非IE下载
+            elink.download = fileName;
+            elink.style.display = "none";
+            elink.href = URL.createObjectURL(blob);
+            document.body.appendChild(elink);
+            elink.click();
+            URL.revokeObjectURL(elink.href); // 释放URL 对象
+            document.body.removeChild(elink);
+          } else {
+            // IE10+下载
+            navigator.msSaveBlob(blob, fileName);
+          }
+        })
+        .catch((e) => {
+          loading.close();
+        });
     },
     // 获取商品列表接口
     getProdList() {
       this.$http({
-        url: this.$http.adornUrl('/platform/search/prod/page'),
-        method: 'get',
+        url: this.$http.adornUrl("/platform/search/prod/page"),
+        method: "get",
         params: this.$http.adornParams({
           current: 1,
-          size: 10000
-        })
+          size: 10000,
+        }),
       }).then(({ data }) => {
-        this.prodDataList = data.records
-      })
+        this.prodDataList = data.records;
+      });
     },
     // 快递批量发货
     uploadSpu() {
-      this.dataForm.startTime = this.dateRange === null ? null : this.dateRange[0]
-      this.dataForm.endTime = this.dateRange === null ? null : this.dateRange[1]
-      this.uploadVisible = true
+      this.dataForm.startTime =
+        this.dateRange === null ? null : this.dateRange[0];
+      this.dataForm.endTime =
+        this.dateRange === null ? null : this.dateRange[1];
+      this.uploadVisible = true;
       this.$nextTick(() => {
-        this.$refs.spuUpload.init()
-      })
+        this.$refs.spuUpload.init();
+      });
     },
     // 自提批量发货
     pickUpBulkDeliveryUpload() {
-      this.pickUpBulkDeliverUploadVisible = true
+      this.pickUpBulkDeliverUploadVisible = true;
       this.$nextTick(() => {
-        this.$refs.pickUpBulkDeliveryUploadSpu.init()
-      })
+        this.$refs.pickUpBulkDeliveryUploadSpu.init();
+      });
     },
     // 批量收货(不分自提和快递)
     orderSendUploadMethod() {
-      this.orderSendUploadVisible = true
+      this.orderSendUploadVisible = true;
       this.$nextTick(() => {
-        this.$refs.orderSendUpload.init()
-      })
+        this.$refs.orderSendUpload.init();
+      });
     },
 
     getWaitingConsignmentExcel() {
-      this.getDataList(this.page)
+      this.getDataList(this.page);
     },
-
   },
   destroyed() {
     // 页面销毁时移除监听
-    window.removeEventListener('scroll', this.handleScroll)
+    window.removeEventListener("scroll", this.handleScroll);
   },
-
-
-}
+};
 </script>
 <style lang="scss" scoped>
 .mod-order-order {
@@ -1081,7 +1449,7 @@ export default {
       .select-time-btn {
         margin-right: 20px;
         display: inline-block;
-        color: #AAAAAA;
+        color: #aaaaaa;
         font-size: 14px;
         cursor: pointer;
 
@@ -1091,9 +1459,8 @@ export default {
       }
 
       .select-time-btn.is-active {
-        color: #155BD4;
+        color: #155bd4;
       }
-
     }
   }
 
@@ -1150,7 +1517,7 @@ export default {
       display: flex;
       align-items: center;
       margin-bottom: 15px;
-      background: #F7F8FA;
+      background: #f7f8fa;
       z-index: 11;
       height: 57px;
       font-weight: bold;
@@ -1163,7 +1530,7 @@ export default {
 
       .product {
         width: 25%;
-        margin-bottom: 15px
+        margin-bottom: 15px;
       }
     }
 
@@ -1187,22 +1554,22 @@ export default {
 
       .prod-tit {
         padding: 10px;
-        background: #F7F8FA;
+        background: #f7f8fa;
         height: 49px;
         display: flex;
         align-items: center;
-        border-left: 1px solid #EBEDF0;
-        border-top: 1px solid #EBEDF0;
-        border-right: 1px solid #EBEDF0;
+        border-left: 1px solid #ebedf0;
+        border-top: 1px solid #ebedf0;
+        border-right: 1px solid #ebedf0;
 
         .order-number {
           color: #333333;
-          font-size: 14px
+          font-size: 14px;
         }
 
         .order-time {
           color: #999999;
-          font-size: 14px
+          font-size: 14px;
         }
 
         span {
@@ -1212,7 +1579,7 @@ export default {
 
       .prod-cont {
         display: flex;
-        border: 1px solid #EBEDF0;
+        border: 1px solid #ebedf0;
         color: #495060;
         font-size: 14px;
 
@@ -1240,7 +1607,7 @@ export default {
               display: block !important;
             }
 
-            .default-btn+.default-btn {
+            .default-btn + .default-btn {
               height: auto;
               display: block;
               margin-left: 0;
@@ -1258,7 +1625,7 @@ export default {
             margin-bottom: 0 !important;
           }
 
-          span+span {
+          span + span {
             margin-top: 10px;
           }
         }
@@ -1274,7 +1641,7 @@ export default {
             width: 100%;
             display: flex;
             align-items: center;
-            border-bottom: 1px solid #EBEDF0;
+            border-bottom: 1px solid #ebedf0;
             padding: 10px;
 
             &:last-child {
@@ -1414,7 +1781,6 @@ export default {
   ::v-deep .export-load {
     top: -50% !important;
   }
-
 }
 
 div ::v-deep .el-form-item--small .el-form-item__content {
@@ -1424,13 +1790,25 @@ div ::v-deep .el-form-item--small .el-form-item__content {
 </style>
 <style>
 /* chrome */
-.mod-order-order .search-bar .input-row .myinput-appearance>input::-webkit-outer-spin-button,
-.mod-order-order .search-bar .input-row .myinput-appearance>input::-webkit-inner-spin-button {
+.mod-order-order
+  .search-bar
+  .input-row
+  .myinput-appearance
+  > input::-webkit-outer-spin-button,
+.mod-order-order
+  .search-bar
+  .input-row
+  .myinput-appearance
+  > input::-webkit-inner-spin-button {
   -webkit-appearance: none;
 }
 
 /* 火狐浏览器 */
-.mod-order-order .search-bar .input-row .myinput-appearance>input[type="number"] {
+.mod-order-order
+  .search-bar
+  .input-row
+  .myinput-appearance
+  > input[type="number"] {
   -moz-appearance: textfield;
 }
 </style>
